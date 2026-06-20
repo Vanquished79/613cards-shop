@@ -31,8 +31,8 @@ export default async function ProductsPage() {
       <form action={createProduct} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
         <input name="name" placeholder="Product Name" required style={inputStyle} />
         <select name="categoryId" required style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
-          <option value="" style={{ color: 'black' }}>Select Category</option>
-          {categories.map((c: any) => <option key={c.id} value={c.id} style={{ color: 'black' }}>{c.name}</option>)}
+          <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Select Category</option>
+          {categories.map((c: any) => <option key={c.id} value={c.id} style={{ background: '#1a0b2e', color: 'white' }}>{c.name}</option>)}
         </select>
         <input name="price" type="number" step="0.01" placeholder="Price (e.g. 99.99)" required style={inputStyle} />
         <input name="stock" type="number" placeholder="Stock Quantity" required style={inputStyle} />
