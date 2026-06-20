@@ -1,6 +1,8 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProductsPage() {
   const products = await prisma.product.findMany({ include: { category: true } });
   const categories = await prisma.category.findMany();
