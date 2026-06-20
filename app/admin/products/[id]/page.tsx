@@ -2,11 +2,13 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { uploadProductImage } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
-export default async function EditProductPage({ params }: { params: { id: string } }) {
-  const productId = parseInt(params.id);
+export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const productId = parseInt(resolvedParams.id);
   const product = await prisma.product.findUnique({ where: { id: productId } });
   const categories = await prisma.category.findMany();
 
@@ -21,13 +23,24 @@ export default async function EditProductPage({ params }: { params: { id: string
     const price = parseFloat(formData.get('price') as string);
     const stock = parseInt(formData.get('stock') as string);
     const categoryId = parseInt(formData.get('categoryId') as string);
-    const imageUrl = formData.get('imageUrl') as string;
+    
+    // Check if the user uploaded a file instead of pasting a URL
+    const imageFile = formData.get('imageFile') as File;
+    const fallbackUrl = formData.get('imageUrl') as string;
+    let finalImageUrl = fallbackUrl || product?.imageUrl || null;
+
+    if (imageFile && imageFile.size > 0) {
+      const uploadedUrl = await uploadProductImage(imageFile);
+      if (uploadedUrl) {
+        finalImageUrl = uploadedUrl;
+      }
+    }
     
     if (!name || isNaN(price) || isNaN(categoryId)) return;
     
     await prisma.product.update({
       where: { id: productId },
-      data: { name, description, price, stock, categoryId, imageUrl: imageUrl || null }
+      data: { name, description, price, stock, categoryId, imageUrl: finalImageUrl }
     });
     
     revalidatePath('/admin/products');
@@ -70,9 +83,14 @@ export default async function EditProductPage({ params }: { params: { id: string
           </div>
           
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Image URL</label>
-            <input name="imageUrl" defaultValue={product.imageUrl || ''} style={inputStyle} />
+            <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Upload New Image (Optional)</label>
+            <input name="imageFile" type="file" accept="image/*" style={inputStyle} />
           </div>
+        </div>
+        
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Or Paste Image URL</label>
+          <input name="imageUrl" defaultValue={product.imageUrl || ''} style={inputStyle} />
         </div>
 
         <div>

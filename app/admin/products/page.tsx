@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
+import { uploadProductImage } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,12 +16,23 @@ export default async function ProductsPage() {
     const price = parseFloat(formData.get('price') as string);
     const stock = parseInt(formData.get('stock') as string);
     const categoryId = parseInt(formData.get('categoryId') as string);
-    const imageUrl = formData.get('imageUrl') as string;
+    
+    // Check if the user uploaded a file instead of pasting a URL
+    const imageFile = formData.get('imageFile') as File;
+    const fallbackUrl = formData.get('imageUrl') as string;
+    let finalImageUrl = fallbackUrl || null;
+
+    if (imageFile && imageFile.size > 0) {
+      const uploadedUrl = await uploadProductImage(imageFile);
+      if (uploadedUrl) {
+        finalImageUrl = uploadedUrl;
+      }
+    }
     
     if (!name || isNaN(price) || isNaN(categoryId)) return;
     
     await prisma.product.create({
-      data: { name, description, price, stock, categoryId, imageUrl: imageUrl || null }
+      data: { name, description, price, stock, categoryId, imageUrl: finalImageUrl }
     });
     revalidatePath('/admin/products');
   }
@@ -45,8 +57,18 @@ export default async function ProductsPage() {
         </select>
         <input name="price" type="number" step="0.01" placeholder="Price (e.g. 99.99)" required style={inputStyle} />
         <input name="stock" type="number" placeholder="Stock Quantity" required style={inputStyle} />
-        <input name="imageUrl" placeholder="Image URL (optional)" style={inputStyle} />
-        <input name="description" placeholder="Description" style={inputStyle} />
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <label style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Upload Image (from computer)</label>
+          <input name="imageFile" type="file" accept="image/*" style={inputStyle} />
+        </div>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <label style={{ fontSize: '12px', color: 'var(--text-muted)' }}>OR Paste Image URL</label>
+          <input name="imageUrl" placeholder="https://..." style={inputStyle} />
+        </div>
+
+        <input name="description" placeholder="Description" style={{ ...inputStyle, gridColumn: '1 / -1' }} />
         <button type="submit" className="btn-primary" style={{ gridColumn: '1 / -1' }}>Add Product</button>
       </form>
 
