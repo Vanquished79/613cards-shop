@@ -37,7 +37,13 @@ export function CartSlideOut() {
           ) : (
             items.map(item => (
               <div key={item.id} style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '12px' }}>
-                <div style={{ width: '60px', height: '60px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}></div>
+                <div style={{ width: '60px', height: '60px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {item.imageUrl ? (
+                    <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>No Img</span>
+                  )}
+                </div>
                 <div style={{ flex: 1 }}>
                   <h4 style={{ margin: '0 0 4px 0', fontSize: '15px' }}>{item.name}</h4>
                   <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>${item.price.toFixed(2)}</span>

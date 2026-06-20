@@ -43,9 +43,18 @@ export default function CheckoutPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {items.map(item => (
               <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid var(--glass-border)' }}>
-                <div>
-                  <h4 style={{ margin: '0 0 4px 0' }}>{item.name}</h4>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Qty: {item.quantity}</span>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <div style={{ width: '48px', height: '48px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {item.imageUrl ? (
+                      <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>No Img</span>
+                    )}
+                  </div>
+                  <div>
+                    <h4 style={{ margin: '0 0 4px 0' }}>{item.name}</h4>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Qty: {item.quantity}</span>
+                  </div>
                 </div>
                 <div style={{ fontWeight: 'bold' }}>
                   ${(item.price * item.quantity).toFixed(2)}
