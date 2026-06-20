@@ -6,11 +6,26 @@ import { ProductCard } from '@/components/ProductCard';
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
+  const now = new Date();
+  
   // Fetch up to 3 latest products from the database to show as "Featured"
   const featuredProducts = await prisma.product.findMany({
     take: 3,
     orderBy: { createdAt: 'desc' },
-    include: { category: true }
+    include: { 
+      category: true,
+      reservations: {
+        where: { expiresAt: { gt: now } }
+      }
+    }
+  });
+
+  const productsWithStock = featuredProducts.map(p => {
+    const reservedCount = p.reservations.reduce((sum: number, r: any) => sum + r.quantity, 0);
+    return {
+      ...p,
+      availableStock: Math.max(0, p.stock - reservedCount)
+    };
   });
 
   return (
@@ -32,11 +47,11 @@ export default async function Home() {
         </div>
       </div>
 
-      {featuredProducts.length > 0 && (
+      {productsWithStock.length > 0 && (
         <>
           <h2 style={{ fontSize: '28px', margin: '20px 0 0 0' }}>Featured <span style={{ color: 'var(--accent-color)' }}>Products</span></h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', width: '100%', maxWidth: '1000px' }}>
-            {featuredProducts.map((p: any) => (
+            {productsWithStock.map((p: any) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>

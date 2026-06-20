@@ -25,10 +25,18 @@ export function ProductCard({ product }: { product: any }) {
         <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>${product.price.toFixed(2)}</span>
         <button 
           className="btn-primary" 
-          style={{ padding: '8px 16px', fontSize: '14px' }}
+          style={{ 
+            padding: '8px 16px', 
+            fontSize: '14px',
+            opacity: product.availableStock === 0 ? 0.5 : 1,
+            cursor: product.availableStock === 0 ? 'not-allowed' : 'pointer'
+          }}
+          disabled={product.availableStock === 0}
           onClick={() => addToCart(product)}
         >
-          Add to Cart
+          {product.availableStock === 0 
+            ? (product.stock > 0 ? 'In Another Cart' : 'Out of Stock') 
+            : 'Add to Cart'}
         </button>
       </div>
     </div>

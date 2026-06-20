@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 export default function CheckoutPage() {
-  const { items, totalAmount, clearCart } = useCart();
+  const { items, totalAmount, clearCart, updateQuantity, removeFromCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
@@ -55,7 +55,21 @@ export default function CheckoutPage() {
                   </div>
                   <div>
                     <h4 style={{ margin: '0 0 4px 0' }}>{item.name}</h4>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Qty: {item.quantity}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button 
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer' }}
+                      >-</button>
+                      <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{item.quantity}</span>
+                      <button 
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer' }}
+                      >+</button>
+                      <button 
+                        onClick={() => removeFromCart(item.id)}
+                        style={{ background: 'transparent', border: 'none', color: '#f87171', fontSize: '12px', cursor: 'pointer', marginLeft: '8px', textDecoration: 'underline' }}
+                      >Remove</button>
+                    </div>
                   </div>
                 </div>
                 <div style={{ fontWeight: 'bold' }}>
@@ -117,6 +131,7 @@ export default function CheckoutPage() {
                   try {
                     const details = await actions.order!.capture();
                     // Save the order to our database
+                    const sessionId = localStorage.getItem('cartSessionId');
                     const response = await fetch('/api/orders', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
@@ -130,7 +145,8 @@ export default function CheckoutPage() {
                         zip: details.purchase_units?.[0]?.shipping?.address?.postal_code,
                         totalAmount: totalAmount,
                         items: items,
-                        userId: session?.user?.id ? parseInt(session.user.id) : null
+                        userId: session?.user?.id ? parseInt(session.user.id) : null,
+                        sessionId: sessionId
                       })
                     });
                     

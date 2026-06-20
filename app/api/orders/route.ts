@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { paypalOrderId, customerName, email, address, city, state, zip, totalAmount, items, userId } = body;
+    const { paypalOrderId, customerName, email, address, city, state, zip, totalAmount, items, userId, sessionId } = body;
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'No items in order' }, { status: 400 });
@@ -44,6 +44,13 @@ export async function POST(request: Request) {
               decrement: item.quantity
             }
           }
+        });
+      }
+
+      // 3. Clear reservations for this session since they bought it
+      if (sessionId) {
+        await tx.cartReservation.deleteMany({
+          where: { sessionId }
         });
       }
 
