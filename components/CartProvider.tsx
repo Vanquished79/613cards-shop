@@ -86,7 +86,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const syncedItems = await syncWithServer(newItems);
     
     // Check if the item was successfully added/increased
-    const syncedExisting = syncedItems.find((i) => i.id === product.id);
+    const syncedExisting = syncedItems.find((i: CartItem) => i.id === product.id);
     if (!syncedExisting || (existing && syncedExisting.quantity === existing.quantity - 1)) {
       alert('Sorry, that item is out of stock or currently in another user\'s cart.');
     } else {
