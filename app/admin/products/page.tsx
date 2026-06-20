@@ -1,10 +1,11 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ProductsPage() {
-  const products = await prisma.product.findMany({ include: { category: true } });
+  const products = await prisma.product.findMany({ include: { category: true }, orderBy: { createdAt: 'desc' } });
   const categories = await prisma.category.findMany();
 
   async function createProduct(formData: FormData) {
@@ -14,12 +15,20 @@ export default async function ProductsPage() {
     const price = parseFloat(formData.get('price') as string);
     const stock = parseInt(formData.get('stock') as string);
     const categoryId = parseInt(formData.get('categoryId') as string);
+    const imageUrl = formData.get('imageUrl') as string;
     
     if (!name || isNaN(price) || isNaN(categoryId)) return;
     
     await prisma.product.create({
-      data: { name, description, price, stock, categoryId }
+      data: { name, description, price, stock, categoryId, imageUrl: imageUrl || null }
     });
+    revalidatePath('/admin/products');
+  }
+
+  async function deleteProduct(formData: FormData) {
+    'use server'
+    const id = parseInt(formData.get('id') as string);
+    await prisma.product.delete({ where: { id } });
     revalidatePath('/admin/products');
   }
 
@@ -36,7 +45,8 @@ export default async function ProductsPage() {
         </select>
         <input name="price" type="number" step="0.01" placeholder="Price (e.g. 99.99)" required style={inputStyle} />
         <input name="stock" type="number" placeholder="Stock Quantity" required style={inputStyle} />
-        <input name="description" placeholder="Description" style={{ ...inputStyle, gridColumn: '1 / -1' }} />
+        <input name="imageUrl" placeholder="Image URL (optional)" style={inputStyle} />
+        <input name="description" placeholder="Description" style={inputStyle} />
         <button type="submit" className="btn-primary" style={{ gridColumn: '1 / -1' }}>Add Product</button>
       </form>
 
@@ -46,11 +56,25 @@ export default async function ProductsPage() {
         ) : (
           products.map((p: any) => (
             <div key={p.id} style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <h3 style={{ margin: 0 }}>{p.name}</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '4px 0 0 0' }}>{p.category.name} • Stock: {p.stock}</p>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                {p.imageUrl ? (
+                  <img src={p.imageUrl} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} />
+                ) : (
+                  <div style={{ width: '50px', height: '50px', background: 'rgba(0,0,0,0.3)', borderRadius: '4px' }}></div>
+                )}
+                <div>
+                  <h3 style={{ margin: 0 }}>{p.name}</h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '4px 0 0 0' }}>{p.category.name} • Stock: {p.stock}</p>
+                </div>
               </div>
-              <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>${p.price.toFixed(2)}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>${p.price.toFixed(2)}</span>
+                <Link href={`/admin/products/${p.id}`} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.1)', color: 'white', textDecoration: 'none', borderRadius: '4px', fontSize: '13px' }}>Edit</Link>
+                <form action={deleteProduct}>
+                  <input type="hidden" name="id" value={p.id} />
+                  <button type="submit" style={{ padding: '6px 12px', background: 'rgba(255,100,100,0.1)', color: '#ff8080', border: '1px solid rgba(255,100,100,0.2)', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}>Delete</button>
+                </form>
+              </div>
             </div>
           ))
         )}
