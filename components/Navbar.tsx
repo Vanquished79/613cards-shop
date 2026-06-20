@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useCart } from './CartProvider';
 import { ShoppingCart } from 'lucide-react';
 
-export function Navbar() {
+export function Navbar({ isAdmin }: { isAdmin?: boolean }) {
   const { items, setIsCartOpen } = useCart();
   
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -30,6 +30,7 @@ export function Navbar() {
         <Link href="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
         <Link href="/shop" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Shop</Link>
         <Link href="/contact" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Contact</Link>
+        {isAdmin && <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontWeight: 500 }}>Admin</Link>}
       </div>
 
       <button 
@@ -51,16 +52,17 @@ export function Navbar() {
             position: 'absolute',
             top: '-8px',
             right: '-8px',
-            background: 'var(--accent-color)',
+            background: '#ff3333',
             color: 'white',
-            fontSize: '12px',
+            fontSize: '14px',
             fontWeight: 'bold',
             borderRadius: '50%',
-            width: '20px',
-            height: '20px',
+            width: '24px',
+            height: '24px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.5)'
           }}>
             {itemCount}
           </span>

@@ -12,16 +12,21 @@ export const metadata: Metadata = {
   description: "The premier shop for trading cards and supplies.",
 };
 
-export default function RootLayout({
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <CartProvider>
-          <Navbar />
+          <Navbar isAdmin={!!session} />
           <CartSlideOut />
           <div className="container">
             {children}

@@ -67,7 +67,7 @@ export default function CheckoutPage() {
             Complete your purchase securely via PayPal. Your shipping address will be collected automatically.
           </p>
           
-          <div style={{ zIndex: 1, position: 'relative' }}>
+          <div style={{ zIndex: 1, position: 'relative', background: 'white', padding: '16px', borderRadius: '12px' }}>
             <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test', currency: 'USD' }}>
               <PayPalButtons 
                 style={{ layout: 'vertical', color: 'gold', shape: 'rect' }}
