@@ -49,7 +49,7 @@ export default async function ProductsPage() {
       <h1>Manage Products</h1>
       <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>Add new cards or supplies to your store.</p>
       
-      <form action={createProduct} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
+      <form action={createProduct} encType="multipart/form-data" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
         <input name="name" placeholder="Product Name" required style={inputStyle} />
         <select name="categoryId" required style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
           <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Select Category</option>

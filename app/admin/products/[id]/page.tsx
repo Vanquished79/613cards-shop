@@ -56,7 +56,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         <h1 style={{ margin: 0 }}>Edit Product</h1>
       </div>
       
-      <form action={updateProduct} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <form action={updateProduct} encType="multipart/form-data" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
           <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Product Name</label>
           <input name="name" defaultValue={product.name} required style={inputStyle} />
