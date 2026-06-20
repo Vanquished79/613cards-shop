@@ -1,7 +1,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import prisma from '@/lib/prisma';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  // Fetch up to 3 latest products from the database to show as "Featured"
+  const featuredProducts = await prisma.product.findMany({
+    take: 3,
+    orderBy: { createdAt: 'desc' },
+    include: { category: true }
+  });
+
   return (
     <main style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '40px', padding: '40px 0' }}>
       <div style={{ textAlign: 'center' }}>
@@ -26,21 +36,31 @@ export default function Home() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px', width: '100%', maxWidth: '1000px' }}>
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ height: '200px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: 'var(--text-muted)' }}>Mockup Image</span>
-            </div>
-            <h3 style={{ fontSize: '20px', fontWeight: '600' }}>Featured Card {i}</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Holographic rare from the new expansion set.</p>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-              <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>$99.99</span>
-              <button className="btn-primary" style={{ padding: '8px 16px', fontSize: '14px' }}>Add to Cart</button>
-            </div>
+      {featuredProducts.length > 0 && (
+        <>
+          <h2 style={{ fontSize: '28px', margin: '20px 0 0 0' }}>Featured <span style={{ color: 'var(--accent-color)' }}>Products</span></h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', width: '100%', maxWidth: '1000px' }}>
+            {featuredProducts.map((p: any) => (
+              <div key={p.id} className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ height: '200px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Image</span>
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '20px', fontWeight: '600', margin: 0 }}>{p.name}</h3>
+                  <span style={{ fontSize: '12px', background: 'rgba(255,255,255,0.1)', padding: '4px 8px', borderRadius: '12px', marginTop: '8px', display: 'inline-block' }}>
+                    {p.category.name}
+                  </span>
+                </div>
+                <p style={{ color: 'var(--text-muted)', fontSize: '14px', flex: 1 }}>{p.description}</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+                  <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>${p.price.toFixed(2)}</span>
+                  <button className="btn-primary" style={{ padding: '8px 16px', fontSize: '14px' }}>Add to Cart</button>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </main>
   );
 }
