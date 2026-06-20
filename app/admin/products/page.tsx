@@ -30,7 +30,7 @@ export default async function ProductsPage() {
         <input name="name" placeholder="Product Name" required style={inputStyle} />
         <select name="categoryId" required style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
           <option value="" style={{ color: 'black' }}>Select Category</option>
-          {categories.map(c => <option key={c.id} value={c.id} style={{ color: 'black' }}>{c.name}</option>)}
+          {categories.map((c: any) => <option key={c.id} value={c.id} style={{ color: 'black' }}>{c.name}</option>)}
         </select>
         <input name="price" type="number" step="0.01" placeholder="Price (e.g. 99.99)" required style={inputStyle} />
         <input name="stock" type="number" placeholder="Stock Quantity" required style={inputStyle} />
@@ -42,7 +42,7 @@ export default async function ProductsPage() {
         {products.length === 0 ? (
           <p style={{ color: 'var(--text-muted)' }}>No products found.</p>
         ) : (
-          products.map(p => (
+          products.map((p: any) => (
             <div key={p.id} style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <h3 style={{ margin: 0 }}>{p.name}</h3>

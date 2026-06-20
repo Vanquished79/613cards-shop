@@ -11,7 +11,7 @@ export default async function ShopPage() {
         {products.length === 0 ? (
           <p style={{ color: 'var(--text-muted)' }}>No products available yet. Check back later!</p>
         ) : (
-          products.map(p => (
+          products.map((p: any) => (
             <div key={p.id} className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div style={{ height: '200px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Image</span>

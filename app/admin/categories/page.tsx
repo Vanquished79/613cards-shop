@@ -42,7 +42,7 @@ export default async function CategoriesPage() {
         {categories.length === 0 ? (
           <p style={{ color: 'var(--text-muted)' }}>No categories found.</p>
         ) : (
-          categories.map(cat => (
+          categories.map((cat: any) => (
             <div key={cat.id} style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
               <h3 style={{ margin: 0 }}>{cat.name}</h3>
               {cat.description && <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '4px 0 0 0' }}>{cat.description}</p>}
