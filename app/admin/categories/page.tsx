@@ -60,9 +60,9 @@ export default async function CategoriesPage() {
           <input name="description" placeholder="Description (optional)" style={inputStyle} />
 
           <select name="parentId" style={{ ...inputStyle, appearance: 'none' as const }}>
-            <option value="">— Top-level category (no parent) —</option>
+            <option value="" style={{ color: 'black' }}>— Top-level category (no parent) —</option>
             {flat.map((cat: any) => (
-              <option key={cat.id} value={cat.id}>
+              <option key={cat.id} value={cat.id} style={{ color: 'black' }}>
                 {'　'.repeat(cat.depth)}{cat.depth > 0 ? '↳ ' : ''}{cat.name}
               </option>
             ))}
