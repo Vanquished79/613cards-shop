@@ -4,9 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from './CartProvider';
 import { ShoppingCart } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
 
-export function Navbar({ isAdmin }: { isAdmin?: boolean }) {
+export function Navbar() {
   const { items, setIsCartOpen } = useCart();
+  const { data: session } = useSession();
   
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -30,10 +32,23 @@ export function Navbar({ isAdmin }: { isAdmin?: boolean }) {
         <Link href="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
         <Link href="/shop" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Shop</Link>
         <Link href="/contact" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Contact</Link>
-        {isAdmin && <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontWeight: 500 }}>Admin</Link>}
+        
+        {session?.user?.role === 'ADMIN' && (
+          <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontWeight: 500 }}>Admin</Link>
+        )}
       </div>
 
-      <button 
+      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+        {session ? (
+          <>
+            <Link href="/account" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>My Account</Link>
+            <button onClick={() => signOut({ callbackUrl: '/' })} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '15px' }}>Logout</button>
+          </>
+        ) : (
+          <Link href="/login" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Login</Link>
+        )}
+
+        <button 
         onClick={() => setIsCartOpen(true)}
         style={{ 
           background: 'none', 
@@ -68,6 +83,7 @@ export function Navbar({ isAdmin }: { isAdmin?: boolean }) {
           </span>
         )}
       </button>
+      </div>
     </nav>
   );
 }

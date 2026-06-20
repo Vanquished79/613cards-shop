@@ -15,6 +15,8 @@ export const metadata: Metadata = {
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
+import { Providers } from "@/components/Providers";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -25,13 +27,15 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <CartProvider>
-          <Navbar isAdmin={!!session} />
-          <CartSlideOut />
-          <div className="container">
-            {children}
-          </div>
-        </CartProvider>
+        <Providers>
+          <CartProvider>
+            <Navbar />
+            <CartSlideOut />
+            <div className="container">
+              {children}
+            </div>
+          </CartProvider>
+        </Providers>
       </body>
     </html>
   );

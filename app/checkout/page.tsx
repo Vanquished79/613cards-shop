@@ -4,12 +4,14 @@ import { useCart } from '@/components/CartProvider';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
 
   if (items.length === 0 && !success) {
     return (
@@ -81,14 +83,33 @@ export default function CheckoutPage() {
               <PayPalButtons 
                 style={{ layout: 'vertical', color: 'gold', shape: 'rect' }}
                 createOrder={(data, actions) => {
+                  
+                  const purchaseUnit: any = {
+                    amount: {
+                      currency_code: 'USD',
+                      value: totalAmount.toFixed(2)
+                    }
+                  };
+
+                  // If user is logged in and has an address, pre-fill it for PayPal
+                  if (session?.user && session.user.address) {
+                    const [firstName, ...lastNameParts] = (session.user.name || '').split(' ');
+                    const lastName = lastNameParts.join(' ');
+                    purchaseUnit.shipping = {
+                      name: { full_name: session.user.name },
+                      address: {
+                        address_line_1: session.user.address,
+                        admin_area_2: session.user.city || '',
+                        admin_area_1: session.user.state || '',
+                        postal_code: session.user.zip || '',
+                        country_code: 'US' // Assuming US for now
+                      }
+                    };
+                  }
+
                   return actions.order.create({
                     intent: 'CAPTURE',
-                    purchase_units: [{
-                      amount: {
-                        currency_code: 'USD',
-                        value: totalAmount.toFixed(2)
-                      }
-                    }]
+                    purchase_units: [purchaseUnit]
                   });
                 }}
                 onApprove={async (data, actions) => {
@@ -108,7 +129,8 @@ export default function CheckoutPage() {
                         state: details.purchase_units?.[0]?.shipping?.address?.admin_area_1,
                         zip: details.purchase_units?.[0]?.shipping?.address?.postal_code,
                         totalAmount: totalAmount,
-                        items: items
+                        items: items,
+                        userId: session?.user?.id ? parseInt(session.user.id) : null
                       })
                     });
                     

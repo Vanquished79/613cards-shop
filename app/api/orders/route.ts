@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { paypalOrderId, customerName, email, address, city, state, zip, totalAmount, items } = body;
+    const { paypalOrderId, customerName, email, address, city, state, zip, totalAmount, items, userId } = body;
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'No items in order' }, { status: 400 });
@@ -15,6 +15,7 @@ export async function POST(request: Request) {
       // 1. Create the order
       const newOrder = await tx.order.create({
         data: {
+          userId: userId || null,
           paypalOrderId,
           customerName,
           email,

@@ -1,0 +1,84 @@
+import { redirect } from 'next/navigation';
+import prisma from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
+import Link from 'next/link';
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+export const dynamic = 'force-dynamic';
+
+export default async function RegisterPage() {
+  const session = await getServerSession(authOptions);
+  
+  if (session) {
+    redirect('/account');
+  }
+
+  async function registerUser(formData: FormData) {
+    'use server'
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    
+    if (!name || !email || !password || password.length < 6) {
+      return; // Basic validation
+    }
+
+    try {
+      const existingUser = await prisma.user.findUnique({ where: { email } });
+      if (existingUser) {
+        return; // Email already in use
+      }
+
+      const passwordHash = await bcrypt.hash(password, 10);
+
+      await prisma.user.create({
+        data: {
+          name,
+          email,
+          passwordHash,
+          role: 'CUSTOMER'
+        }
+      });
+
+      redirect('/login?registered=true');
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  return (
+    <div style={{ padding: '60px 20px', display: 'flex', justifyContent: 'center', minHeight: '80vh', alignItems: 'center' }}>
+      <div className="glass-panel" style={{ width: '100%', maxWidth: '400px', padding: '40px' }}>
+        <h1 style={{ textAlign: 'center', marginBottom: '8px' }}>Create Account</h1>
+        <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginBottom: '32px' }}>
+          Join 613cards to save your address and track orders.
+        </p>
+
+        <form action={registerUser} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-muted)' }}>Full Name</label>
+            <input name="name" type="text" required style={inputStyle} placeholder="John Doe" />
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-muted)' }}>Email</label>
+            <input name="email" type="email" required style={inputStyle} placeholder="john@example.com" />
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-muted)' }}>Password (min 6 chars)</label>
+            <input name="password" type="password" required minLength={6} style={inputStyle} placeholder="••••••••" />
+          </div>
+          <button type="submit" className="btn-primary" style={{ padding: '14px', marginTop: '16px', fontSize: '16px' }}>
+            Sign Up
+          </button>
+        </form>
+
+        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px', color: 'var(--text-muted)' }}>
+          Already have an account? <Link href="/login" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>Log in</Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', boxSizing: 'border-box' as const };

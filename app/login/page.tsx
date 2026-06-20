@@ -1,14 +1,17 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 
-export default function LoginPage() {
+function LoginForm() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const registered = searchParams.get('registered');
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -25,14 +28,131 @@ export default function LoginPage() {
     });
 
     if (result?.ok) {
-      router.push('/admin');
+      router.push('/account'); // Will redirect admins to account, or we can fetch session to redirect admins to admin. For now, /account can handle it or they can click admin.
       router.refresh();
     } else {
-      setError('Invalid username or password.');
+      setError('Invalid email/username or password.');
       setLoading(false);
     }
   }
 
+  return (
+    <div className="glass-panel" style={{
+      width: '100%',
+      maxWidth: '420px',
+      padding: '48px 40px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '28px',
+    }}>
+      <Image src="/logo.png" alt="613cards.com" width={180} height={90} style={{ objectFit: 'contain' }} />
+
+      <div style={{ textAlign: 'center' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: '700', margin: 0 }}>Welcome Back</h1>
+        <p style={{ color: 'var(--text-muted)', marginTop: '8px', fontSize: '14px' }}>
+          Sign in to your account
+        </p>
+      </div>
+
+      {registered && (
+        <p style={{ color: '#4ade80', background: 'rgba(74, 222, 128, 0.1)', padding: '12px', borderRadius: '8px', fontSize: '14px', width: '100%', textAlign: 'center', margin: 0 }}>
+          Account created successfully! Please log in.
+        </p>
+      )}
+
+      <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <label style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: '500' }}>Email or Username</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            required
+            autoComplete="username"
+            placeholder="Enter your email"
+            style={{
+              padding: '12px 16px',
+              borderRadius: '10px',
+              border: '1px solid var(--glass-border)',
+              background: 'rgba(255,255,255,0.05)',
+              color: 'var(--text-main)',
+              fontSize: '15px',
+              outline: 'none',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}
+          />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <label style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: '500' }}>Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            autoComplete="current-password"
+            placeholder="Enter your password"
+            style={{
+              padding: '12px 16px',
+              borderRadius: '10px',
+              border: '1px solid var(--glass-border)',
+              background: 'rgba(255,255,255,0.05)',
+              color: 'var(--text-main)',
+              fontSize: '15px',
+              outline: 'none',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}
+          />
+        </div>
+
+        {error && (
+          <p style={{
+            color: '#ff6b6b',
+            fontSize: '14px',
+            textAlign: 'center',
+            background: 'rgba(255,107,107,0.1)',
+            padding: '10px',
+            borderRadius: '8px',
+            margin: 0,
+          }}>
+            {error}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            marginTop: '8px',
+            padding: '14px',
+            borderRadius: '10px',
+            border: 'none',
+            background: loading
+              ? 'rgba(138,43,226,0.4)'
+              : 'linear-gradient(135deg, var(--accent-color), #6a0dad)',
+            color: 'white',
+            fontSize: '15px',
+            fontWeight: '600',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            transition: 'opacity 0.2s',
+            width: '100%',
+          }}
+        >
+          {loading ? 'Signing in...' : 'Sign In'}
+        </button>
+      </form>
+
+      <div style={{ textAlign: 'center', fontSize: '14px', color: 'var(--text-muted)' }}>
+        Don't have an account? <Link href="/register" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>Sign up</Link>
+      </div>
+    </div>
+  );
+}
+
+export default function LoginPage() {
   return (
     <main style={{
       minHeight: '100vh',
@@ -41,108 +161,9 @@ export default function LoginPage() {
       justifyContent: 'center',
       padding: '20px',
     }}>
-      <div className="glass-panel" style={{
-        width: '100%',
-        maxWidth: '420px',
-        padding: '48px 40px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '28px',
-      }}>
-        <Image src="/logo.png" alt="613cards.com" width={180} height={90} style={{ objectFit: 'contain' }} />
-
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: '700', margin: 0 }}>Admin Login</h1>
-          <p style={{ color: 'var(--text-muted)', marginTop: '8px', fontSize: '14px' }}>
-            Sign in to manage your shop
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: '500' }}>Username</label>
-            <input
-              id="username"
-              name="username"
-              type="text"
-              required
-              autoComplete="username"
-              placeholder="Enter your username"
-              style={{
-                padding: '12px 16px',
-                borderRadius: '10px',
-                border: '1px solid var(--glass-border)',
-                background: 'rgba(255,255,255,0.05)',
-                color: 'var(--text-main)',
-                fontSize: '15px',
-                outline: 'none',
-                width: '100%',
-                boxSizing: 'border-box',
-              }}
-            />
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: '500' }}>Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              placeholder="Enter your password"
-              style={{
-                padding: '12px 16px',
-                borderRadius: '10px',
-                border: '1px solid var(--glass-border)',
-                background: 'rgba(255,255,255,0.05)',
-                color: 'var(--text-main)',
-                fontSize: '15px',
-                outline: 'none',
-                width: '100%',
-                boxSizing: 'border-box',
-              }}
-            />
-          </div>
-
-          {error && (
-            <p style={{
-              color: '#ff6b6b',
-              fontSize: '14px',
-              textAlign: 'center',
-              background: 'rgba(255,107,107,0.1)',
-              padding: '10px',
-              borderRadius: '8px',
-              margin: 0,
-            }}>
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              marginTop: '8px',
-              padding: '14px',
-              borderRadius: '10px',
-              border: 'none',
-              background: loading
-                ? 'rgba(138,43,226,0.4)'
-                : 'linear-gradient(135deg, var(--accent-color), #6a0dad)',
-              color: 'white',
-              fontSize: '15px',
-              fontWeight: '600',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'opacity 0.2s',
-              width: '100%',
-            }}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
-      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <LoginForm />
+      </Suspense>
     </main>
   );
 }
