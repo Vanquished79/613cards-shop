@@ -1,0 +1,32 @@
+'use client';
+
+import { useCart } from './CartProvider';
+
+export function ProductCard({ product }: { product: any }) {
+  const { addToCart } = useCart();
+
+  return (
+    <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ height: '200px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ color: 'var(--text-muted)' }}>Image</span>
+      </div>
+      <div>
+        <h3 style={{ fontSize: '20px', fontWeight: '600', margin: 0 }}>{product.name}</h3>
+        <span style={{ fontSize: '12px', background: 'rgba(255,255,255,0.1)', padding: '4px 8px', borderRadius: '12px', marginTop: '8px', display: 'inline-block' }}>
+          {product.category?.name}
+        </span>
+      </div>
+      <p style={{ color: 'var(--text-muted)', fontSize: '14px', flex: 1 }}>{product.description}</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+        <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>${product.price.toFixed(2)}</span>
+        <button 
+          className="btn-primary" 
+          style={{ padding: '8px 16px', fontSize: '14px' }}
+          onClick={() => addToCart(product)}
+        >
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  );
+}
