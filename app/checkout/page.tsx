@@ -94,10 +94,10 @@ export default function CheckoutPage() {
                         paypalOrderId: details.id,
                         customerName: details.payer?.name?.given_name + ' ' + details.payer?.name?.surname,
                         email: details.payer?.email_address,
-                        address: details.purchase_units[0].shipping?.address?.address_line_1,
-                        city: details.purchase_units[0].shipping?.address?.admin_area_2,
-                        state: details.purchase_units[0].shipping?.address?.admin_area_1,
-                        zip: details.purchase_units[0].shipping?.address?.postal_code,
+                        address: details.purchase_units?.[0]?.shipping?.address?.address_line_1,
+                        city: details.purchase_units?.[0]?.shipping?.address?.admin_area_2,
+                        state: details.purchase_units?.[0]?.shipping?.address?.admin_area_1,
+                        zip: details.purchase_units?.[0]?.shipping?.address?.postal_code,
                         totalAmount: totalAmount,
                         items: items
                       })
