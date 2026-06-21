@@ -46,7 +46,7 @@ function LoginForm() {
       alignItems: 'center',
       gap: '28px',
     }}>
-      <Image src="/logo.png" alt="613cards.com" width={180} height={90} style={{ objectFit: 'contain' }} />
+      <Image src="/logo.png" alt="613cards.com" width={180} height={90} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
 
       <div style={{ textAlign: 'center' }}>
         <h1 style={{ fontSize: '24px', fontWeight: '700', margin: 0 }}>Welcome Back</h1>
