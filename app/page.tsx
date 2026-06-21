@@ -76,27 +76,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
   return (
     <main style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', gap: '40px', padding: '40px 0' }}>
       
-      {/* Minimal Header */}
-      <div style={{ 
-        padding: '20px 0', 
-        width: '100%', 
-        maxWidth: '800px', 
-        display: 'flex', 
-        flexDirection: 'column',
-        alignItems: 'center', 
-        gap: '24px',
-        textAlign: 'center'
-      }}>
-        <Image src="/logo.png" alt="613cards.com Logo" width={320} height={400} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} priority />
-        <div>
-          <h1 style={{ fontSize: '36px', fontWeight: '800', margin: '0 0 16px 0' }}>
-            Welcome to <span style={{ color: 'var(--accent-color)' }}>613cards.com</span>
-          </h1>
-          <p style={{ fontSize: '18px', color: 'var(--text-muted)', margin: '0 auto', lineHeight: '1.6', maxWidth: '600px' }}>
-            Discover the rarest trading cards, perfect your deck, and grab the best supplies to protect your collection.
-          </p>
-        </div>
-      </div>
+      {/* Header removed by user request */}
 
       <div style={{ width: '100%', maxWidth: '1000px' }}>
         <ShopFilters categories={categories} />
