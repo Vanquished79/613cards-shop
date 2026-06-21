@@ -87,7 +87,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
         flexWrap: 'wrap',
         justifyContent: 'center'
       }}>
-        <Image src="/logo.png" alt="613cards.com Logo" width={380} height={190} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
+        <Image src="/logo.png" alt="613cards.com Logo" width={760} height={380} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
         <div style={{ flex: '1 1 300px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: '800', margin: '0 0 8px 0' }}>
             Welcome to <span style={{ color: 'var(--accent-color)' }}>613cards.com</span>
