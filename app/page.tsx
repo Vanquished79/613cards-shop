@@ -80,21 +80,19 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
       <div style={{ 
         padding: '20px 0', 
         width: '100%', 
-        maxWidth: '1000px', 
+        maxWidth: '800px', 
         display: 'flex', 
+        flexDirection: 'column',
         alignItems: 'center', 
-        gap: '16px',
-        flexWrap: 'nowrap',
-        justifyContent: 'center'
+        gap: '24px',
+        textAlign: 'center'
       }}>
-        <div style={{ flexShrink: 0 }}>
-          <Image src="/logo.png" alt="613cards.com Logo" width={500} height={250} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
-        </div>
-        <div style={{ flex: '1 1 auto', maxWidth: '400px' }}>
-          <h1 style={{ fontSize: '28px', fontWeight: '800', margin: '0 0 8px 0' }}>
+        <Image src="/logo.png" alt="613cards.com Logo" width={320} height={400} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} priority />
+        <div>
+          <h1 style={{ fontSize: '36px', fontWeight: '800', margin: '0 0 16px 0' }}>
             Welcome to <span style={{ color: 'var(--accent-color)' }}>613cards.com</span>
           </h1>
-          <p style={{ fontSize: '15px', color: 'var(--text-muted)', margin: 0, lineHeight: '1.5' }}>
+          <p style={{ fontSize: '18px', color: 'var(--text-muted)', margin: '0 auto', lineHeight: '1.6', maxWidth: '600px' }}>
             Discover the rarest trading cards, perfect your deck, and grab the best supplies to protect your collection.
           </p>
         </div>
