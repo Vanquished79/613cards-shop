@@ -9,13 +9,19 @@ export function ProductCard({ product }: { product: any }) {
   return (
     <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', position: 'relative' }}>
       <Link href={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-        <div style={{ height: '280px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '16px', transition: 'transform 0.2s', cursor: 'pointer' }}
+        <div style={{ height: '280px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '16px', transition: 'transform 0.2s', cursor: 'pointer', position: 'relative' }}
              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
              onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
           {product.imageUrl ? (
             <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.4))' }} />
           ) : (
             <span style={{ color: 'var(--text-muted)' }}>No Image</span>
+          )}
+          
+          {product.compareAtPrice && product.compareAtPrice > product.price && (
+            <div style={{ position: 'absolute', top: '12px', right: '12px', background: '#ff3366', color: 'white', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '12px', boxShadow: '0 4px 10px rgba(255,51,102,0.4)' }}>
+              SALE
+            </div>
           )}
         </div>
       </Link>
@@ -29,24 +35,31 @@ export function ProductCard({ product }: { product: any }) {
           </h3>
         </Link>
           
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{product.category?.name || 'Uncategorized'}</span>
-            <span style={{ fontSize: '14px', color: product.availableStock > 0 ? '#4ade80' : '#ff8080', fontWeight: 'bold' }}>
-              {product.availableStock > 0 ? `${product.availableStock} in stock` : 'Out of Stock'}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{product.category?.name || 'Uncategorized'}</span>
+          <span style={{ fontSize: '14px', color: product.availableStock > 0 ? '#4ade80' : '#ff8080', fontWeight: 'bold' }}>
+            {product.availableStock > 0 ? `${product.availableStock} in stock` : 'Out of Stock'}
+          </span>
+        </div>
+
+        {product.condition && product.condition !== 'N/A' && (
+          <div style={{ marginBottom: '16px' }}>
+            <span style={{ background: 'rgba(255,255,255,0.1)', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(255,255,255,0.2)' }}>
+              {product.condition}
             </span>
           </div>
+        )}
 
-          {product.condition && product.condition !== 'N/A' && (
-            <div style={{ marginBottom: '16px' }}>
-              <span style={{ background: 'rgba(255,255,255,0.1)', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(255,255,255,0.2)' }}>
-                {product.condition}
+        <p style={{ color: 'var(--text-muted)', fontSize: '14px', flex: 1, marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.description}</p>
+        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {product.compareAtPrice && product.compareAtPrice > product.price && (
+              <span style={{ color: 'var(--text-muted)', textDecoration: 'line-through', fontSize: '14px', marginBottom: '2px' }}>
+                ${product.compareAtPrice.toFixed(2)}
               </span>
-            </div>
-          )}
-
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', flex: 1, marginBottom: '16px' }}>{product.description}</p>
-          <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>${product.price.toFixed(2)}</span>
+            )}
+            <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>${product.price.toFixed(2)}</span>
+          </div>
         <button 
           className="btn-primary" 
           style={{ 

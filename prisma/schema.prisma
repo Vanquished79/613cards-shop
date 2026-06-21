@@ -25,8 +25,9 @@ model Product {
   id          Int      @id @default(autoincrement())
   name        String
   description String?
-  price       Float
-  stock       Int      @default(0)
+  price          Float
+  compareAtPrice Float?
+  stock          Int      @default(0)
   imageUrl    String?
   condition   String?
   isFeatured  Boolean  @default(false)

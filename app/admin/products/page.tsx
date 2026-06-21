@@ -14,6 +14,8 @@ export default async function ProductsPage() {
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     const price = parseFloat(formData.get('price') as string);
+    const compareAtPriceRaw = formData.get('compareAtPrice') as string;
+    const compareAtPrice = compareAtPriceRaw ? parseFloat(compareAtPriceRaw) : null;
     const stock = parseInt(formData.get('stock') as string);
     const categoryId = parseInt(formData.get('categoryId') as string);
     const condition = (formData.get('condition') as string) || null;
@@ -35,7 +37,7 @@ export default async function ProductsPage() {
     if (!name || isNaN(price) || isNaN(categoryId)) return;
     
     await prisma.product.create({
-      data: { name, description, price, stock, categoryId, imageUrl: finalImageUrl, isFeatured }
+      data: { name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition }
     });
     revalidatePath('/admin/products');
   }
@@ -71,6 +73,7 @@ export default async function ProductsPage() {
         </select>
 
         <input name="price" type="number" step="0.01" placeholder="Price (e.g. 99.99)" required style={inputStyle} />
+        <input name="compareAtPrice" type="number" step="0.01" placeholder="Compare At Price (Optional Sale Price)" style={inputStyle} />
         <input name="stock" type="number" placeholder="Stock Quantity" required style={inputStyle} />
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>

@@ -15,11 +15,17 @@ export function ProductClient({ product }: { product: any }) {
       <div className="glass-panel" style={{ padding: '40px', display: 'flex', gap: '40px', flexWrap: 'wrap' }}>
         
         {/* Left Side: Image */}
-        <div style={{ flex: '1 1 300px', height: '400px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div style={{ flex: '1 1 300px', height: '400px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative' }}>
           {product.imageUrl ? (
             <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.5))' }} />
           ) : (
             <span style={{ color: 'var(--text-muted)' }}>No Image Available</span>
+          )}
+
+          {product.compareAtPrice && product.compareAtPrice > product.price && (
+            <div style={{ position: 'absolute', top: '16px', right: '16px', background: '#ff3366', color: 'white', padding: '8px 16px', borderRadius: '20px', fontWeight: 'bold', fontSize: '14px', boxShadow: '0 4px 10px rgba(255,51,102,0.4)' }}>
+              SALE
+            </div>
           )}
         </div>
 
@@ -27,7 +33,14 @@ export function ProductClient({ product }: { product: any }) {
         <div style={{ flex: '2 1 400px', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
             <h1 style={{ margin: 0, fontSize: '32px' }}>{product.name}</h1>
-            <span style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${product.price.toFixed(2)}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+              {product.compareAtPrice && product.compareAtPrice > product.price && (
+                <span style={{ color: 'var(--text-muted)', textDecoration: 'line-through', fontSize: '18px', marginBottom: '4px' }}>
+                  ${product.compareAtPrice.toFixed(2)}
+                </span>
+              )}
+              <span style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${product.price.toFixed(2)}</span>
+            </div>
           </div>
 
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '24px' }}>

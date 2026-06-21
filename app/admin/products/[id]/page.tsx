@@ -21,6 +21,8 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     const price = parseFloat(formData.get('price') as string);
+    const compareAtPriceRaw = formData.get('compareAtPrice') as string;
+    const compareAtPrice = compareAtPriceRaw ? parseFloat(compareAtPriceRaw) : null;
     const stock = parseInt(formData.get('stock') as string);
     const categoryId = parseInt(formData.get('categoryId') as string);
     const condition = (formData.get('condition') as string) || null;
@@ -43,7 +45,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     
     await prisma.product.update({
       where: { id: productId },
-      data: { name, description, price, stock, categoryId, imageUrl: finalImageUrl, isFeatured }
+      data: { name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition }
     });
     
     revalidatePath('/admin/products');
@@ -90,12 +92,17 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
 
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Price</label>
             <input name="price" type="number" step="0.01" defaultValue={product.price} required style={inputStyle} />
           </div>
           
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Compare At Price</label>
+            <input name="compareAtPrice" type="number" step="0.01" defaultValue={product.compareAtPrice || ''} placeholder="Optional Sale Price" style={inputStyle} />
+          </div>
+
           <div>
             <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Stock Quantity</label>
             <input name="stock" type="number" defaultValue={product.stock} required style={inputStyle} />
