@@ -66,6 +66,43 @@ export function ProductClient({ product }: { product: any }) {
             </p>
           </div>
 
+          {product.type === 'CARD' && (
+            <div style={{ marginBottom: '32px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '8px', overflow: 'hidden' }}>
+              <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid var(--glass-border)', fontWeight: 'bold' }}>
+                Card Specifications
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'var(--glass-border)' }}>
+                {product.cardName && (
+                  <div style={{ padding: '12px 16px', background: '#1a0b2e' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Player / Character</div>
+                    <div style={{ fontWeight: '500' }}>{product.cardName}</div>
+                  </div>
+                )}
+                {product.cardSeries && (
+                  <div style={{ padding: '12px 16px', background: '#1a0b2e' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Series / Year</div>
+                    <div style={{ fontWeight: '500' }}>{product.cardSeries}</div>
+                  </div>
+                )}
+                {product.cardBrand && (
+                  <div style={{ padding: '12px 16px', background: '#1a0b2e' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Brand</div>
+                    <div style={{ fontWeight: '500' }}>{product.cardBrand}</div>
+                  </div>
+                )}
+                <div style={{ padding: '12px 16px', background: '#1a0b2e', display: 'flex', gap: '8px', alignItems: 'center', gridColumn: (!product.cardName && !product.cardSeries && !product.cardBrand) ? '1 / -1' : 'auto' }}>
+                    {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>Rookie Card</span>}
+                    {product.isAutograph && <span style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(168, 85, 247, 0.3)', fontWeight: 'bold' }}>Autograph</span>}
+                    {product.isNumbered && <span style={{ background: 'rgba(234, 179, 8, 0.2)', color: '#facc15', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 'bold' }}>Numbered</span>}
+                    {product.isParallel && <span style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#f472b6', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 'bold' }}>Parallel</span>}
+                    {!product.isRookie && !product.isAutograph && !product.isNumbered && !product.isParallel && (
+                      <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Base Card</span>
+                    )}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div style={{ marginTop: 'auto', padding: '24px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
             <button 
               className="btn-primary" 

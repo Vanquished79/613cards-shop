@@ -1,0 +1,146 @@
+'use client';
+
+import { useState } from 'react';
+
+export default function EditProductForm({ product, categories, updateProductAction }: { product: any, categories: any[], updateProductAction: (formData: FormData) => void }) {
+  const [productType, setProductType] = useState(product.type || 'CARD');
+
+  return (
+    <form action={updateProductAction} encType="multipart/form-data" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      
+      {/* Product Type Selector */}
+      <div style={{ marginBottom: '8px' }}>
+        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Product Type</label>
+        <div style={{ display: 'flex', gap: '16px' }}>
+          {['CARD', 'BOX', 'SUPPLY'].map((type) => (
+            <label key={type} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <input 
+                type="radio" 
+                name="type" 
+                value={type} 
+                checked={productType === type} 
+                onChange={(e) => setProductType(e.target.value)} 
+                style={{ cursor: 'pointer' }}
+              />
+              <span style={{ color: 'white' }}>{type.charAt(0) + type.slice(1).toLowerCase()}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Listing Title</label>
+        <input name="name" defaultValue={product.name} required style={inputStyle} />
+      </div>
+      
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Category</label>
+          <select name="categoryId" defaultValue={product.categoryId} required style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
+            {categories.map((c: any) => <option key={c.id} value={c.id} style={{ background: '#1a0b2e', color: 'white' }}>{c.name}</option>)}
+          </select>
+        </div>
+        
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Condition</label>
+          <select name="condition" defaultValue={product.condition || ''} style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
+            <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Any Condition</option>
+            <option value="Mint" style={{ background: '#1a0b2e', color: 'white' }}>Mint</option>
+            <option value="Near Mint" style={{ background: '#1a0b2e', color: 'white' }}>Near Mint</option>
+            <option value="Lightly Played" style={{ background: '#1a0b2e', color: 'white' }}>Lightly Played</option>
+            <option value="Moderately Played" style={{ background: '#1a0b2e', color: 'white' }}>Moderately Played</option>
+            <option value="Heavily Played" style={{ background: '#1a0b2e', color: 'white' }}>Heavily Played</option>
+            <option value="Damaged" style={{ background: '#1a0b2e', color: 'white' }}>Damaged</option>
+            <option value="N/A" style={{ background: '#1a0b2e', color: 'white' }}>N/A (Sealed)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Price</label>
+          <input name="price" type="number" step="0.01" defaultValue={product.price} required style={inputStyle} />
+        </div>
+        
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Compare At Price</label>
+          <input name="compareAtPrice" type="number" step="0.01" defaultValue={product.compareAtPrice || ''} placeholder="Optional Sale Price" style={inputStyle} />
+        </div>
+
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Stock Quantity</label>
+          <input name="stock" type="number" defaultValue={product.stock} required style={inputStyle} />
+        </div>
+      </div>
+      
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Upload New Image (Optional)</label>
+          <input name="imageFile" type="file" accept="image/*" style={inputStyle} />
+        </div>
+      </div>
+      
+      <div>
+        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Or Paste Image URL</label>
+        <input name="imageUrl" defaultValue={product.imageUrl || ''} style={inputStyle} />
+      </div>
+
+      {/* Dynamic Card Fields */}
+      {productType === 'CARD' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+          <h3 style={{ gridColumn: '1 / -1', margin: '0 0 8px 0', fontSize: '16px', color: 'var(--accent-color)' }}>Card Details</h3>
+          
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Card/Player Name</label>
+            <input name="cardName" defaultValue={product.cardName || ''} style={inputStyle} />
+          </div>
+          
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Series (e.g. 2023 Prizm)</label>
+            <input name="cardSeries" defaultValue={product.cardSeries || ''} style={inputStyle} />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Brand (e.g. Panini)</label>
+            <input name="cardBrand" defaultValue={product.cardBrand || ''} style={inputStyle} />
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+              <input type="checkbox" name="isRookie" defaultChecked={product.isRookie} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+              Rookie Card
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+              <input type="checkbox" name="isAutograph" defaultChecked={product.isAutograph} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+              Autograph
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+              <input type="checkbox" name="isNumbered" defaultChecked={product.isNumbered} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+              Numbered
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+              <input type="checkbox" name="isParallel" defaultChecked={product.isParallel} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+              Parallel
+            </label>
+          </div>
+        </div>
+      )}
+
+      <div>
+        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Description</label>
+        <textarea name="description" defaultValue={product.description || ''} rows={4} style={{...inputStyle, resize: 'vertical'}} />
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
+        <input type="checkbox" id="isFeatured" name="isFeatured" defaultChecked={product.isFeatured} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+        <label htmlFor="isFeatured" style={{ color: 'white', cursor: 'pointer' }}>Feature this product on the Home Page</label>
+      </div>
+
+      <button type="submit" className="btn-primary" style={{ padding: '16px', marginTop: '16px', fontSize: '16px' }}>
+        Save Changes
+      </button>
+    </form>
+  );
+}
+
+const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', boxSizing: 'border-box' as const };

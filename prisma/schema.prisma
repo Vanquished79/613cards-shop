@@ -33,7 +33,18 @@ model Product {
   isFeatured  Boolean  @default(false)
   categoryId  Int
   category    Category @relation(fields: [categoryId], references: [id])
-  type        String   @default("CARD") // CARD or SUPPLY
+  
+  type        String   @default("CARD") // CARD, BOX, or SUPPLY
+
+  // Card-specific fields
+  cardName    String?
+  cardSeries  String?
+  cardBrand   String?
+  isRookie    Boolean  @default(false)
+  isAutograph Boolean  @default(false)
+  isNumbered  Boolean  @default(false)
+  isParallel  Boolean  @default(false)
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   orderItems  OrderItem[]

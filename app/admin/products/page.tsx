@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import { uploadProductImage } from '@/lib/supabase';
+import CreateProductForm from './CreateProductForm';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,16 @@ export default async function ProductsPage() {
     const categoryId = parseInt(formData.get('categoryId') as string);
     const condition = (formData.get('condition') as string) || null;
     
+    // Dynamic fields
+    const type = (formData.get('type') as string) || 'CARD';
+    const cardName = (formData.get('cardName') as string) || null;
+    const cardSeries = (formData.get('cardSeries') as string) || null;
+    const cardBrand = (formData.get('cardBrand') as string) || null;
+    const isRookie = formData.get('isRookie') === 'on';
+    const isAutograph = formData.get('isAutograph') === 'on';
+    const isNumbered = formData.get('isNumbered') === 'on';
+    const isParallel = formData.get('isParallel') === 'on';
+
     // Check if the user uploaded a file instead of pasting a URL
     const imageFile = formData.get('imageFile') as File;
     const fallbackUrl = formData.get('imageUrl') as string;
@@ -37,7 +48,10 @@ export default async function ProductsPage() {
     if (!name || isNaN(price) || isNaN(categoryId)) return;
     
     await prisma.product.create({
-      data: { name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition }
+      data: { 
+        name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition,
+        type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, isParallel 
+      }
     });
     revalidatePath('/admin/products');
   }
@@ -54,47 +68,7 @@ export default async function ProductsPage() {
       <h1>Manage Products</h1>
       <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>Add new cards or supplies to your store.</p>
       
-      <form action={createProduct} encType="multipart/form-data" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
-        <input name="name" placeholder="Product Name" required style={inputStyle} />
-        <select name="categoryId" required style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
-          <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Select Category</option>
-          {categories.map((c: any) => <option key={c.id} value={c.id} style={{ background: '#1a0b2e', color: 'white' }}>{c.name}</option>)}
-        </select>
-        
-        <select name="condition" style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
-          <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Any Condition</option>
-          <option value="Mint" style={{ background: '#1a0b2e', color: 'white' }}>Mint</option>
-          <option value="Near Mint" style={{ background: '#1a0b2e', color: 'white' }}>Near Mint</option>
-          <option value="Lightly Played" style={{ background: '#1a0b2e', color: 'white' }}>Lightly Played</option>
-          <option value="Moderately Played" style={{ background: '#1a0b2e', color: 'white' }}>Moderately Played</option>
-          <option value="Heavily Played" style={{ background: '#1a0b2e', color: 'white' }}>Heavily Played</option>
-          <option value="Damaged" style={{ background: '#1a0b2e', color: 'white' }}>Damaged</option>
-          <option value="N/A" style={{ background: '#1a0b2e', color: 'white' }}>N/A (Sealed)</option>
-        </select>
-
-        <input name="price" type="number" step="0.01" placeholder="Price (e.g. 99.99)" required style={inputStyle} />
-        <input name="compareAtPrice" type="number" step="0.01" placeholder="Compare At Price (Optional Sale Price)" style={inputStyle} />
-        <input name="stock" type="number" placeholder="Stock Quantity" required style={inputStyle} />
-        
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Upload Image (from computer)</label>
-          <input name="imageFile" type="file" accept="image/*" style={inputStyle} />
-        </div>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{ fontSize: '12px', color: 'var(--text-muted)' }}>OR Paste Image URL</label>
-          <input name="imageUrl" placeholder="https://..." style={inputStyle} />
-        </div>
-
-        <input name="description" placeholder="Description" style={{ ...inputStyle, gridColumn: '1 / -1' }} />
-        
-        <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
-          <input type="checkbox" id="isFeatured" name="isFeatured" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-          <label htmlFor="isFeatured" style={{ color: 'white', cursor: 'pointer' }}>Feature this product on the Home Page</label>
-        </div>
-
-        <button type="submit" className="btn-primary" style={{ gridColumn: '1 / -1' }}>Add Product</button>
-      </form>
+      <CreateProductForm categories={categories} createProductAction={createProduct} />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {products.length === 0 ? (
