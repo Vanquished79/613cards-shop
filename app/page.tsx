@@ -83,12 +83,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
         maxWidth: '1000px', 
         display: 'flex', 
         alignItems: 'center', 
-        gap: '24px',
+        gap: '16px',
         flexWrap: 'nowrap',
         justifyContent: 'center'
       }}>
-        <Image src="/logo.png" alt="613cards.com Logo" width={760} height={380} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
-        <div style={{ flex: '1 1 300px' }}>
+        <div style={{ flexShrink: 0 }}>
+          <Image src="/logo.png" alt="613cards.com Logo" width={500} height={250} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
+        </div>
+        <div style={{ flex: '1 1 auto', maxWidth: '400px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: '800', margin: '0 0 8px 0' }}>
             Welcome to <span style={{ color: 'var(--accent-color)' }}>613cards.com</span>
           </h1>
