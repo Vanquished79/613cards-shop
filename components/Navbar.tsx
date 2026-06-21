@@ -30,7 +30,6 @@ export function Navbar() {
           <Image src="/logo.png" alt="613cards.com Logo" width={160} height={80} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
         </Link>
         <Link href="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
-        <Link href="/shop" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Shop</Link>
         <Link href="/contact" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Contact</Link>
         
         {session?.user?.role === 'ADMIN' && (

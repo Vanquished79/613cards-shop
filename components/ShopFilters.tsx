@@ -28,11 +28,11 @@ function ShopFiltersInner({ categories }: { categories: any[] }) {
     if (cond) params.set('condition', cond);
     if (srt) params.set('sort', srt);
 
-    router.push(`/shop?${params.toString()}`);
+    router.push(`/?${params.toString()}`);
   }
 
   function handleClear() {
-    router.push('/shop');
+    router.push('/');
   }
 
   const inputStyle = { padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', outline: 'none' };
