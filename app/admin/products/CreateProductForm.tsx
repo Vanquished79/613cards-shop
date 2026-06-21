@@ -2,11 +2,21 @@
 
 import { useState } from 'react';
 
-export default function CreateProductForm({ categories, createProductAction }: { categories: any[], createProductAction: (formData: FormData) => void }) {
+export default function CreateProductForm({ categories, createProductAction }: { categories: any[], createProductAction: (formData: FormData) => Promise<{ error?: string, success?: boolean } | void> }) {
   const [productType, setProductType] = useState('CARD');
 
+  async function handleSubmit(formData: FormData) {
+    const result = await createProductAction(formData);
+    if (result?.error) {
+      alert("Failed to add product:\n\n" + result.error);
+    } else {
+      // Refresh or clear if needed, but Next.js router handles revalidation.
+      window.location.href = '/admin/products';
+    }
+  }
+
   return (
-    <form action={createProductAction} encType="multipart/form-data" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
+    <form action={handleSubmit} encType="multipart/form-data" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
       
       {/* Product Type Selector */}
       <div style={{ gridColumn: '1 / -1', marginBottom: '16px' }}>

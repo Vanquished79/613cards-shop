@@ -15,60 +15,51 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
   async function createProduct(formData: FormData) {
     'use server'
-    const name = formData.get('name') as string;
-    const description = formData.get('description') as string;
-    const price = parseFloat(formData.get('price') as string);
-    const compareAtPriceRaw = formData.get('compareAtPrice') as string;
-    const compareAtPrice = compareAtPriceRaw ? parseFloat(compareAtPriceRaw) : null;
-    const stock = parseInt(formData.get('stock') as string);
-    const categoryId = parseInt(formData.get('categoryId') as string);
-    const condition = (formData.get('condition') as string) || null;
-    
-    // Dynamic fields
-    const type = (formData.get('type') as string) || 'CARD';
-    const cardName = (formData.get('cardName') as string) || null;
-    const cardSeries = (formData.get('cardSeries') as string) || null;
-    const cardBrand = (formData.get('cardBrand') as string) || null;
-    const isRookie = formData.get('isRookie') === 'on';
-    const isAutograph = formData.get('isAutograph') === 'on';
-    const isNumbered = formData.get('isNumbered') === 'on';
-    const isParallel = formData.get('isParallel') === 'on';
-
-    // Check if the user uploaded a file instead of pasting a URL
-    const imageFile = formData.get('imageFile') as File;
-    const fallbackUrl = formData.get('imageUrl') as string;
-    let finalImageUrl = fallbackUrl || null;
-
-    if (imageFile && imageFile.size > 0) {
-      const uploadedUrl = await uploadProductImage(imageFile);
-      if (uploadedUrl) {
-        finalImageUrl = uploadedUrl;
-      }
-    }
-    
-    const isFeatured = formData.get('isFeatured') === 'on';
-    
-    if (!name || isNaN(price) || isNaN(categoryId)) return;
-    
-    let redirectError = null;
     try {
+      const name = formData.get('name') as string;
+      const description = formData.get('description') as string;
+      const price = parseFloat(formData.get('price') as string);
+      const compareAtPriceRaw = formData.get('compareAtPrice') as string;
+      const compareAtPrice = compareAtPriceRaw ? parseFloat(compareAtPriceRaw) : null;
+      const stock = parseInt(formData.get('stock') as string);
+      const categoryId = parseInt(formData.get('categoryId') as string);
+      const condition = (formData.get('condition') as string) || null;
+      
+      const type = (formData.get('type') as string) || 'CARD';
+      const cardName = (formData.get('cardName') as string) || null;
+      const cardSeries = (formData.get('cardSeries') as string) || null;
+      const cardBrand = (formData.get('cardBrand') as string) || null;
+      const isRookie = formData.get('isRookie') === 'on';
+      const isAutograph = formData.get('isAutograph') === 'on';
+      const isNumbered = formData.get('isNumbered') === 'on';
+      const isParallel = formData.get('isParallel') === 'on';
+
+      const imageFile = formData.get('imageFile') as File;
+      const fallbackUrl = formData.get('imageUrl') as string;
+      let finalImageUrl = fallbackUrl || null;
+
+      if (imageFile && imageFile.size > 0) {
+        const uploadedUrl = await uploadProductImage(imageFile);
+        if (uploadedUrl) {
+          finalImageUrl = uploadedUrl;
+        }
+      }
+      
+      const isFeatured = formData.get('isFeatured') === 'on';
+      
+      if (!name || isNaN(price) || isNaN(categoryId)) return { error: "Missing required fields" };
+      
       await prisma.product.create({
         data: { 
           name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition,
           type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, isParallel 
         }
       });
-    } catch (e: any) {
-      redirectError = e.message;
-    }
-    
-    if (redirectError) {
-      const { redirect } = await import('next/navigation');
-      redirect(`/admin/products?error=${encodeURIComponent(redirectError)}`);
-    } else {
+      
       revalidatePath('/admin/products');
-      const { redirect } = await import('next/navigation');
-      redirect('/admin/products'); // Clear any previous errors
+      return { success: true };
+    } catch (e: any) {
+      return { error: e.message };
     }
   }
 
