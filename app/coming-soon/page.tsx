@@ -36,22 +36,22 @@ export default function ComingSoon() {
       textAlign: 'center'
     }}>
       <div className="glass-panel" style={{
-        padding: '60px 40px',
+        padding: '40px',
         maxWidth: '700px',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '24px'
+        gap: '16px'
       }}>
-        {/* Much larger logo per user request */}
-        <div style={{ background: 'transparent', padding: '10px', borderRadius: '12px' }}>
+        {/* Much larger logo per user request, with negative margins to remove built-in image padding */}
+        <div style={{ background: 'transparent', marginTop: '-30px', marginBottom: '-40px', display: 'flex', justifyContent: 'center' }}>
           <Image 
             src="/logo.png" 
             alt="613cards.com Logo" 
-            width={500} 
-            height={250} 
-            style={{ objectFit: 'contain', mixBlendMode: 'lighten', marginBottom: '20px', maxWidth: '100%', height: 'auto' }} 
+            width={400} 
+            height={400} 
+            style={{ objectFit: 'contain', mixBlendMode: 'lighten', maxWidth: '100%', height: 'auto' }} 
             priority 
           />
         </div>
