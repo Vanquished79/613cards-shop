@@ -92,15 +92,21 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
           <div>
+            <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Price</label>
+            <input name="price" type="number" step="0.01" defaultValue={product.price} required style={inputStyle} />
+          </div>
+          
+          <div>
             <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Stock Quantity</label>
             <input name="stock" type="number" defaultValue={product.stock} required style={inputStyle} />
           </div>
-          
+        </div>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Upload New Image (Optional)</label>
             <input name="imageFile" type="file" accept="image/*" style={inputStyle} />
           </div>
-        </div>
         
         <div>
           <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Or Paste Image URL</label>
