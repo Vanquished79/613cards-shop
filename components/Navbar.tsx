@@ -27,7 +27,7 @@ export function Navbar() {
     }}>
       <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
         <Link href="/">
-          <Image src="/logo.png" alt="613cards.com Logo" width={100} height={50} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
+          <Image src="/logo.png" alt="613cards.com Logo" width={160} height={80} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
         </Link>
         <Link href="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
         <Link href="/shop" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>Shop</Link>

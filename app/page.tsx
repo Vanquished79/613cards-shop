@@ -31,7 +31,7 @@ export default async function Home() {
   return (
     <main style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '40px', padding: '40px 0' }}>
       <div style={{ textAlign: 'center' }}>
-        <Image src="/logo.png" alt="613cards.com Logo" width={300} height={150} style={{ margin: '0 auto', objectFit: 'contain', mixBlendMode: 'lighten' }} />
+        <Image src="/logo.png" alt="613cards.com Logo" width={460} height={230} style={{ margin: '0 auto', objectFit: 'contain', mixBlendMode: 'lighten' }} />
       </div>
       <div className="glass-panel" style={{ padding: '60px', textAlign: 'center', maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '800', margin: 0 }}>
