@@ -1,21 +1,33 @@
 'use client';
 
+import Link from 'next/link';
 import { useCart } from './CartProvider';
 
 export function ProductCard({ product }: { product: any }) {
   const { addToCart } = useCart();
 
   return (
-    <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <div style={{ height: '280px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '16px' }}>
-        {product.imageUrl ? (
-          <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.4))' }} />
-        ) : (
-          <span style={{ color: 'var(--text-muted)' }}>No Image</span>
-        )}
-      </div>
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-          <h3 style={{ margin: '0 0 8px 0', fontSize: '20px' }}>{product.name}</h3>
+    <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', position: 'relative' }}>
+      <Link href={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <div style={{ height: '280px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '16px', transition: 'transform 0.2s', cursor: 'pointer' }}
+             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+          {product.imageUrl ? (
+            <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.4))' }} />
+          ) : (
+            <span style={{ color: 'var(--text-muted)' }}>No Image</span>
+          )}
+        </div>
+      </Link>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+        <Link href={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', transition: 'color 0.2s' }}
+              onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-color)'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'inherit'}>
+            {product.name}
+          </h3>
+        </Link>
           
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{product.category?.name || 'Uncategorized'}</span>
