@@ -75,16 +75,27 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
 
   return (
     <main style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', gap: '40px', padding: '40px 0' }}>
-      <div style={{ textAlign: 'center' }}>
-        <Image src="/logo.png" alt="613cards.com Logo" width={460} height={230} style={{ margin: '0 auto', objectFit: 'contain', mixBlendMode: 'lighten' }} />
-      </div>
-      <div className="glass-panel" style={{ padding: '40px 60px', textAlign: 'center', maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-        <h1 style={{ fontSize: '40px', fontWeight: '800', margin: 0 }}>
-          Welcome to <span style={{ color: 'var(--accent-color)' }}>613cards.com</span>
-        </h1>
-        <p style={{ fontSize: '16px', color: 'var(--text-muted)', maxWidth: '500px', lineHeight: '1.6', margin: 0 }}>
-          Discover the rarest trading cards, perfect your deck, and grab the best supplies to protect your collection.
-        </p>
+      
+      {/* Minimal Header */}
+      <div className="glass-panel" style={{ 
+        padding: '20px 40px', 
+        width: '100%', 
+        maxWidth: '1000px', 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '32px',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
+      }}>
+        <Image src="/logo.png" alt="613cards.com Logo" width={240} height={120} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
+        <div style={{ flex: '1 1 300px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: '800', margin: '0 0 8px 0' }}>
+            Welcome to <span style={{ color: 'var(--accent-color)' }}>613cards.com</span>
+          </h1>
+          <p style={{ fontSize: '15px', color: 'var(--text-muted)', margin: 0, lineHeight: '1.5' }}>
+            Discover the rarest trading cards, perfect your deck, and grab the best supplies to protect your collection.
+          </p>
+        </div>
       </div>
 
       <div style={{ width: '100%', maxWidth: '1000px' }}>
