@@ -24,10 +24,11 @@ model Category {
 model Product {
   id          Int      @id @default(autoincrement())
   name        String
-  description String
+  description String?
   price       Float
   stock       Int      @default(0)
   imageUrl    String?
+  isFeatured  Boolean  @default(false)
   categoryId  Int
   category    Category @relation(fields: [categoryId], references: [id])
   type        String   @default("CARD") // CARD or SUPPLY

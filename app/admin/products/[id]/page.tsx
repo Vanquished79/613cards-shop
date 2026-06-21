@@ -36,11 +36,13 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
       }
     }
     
+    const isFeatured = formData.get('isFeatured') === 'on';
+    
     if (!name || isNaN(price) || isNaN(categoryId)) return;
     
     await prisma.product.update({
       where: { id: productId },
-      data: { name, description, price, stock, categoryId, imageUrl: finalImageUrl }
+      data: { name, description, price, stock, categoryId, imageUrl: finalImageUrl, isFeatured }
     });
     
     revalidatePath('/admin/products');
@@ -96,6 +98,11 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         <div>
           <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Description</label>
           <textarea name="description" defaultValue={product.description || ''} rows={4} style={{...inputStyle, resize: 'vertical'}} />
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
+          <input type="checkbox" id="isFeatured" name="isFeatured" defaultChecked={product.isFeatured} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+          <label htmlFor="isFeatured" style={{ color: 'white', cursor: 'pointer' }}>Feature this product on the Home Page</label>
         </div>
 
         <button type="submit" className="btn-primary" style={{ padding: '16px', marginTop: '16px', fontSize: '16px' }}>

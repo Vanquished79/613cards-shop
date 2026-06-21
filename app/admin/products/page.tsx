@@ -29,10 +29,12 @@ export default async function ProductsPage() {
       }
     }
     
+    const isFeatured = formData.get('isFeatured') === 'on';
+    
     if (!name || isNaN(price) || isNaN(categoryId)) return;
     
     await prisma.product.create({
-      data: { name, description, price, stock, categoryId, imageUrl: finalImageUrl }
+      data: { name, description, price, stock, categoryId, imageUrl: finalImageUrl, isFeatured }
     });
     revalidatePath('/admin/products');
   }
@@ -69,6 +71,12 @@ export default async function ProductsPage() {
         </div>
 
         <input name="description" placeholder="Description" style={{ ...inputStyle, gridColumn: '1 / -1' }} />
+        
+        <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
+          <input type="checkbox" id="isFeatured" name="isFeatured" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+          <label htmlFor="isFeatured" style={{ color: 'white', cursor: 'pointer' }}>Feature this product on the Home Page</label>
+        </div>
+
         <button type="submit" className="btn-primary" style={{ gridColumn: '1 / -1' }}>Add Product</button>
       </form>
 
@@ -85,7 +93,9 @@ export default async function ProductsPage() {
                   <div style={{ width: '50px', height: '50px', background: 'rgba(0,0,0,0.3)', borderRadius: '4px' }}></div>
                 )}
                 <div>
-                  <h3 style={{ margin: 0 }}>{p.name}</h3>
+                  <h3 style={{ margin: 0 }}>
+                    {p.name} {p.isFeatured && <span style={{ fontSize: '12px', background: 'rgba(255, 183, 3, 0.2)', color: '#ffb703', padding: '2px 6px', borderRadius: '4px', marginLeft: '8px', verticalAlign: 'middle' }}>Featured</span>}
+                  </h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '4px 0 0 0' }}>{p.category.name} • Stock: {p.stock}</p>
                 </div>
               </div>

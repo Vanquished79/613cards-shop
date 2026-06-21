@@ -8,8 +8,9 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   const now = new Date();
   
-  // Fetch up to 3 latest products from the database to show as "Featured"
+  // Fetch up to 3 featured products from the database
   const featuredProducts = await prisma.product.findMany({
+    where: { isFeatured: true },
     take: 3,
     orderBy: { createdAt: 'desc' },
     include: { 
