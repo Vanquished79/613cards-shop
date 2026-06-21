@@ -107,6 +107,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
             <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Upload New Image (Optional)</label>
             <input name="imageFile" type="file" accept="image/*" style={inputStyle} />
           </div>
+        </div>
         
         <div>
           <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Or Paste Image URL</label>
