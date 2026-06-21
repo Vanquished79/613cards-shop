@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 export const dynamic = 'force-dynamic';
 
 export default async function OrdersPage() {
@@ -10,6 +11,24 @@ export default async function OrdersPage() {
       }
     }
   });
+
+  async function updateTracking(formData: FormData) {
+    'use server'
+    const id = parseInt(formData.get('orderId') as string);
+    const trackingNumber = formData.get('trackingNumber') as string;
+    const shippingCarrier = formData.get('shippingCarrier') as string;
+    
+    await prisma.order.update({
+      where: { id },
+      data: { 
+        trackingNumber, 
+        shippingCarrier,
+        status: trackingNumber ? 'SHIPPED' : 'PAID' // Auto update status if tracking provided
+      }
+    });
+
+    revalidatePath('/admin/orders');
+  }
 
   return (
     <div style={{ padding: '28px' }} className="glass-panel">
@@ -53,6 +72,28 @@ export default async function OrdersPage() {
                   <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}>{order.address}</p>
                   <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}>{order.city}, {order.state} {order.zip}</p>
                   <p style={{ margin: '8px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>PayPal ID: {order.paypalOrderId}</p>
+                </div>
+
+                <div style={{ borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '24px' }}>
+                  <h4 style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '16px' }}>Shipping & Tracking</h4>
+                  <form action={updateTracking} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <input type="hidden" name="orderId" value={order.id} />
+                    <input 
+                      name="shippingCarrier" 
+                      placeholder="Carrier (e.g. USPS, FedEx)" 
+                      defaultValue={order.shippingCarrier || ''}
+                      style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '12px' }} 
+                    />
+                    <input 
+                      name="trackingNumber" 
+                      placeholder="Tracking Number" 
+                      defaultValue={order.trackingNumber || ''}
+                      style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '12px' }} 
+                    />
+                    <button type="submit" style={{ padding: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', marginTop: '4px' }}>
+                      Save & Mark Shipped
+                    </button>
+                  </form>
                 </div>
 
                 <div>

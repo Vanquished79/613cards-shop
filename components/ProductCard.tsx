@@ -14,14 +14,26 @@ export function ProductCard({ product }: { product: any }) {
           <span style={{ color: 'var(--text-muted)' }}>No Image</span>
         )}
       </div>
-      <div>
-        <h3 style={{ fontSize: '20px', fontWeight: '600', margin: 0 }}>{product.name}</h3>
-        <span style={{ fontSize: '12px', background: 'rgba(255,255,255,0.1)', padding: '4px 8px', borderRadius: '12px', marginTop: '8px', display: 'inline-block' }}>
-          {product.category?.name}
-        </span>
-      </div>
-      <p style={{ color: 'var(--text-muted)', fontSize: '14px', flex: 1 }}>{product.description}</p>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '20px' }}>{product.name}</h3>
+          
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{product.category?.name || 'Uncategorized'}</span>
+            <span style={{ fontSize: '14px', color: product.availableStock > 0 ? '#4ade80' : '#ff8080', fontWeight: 'bold' }}>
+              {product.availableStock > 0 ? `${product.availableStock} in stock` : 'Out of Stock'}
+            </span>
+          </div>
+
+          {product.condition && product.condition !== 'N/A' && (
+            <div style={{ marginBottom: '16px' }}>
+              <span style={{ background: 'rgba(255,255,255,0.1)', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(255,255,255,0.2)' }}>
+                {product.condition}
+              </span>
+            </div>
+          )}
+
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px', flex: 1, marginBottom: '16px' }}>{product.description}</p>
+          <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>${product.price.toFixed(2)}</span>
         <button 
           className="btn-primary" 
@@ -38,6 +50,7 @@ export function ProductCard({ product }: { product: any }) {
             ? (product.stock > 0 ? 'In Another Cart' : 'Out of Stock') 
             : 'Add to Cart'}
         </button>
+      </div>
       </div>
     </div>
   );

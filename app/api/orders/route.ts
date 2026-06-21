@@ -57,6 +57,20 @@ export async function POST(request: Request) {
       return newOrder;
     });
 
+    // Trigger Emails in the background
+    import('@/lib/email').then(({ sendOrderConfirmation, sendAdminNotification }) => {
+      sendOrderConfirmation(
+        order.email, 
+        order.customerName, 
+        order.id, 
+        order.totalAmount
+      );
+      sendAdminNotification(
+        `New Order #${order.id} Received!`,
+        `A new order has been placed by ${order.customerName} for $${order.totalAmount.toFixed(2)}.`
+      );
+    }).catch(console.error);
+
     return NextResponse.json(order, { status: 201 });
   } catch (error) {
     console.error('Failed to save order:', error);

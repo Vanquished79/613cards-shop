@@ -1,0 +1,102 @@
+'use client';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Search } from 'lucide-react';
+import { Suspense } from 'react';
+
+function ShopFiltersInner({ categories }: { categories: any[] }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const q = searchParams.get('q') || '';
+  const categoryId = searchParams.get('categoryId') || '';
+  const condition = searchParams.get('condition') || '';
+  const sort = searchParams.get('sort') || '';
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const params = new URLSearchParams();
+
+    const search = formData.get('q') as string;
+    const cat = formData.get('categoryId') as string;
+    const cond = formData.get('condition') as string;
+    const srt = formData.get('sort') as string;
+
+    if (search) params.set('q', search);
+    if (cat) params.set('categoryId', cat);
+    if (cond) params.set('condition', cond);
+    if (srt) params.set('sort', srt);
+
+    router.push(`/shop?${params.toString()}`);
+  }
+
+  function handleClear() {
+    router.push('/shop');
+  }
+
+  const inputStyle = { padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', outline: 'none' };
+
+  return (
+    <form onSubmit={handleSubmit} className="glass-panel" style={{ padding: '24px', display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', marginBottom: '32px' }}>
+      
+      <div style={{ flex: '1 1 200px', display: 'flex', alignItems: 'center', position: 'relative' }}>
+        <input 
+          name="q" 
+          defaultValue={q} 
+          placeholder="Search cards..." 
+          style={{ ...inputStyle, width: '100%', paddingLeft: '40px' }} 
+        />
+        <Search size={18} style={{ position: 'absolute', left: '14px', color: 'var(--text-muted)' }} />
+      </div>
+
+      <div style={{ flex: '1 1 150px' }}>
+        <select name="categoryId" defaultValue={categoryId} style={{ ...inputStyle, width: '100%', WebkitAppearance: 'none', appearance: 'none' }}>
+          <option value="" style={{ background: '#1a0b2e', color: 'white' }}>All Categories</option>
+          {categories.map(c => (
+            <option key={c.id} value={c.id.toString()} style={{ background: '#1a0b2e', color: 'white' }}>{c.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div style={{ flex: '1 1 150px' }}>
+        <select name="condition" defaultValue={condition} style={{ ...inputStyle, width: '100%', WebkitAppearance: 'none', appearance: 'none' }}>
+          <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Any Condition</option>
+          <option value="Mint" style={{ background: '#1a0b2e', color: 'white' }}>Mint</option>
+          <option value="Near Mint" style={{ background: '#1a0b2e', color: 'white' }}>Near Mint</option>
+          <option value="Lightly Played" style={{ background: '#1a0b2e', color: 'white' }}>Lightly Played</option>
+          <option value="Moderately Played" style={{ background: '#1a0b2e', color: 'white' }}>Moderately Played</option>
+          <option value="Heavily Played" style={{ background: '#1a0b2e', color: 'white' }}>Heavily Played</option>
+          <option value="Damaged" style={{ background: '#1a0b2e', color: 'white' }}>Damaged</option>
+          <option value="N/A" style={{ background: '#1a0b2e', color: 'white' }}>N/A (Sealed)</option>
+        </select>
+      </div>
+
+      <div style={{ flex: '1 1 150px' }}>
+        <select name="sort" defaultValue={sort} style={{ ...inputStyle, width: '100%', WebkitAppearance: 'none', appearance: 'none' }}>
+          <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Newest First</option>
+          <option value="price_asc" style={{ background: '#1a0b2e', color: 'white' }}>Price: Low to High</option>
+          <option value="price_desc" style={{ background: '#1a0b2e', color: 'white' }}>Price: High to Low</option>
+        </select>
+      </div>
+
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <button type="submit" className="btn-primary" style={{ padding: '10px 20px', borderRadius: '8px' }}>Apply</button>
+        {(q || categoryId || condition || sort) && (
+          <button type="button" onClick={handleClear} style={{ padding: '10px 20px', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', cursor: 'pointer' }}>
+            Clear
+          </button>
+        )}
+      </div>
+
+    </form>
+  );
+}
+
+export function ShopFilters({ categories }: { categories: any[] }) {
+  return (
+    <Suspense fallback={<div className="glass-panel" style={{ height: '90px', marginBottom: '32px' }}>Loading filters...</div>}>
+      <ShopFiltersInner categories={categories} />
+    </Suspense>
+  );
+}

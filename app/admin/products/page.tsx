@@ -16,6 +16,7 @@ export default async function ProductsPage() {
     const price = parseFloat(formData.get('price') as string);
     const stock = parseInt(formData.get('stock') as string);
     const categoryId = parseInt(formData.get('categoryId') as string);
+    const condition = (formData.get('condition') as string) || null;
     
     // Check if the user uploaded a file instead of pasting a URL
     const imageFile = formData.get('imageFile') as File;
@@ -57,6 +58,18 @@ export default async function ProductsPage() {
           <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Select Category</option>
           {categories.map((c: any) => <option key={c.id} value={c.id} style={{ background: '#1a0b2e', color: 'white' }}>{c.name}</option>)}
         </select>
+        
+        <select name="condition" style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
+          <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Any Condition</option>
+          <option value="Mint" style={{ background: '#1a0b2e', color: 'white' }}>Mint</option>
+          <option value="Near Mint" style={{ background: '#1a0b2e', color: 'white' }}>Near Mint</option>
+          <option value="Lightly Played" style={{ background: '#1a0b2e', color: 'white' }}>Lightly Played</option>
+          <option value="Moderately Played" style={{ background: '#1a0b2e', color: 'white' }}>Moderately Played</option>
+          <option value="Heavily Played" style={{ background: '#1a0b2e', color: 'white' }}>Heavily Played</option>
+          <option value="Damaged" style={{ background: '#1a0b2e', color: 'white' }}>Damaged</option>
+          <option value="N/A" style={{ background: '#1a0b2e', color: 'white' }}>N/A (Sealed)</option>
+        </select>
+
         <input name="price" type="number" step="0.01" placeholder="Price (e.g. 99.99)" required style={inputStyle} />
         <input name="stock" type="number" placeholder="Stock Quantity" required style={inputStyle} />
         

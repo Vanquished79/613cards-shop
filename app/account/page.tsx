@@ -122,13 +122,20 @@ export default async function AccountPage() {
                     </div>
                     
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {order.items.map((item) => (
+                      {order.items.map((item: any) => (
                         <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
                           <span>{item.quantity}x {item.product.name}</span>
                           <span style={{ color: 'var(--text-muted)' }}>${(item.price * item.quantity).toFixed(2)}</span>
                         </div>
                       ))}
                     </div>
+
+                    {order.trackingNumber && (
+                      <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)', fontSize: '14px' }}>
+                        <span style={{ color: 'var(--text-muted)' }}>Tracking: </span>
+                        <strong>{order.shippingCarrier ? `${order.shippingCarrier} - ` : ''}{order.trackingNumber}</strong>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
