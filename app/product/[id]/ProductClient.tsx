@@ -43,7 +43,7 @@ export function ProductClient({ product }: { product: any }) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '24px' }}>
             <span style={{ background: 'rgba(255,255,255,0.05)', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', border: '1px solid var(--glass-border)' }}>
               {product.category?.name || 'Uncategorized'}
             </span>
@@ -54,7 +54,19 @@ export function ProductClient({ product }: { product: any }) {
               </span>
             )}
 
-            <span style={{ fontSize: '14px', color: product.availableStock > 0 ? '#4ade80' : '#ff8080', fontWeight: 'bold' }}>
+            {product.type === 'CARD' && (
+              <>
+                {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>Rookie Card</span>}
+                {product.isAutograph && <span style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', border: '1px solid rgba(168, 85, 247, 0.3)', fontWeight: 'bold' }}>Autograph</span>}
+                {product.isNumbered && <span style={{ background: 'rgba(234, 179, 8, 0.2)', color: '#facc15', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 'bold' }}>Numbered</span>}
+                {product.isParallel && <span style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#f472b6', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 'bold' }}>Parallel</span>}
+                {!product.isRookie && !product.isAutograph && !product.isNumbered && !product.isParallel && (
+                  <span style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-muted)', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', border: '1px solid var(--glass-border)' }}>Base Card</span>
+                )}
+              </>
+            )}
+
+            <span style={{ fontSize: '14px', color: product.availableStock > 0 ? '#4ade80' : '#ff8080', fontWeight: 'bold', marginLeft: 'auto' }}>
               {product.availableStock > 0 ? `${product.availableStock} in stock` : 'Out of Stock'}
             </span>
           </div>
@@ -85,20 +97,11 @@ export function ProductClient({ product }: { product: any }) {
                   </div>
                 )}
                 {product.cardBrand && (
-                  <div style={{ padding: '12px 16px', background: '#1a0b2e' }}>
+                  <div style={{ padding: '12px 16px', background: '#1a0b2e', gridColumn: (!product.cardName && !product.cardSeries) ? '1 / -1' : 'auto' }}>
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Brand</div>
                     <div style={{ fontWeight: '500' }}>{product.cardBrand}</div>
                   </div>
                 )}
-                <div style={{ padding: '12px 16px', background: '#1a0b2e', display: 'flex', gap: '8px', alignItems: 'center', gridColumn: (!product.cardName && !product.cardSeries && !product.cardBrand) ? '1 / -1' : 'auto' }}>
-                    {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>Rookie Card</span>}
-                    {product.isAutograph && <span style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(168, 85, 247, 0.3)', fontWeight: 'bold' }}>Autograph</span>}
-                    {product.isNumbered && <span style={{ background: 'rgba(234, 179, 8, 0.2)', color: '#facc15', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 'bold' }}>Numbered</span>}
-                    {product.isParallel && <span style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#f472b6', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 'bold' }}>Parallel</span>}
-                    {!product.isRookie && !product.isAutograph && !product.isNumbered && !product.isParallel && (
-                      <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Base Card</span>
-                    )}
-                </div>
               </div>
             </div>
           )}
