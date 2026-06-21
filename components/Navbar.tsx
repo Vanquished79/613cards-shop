@@ -13,27 +13,16 @@ export function Navbar() {
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <nav style={{ 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center', 
-      padding: '12px 40px', 
-      background: 'rgba(26, 11, 46, 0.95)',
-      backdropFilter: 'blur(12px)',
-      borderBottom: '1px solid var(--glass-border)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 30
-    }}>
+    <nav className="navbar-container">
       {/* Left: Prominent Logo */}
       <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
-          <Image src="/logo.png" alt="613cards.com Logo" width={300} height={150} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} priority />
+          <Image src="/logo.png" alt="613cards.com Logo" width={300} height={150} className="navbar-logo" style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} priority />
         </Link>
       </div>
 
       {/* Center: Navigation Links */}
-      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: '40px', alignItems: 'center' }}>
+      <div className="nav-links" style={{ flex: 1 }}>
         <Link href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '16px', textTransform: 'uppercase', letterSpacing: '1px' }}>Shop</Link>
         <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '16px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' }}
               onMouseOver={(e) => e.currentTarget.style.color = 'white'}
@@ -46,7 +35,7 @@ export function Navbar() {
       </div>
 
       {/* Right: Account & Cart */}
-      <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: '32px', alignItems: 'center' }}>
+      <div className="navbar-right" style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: '32px', alignItems: 'center' }}>
         {session ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <Link href="/account" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '14px', transition: 'color 0.2s' }}

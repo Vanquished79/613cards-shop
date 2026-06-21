@@ -16,7 +16,7 @@ export default function CreateProductForm({ categories, createProductAction }: {
   }
 
   return (
-    <form action={handleSubmit} encType="multipart/form-data" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
+    <form action={handleSubmit} encType="multipart/form-data" className="admin-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
       
       {/* Product Type Selector */}
       <div style={{ gridColumn: '1 / -1', marginBottom: '16px' }}>

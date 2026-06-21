@@ -38,7 +38,7 @@ function ShopFiltersInner({ categories }: { categories: any[] }) {
   const inputStyle = { padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', outline: 'none' };
 
   return (
-    <form onSubmit={handleSubmit} className="glass-panel" style={{ padding: '24px', display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', marginBottom: '32px' }}>
+    <form onSubmit={handleSubmit} className="glass-panel filters-container" style={{ marginBottom: '32px' }}>
       
       <div style={{ flex: '1 1 200px', display: 'flex', alignItems: 'center', position: 'relative' }}>
         <input 

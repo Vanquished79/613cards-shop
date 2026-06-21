@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
-import { Navbar } from "@/components/Navbar";
-import { CartSlideOut } from "@/components/CartSlideOut";
+import { ConditionalLayout } from "@/components/ConditionalLayout";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-primary" });
 
@@ -29,11 +28,9 @@ export default async function RootLayout({
       <body className={inter.className}>
         <Providers>
           <CartProvider>
-            <Navbar />
-            <CartSlideOut />
-            <div className="container">
+            <ConditionalLayout>
               {children}
-            </div>
+            </ConditionalLayout>
           </CartProvider>
         </Providers>
       </body>
