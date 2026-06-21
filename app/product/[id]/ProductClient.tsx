@@ -79,12 +79,12 @@ export function ProductClient({ product }: { product: any }) {
                   </div>
                 )}
                 {product.cardBrand && (
-                  <div style={{ padding: '12px 16px', background: '#1a0b2e', gridColumn: (!product.cardName && !product.cardSeries) ? '1 / -1' : 'auto' }}>
+                  <div style={{ padding: '12px 16px', background: '#1a0b2e' }}>
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Brand</div>
                     <div style={{ fontWeight: '500' }}>{product.cardBrand}</div>
                   </div>
                 )}
-                <div style={{ padding: '12px 16px', background: '#1a0b2e', display: 'flex', gap: '8px', alignItems: 'center', gridColumn: '1 / -1', flexWrap: 'wrap' }}>
+                <div style={{ padding: '12px 16px', background: '#1a0b2e', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                     {product.condition && product.condition !== 'N/A' && (
                       <span style={{ background: 'rgba(255,255,255,0.1)', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(255,255,255,0.2)' }}>
                         {product.condition}
