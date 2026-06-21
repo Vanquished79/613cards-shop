@@ -6,7 +6,10 @@ import CreateProductForm from './CreateProductForm';
 
 export const dynamic = 'force-dynamic';
 
-export default async function ProductsPage() {
+export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+  const resolvedSearchParams = await searchParams;
+  const errorMessage = resolvedSearchParams.error;
+
   const products = await prisma.product.findMany({ include: { category: true }, orderBy: { createdAt: 'desc' } });
   const categories = await prisma.category.findMany();
 
@@ -47,13 +50,26 @@ export default async function ProductsPage() {
     
     if (!name || isNaN(price) || isNaN(categoryId)) return;
     
-    await prisma.product.create({
-      data: { 
-        name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition,
-        type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, isParallel 
-      }
-    });
-    revalidatePath('/admin/products');
+    let redirectError = null;
+    try {
+      await prisma.product.create({
+        data: { 
+          name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition,
+          type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, isParallel 
+        }
+      });
+    } catch (e: any) {
+      redirectError = e.message;
+    }
+    
+    if (redirectError) {
+      const { redirect } = await import('next/navigation');
+      redirect(`/admin/products?error=${encodeURIComponent(redirectError)}`);
+    } else {
+      revalidatePath('/admin/products');
+      const { redirect } = await import('next/navigation');
+      redirect('/admin/products'); // Clear any previous errors
+    }
   }
 
   async function deleteProduct(formData: FormData) {
@@ -67,6 +83,12 @@ export default async function ProductsPage() {
     <div className="glass-panel" style={{ padding: '32px' }}>
       <h1>Manage Products</h1>
       <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>Add new cards or supplies to your store.</p>
+      
+      {errorMessage && (
+        <div style={{ padding: '16px', background: 'rgba(255, 51, 102, 0.1)', border: '1px solid #ff3366', borderRadius: '8px', color: '#ff3366', marginBottom: '24px' }}>
+          <strong>Error:</strong> {errorMessage}
+        </div>
+      )}
       
       <CreateProductForm categories={categories} createProductAction={createProduct} />
 
