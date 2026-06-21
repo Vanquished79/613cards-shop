@@ -16,8 +16,8 @@ export function Navbar() {
     <nav className="navbar-container">
       {/* Left: Prominent Logo */}
       <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
-          <Image src="/logo.png" alt="613cards.com Logo" width={300} height={150} className="navbar-logo" style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} priority />
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', background: 'transparent' }}>
+          <Image src="/logo.png" alt="613cards.com Logo" width={300} height={150} className="navbar-logo" style={{ objectFit: 'contain', mixBlendMode: 'lighten', backgroundColor: 'transparent' }} priority />
         </Link>
       </div>
 
