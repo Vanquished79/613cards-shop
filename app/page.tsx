@@ -77,14 +77,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     <main style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', gap: '40px', padding: '40px 0' }}>
       
       {/* Minimal Header */}
-      <div className="glass-panel" style={{ 
-        padding: '20px 40px', 
+      <div style={{ 
+        padding: '20px 0', 
         width: '100%', 
         maxWidth: '1000px', 
         display: 'flex', 
         alignItems: 'center', 
-        gap: '48px',
-        flexWrap: 'wrap',
+        gap: '24px',
+        flexWrap: 'nowrap',
         justifyContent: 'center'
       }}>
         <Image src="/logo.png" alt="613cards.com Logo" width={760} height={380} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
