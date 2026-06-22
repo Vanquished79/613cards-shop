@@ -7,6 +7,16 @@ import { useState } from 'react';
 export function ProductClient({ product }: { product: any }) {
   const { addToCart } = useCart();
   const [isImageExpanded, setIsImageExpanded] = useState(false);
+  const [isSuperZoomed, setIsSuperZoomed] = useState(false);
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+
+  const handleOverlayMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isSuperZoomed) return;
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = Math.max(0, Math.min(100, ((e.clientX - left) / width) * 100));
+    const y = Math.max(0, Math.min(100, ((e.clientY - top) / height) * 100));
+    setZoomPos({ x, y });
+  };
 
   return (
     <div style={{ maxWidth: '1000px', margin: '40px auto', padding: '0 20px' }}>
@@ -20,7 +30,13 @@ export function ProductClient({ product }: { product: any }) {
         <div 
           className="product-image-container" 
           style={{ flex: '1 1 300px', height: '400px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative', cursor: product.imageUrl ? 'zoom-in' : 'default' }}
-          onClick={() => product.imageUrl && setIsImageExpanded(true)}
+          onClick={() => {
+            if (product.imageUrl) {
+              setIsImageExpanded(true);
+              setIsSuperZoomed(false);
+              setZoomPos({ x: 50, y: 50 });
+            }
+          }}
         >
           {product.imageUrl ? (
             <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.5))' }} />
@@ -41,16 +57,74 @@ export function ProductClient({ product }: { product: any }) {
             style={{
               position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', 
               backgroundColor: 'rgba(0, 0, 0, 0.9)', zIndex: 9999, 
-              display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out'
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden'
             }}
-            onClick={() => setIsImageExpanded(false)}
+            onClick={() => {
+              setIsImageExpanded(false);
+              setIsSuperZoomed(false);
+            }}
           >
-            <div style={{ position: 'absolute', top: '20px', right: '20px', color: 'white', fontSize: '32px', cursor: 'pointer' }}>&times;</div>
-            <img 
-              src={product.imageUrl} 
-              alt={product.name} 
-              style={{ maxWidth: '90vw', maxHeight: '90vh', objectFit: 'contain', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.8))' }} 
-            />
+            <div 
+              style={{ position: 'absolute', top: '20px', right: '30px', color: 'white', fontSize: '40px', cursor: 'pointer', zIndex: 10000, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsImageExpanded(false);
+                setIsSuperZoomed(false);
+              }}
+            >
+              &times;
+            </div>
+            
+            <div
+              style={{
+                width: '90vw',
+                height: '90vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: isSuperZoomed ? 'zoom-out' : 'zoom-in',
+                position: 'relative'
+              }}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent closing
+                if (!isSuperZoomed) {
+                  // On first click to zoom, center on the click position
+                  const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+                  const x = Math.max(0, Math.min(100, ((e.clientX - left) / width) * 100));
+                  const y = Math.max(0, Math.min(100, ((e.clientY - top) / height) * 100));
+                  setZoomPos({ x, y });
+                }
+                setIsSuperZoomed(!isSuperZoomed);
+              }}
+              onMouseMove={handleOverlayMouseMove}
+              onMouseLeave={() => {
+                if (isSuperZoomed) {
+                  setZoomPos({ x: 50, y: 50 }); // Optional: reset or keep edge
+                }
+              }}
+            >
+              <img 
+                src={product.imageUrl} 
+                alt={product.name} 
+                style={{ 
+                  maxWidth: '100%', 
+                  maxHeight: '100%', 
+                  objectFit: 'contain', 
+                  filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.8))',
+                  transform: isSuperZoomed ? 'scale(2.5)' : 'scale(1)',
+                  transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
+                  transition: isSuperZoomed ? 'transform 0.3s cubic-bezier(0.2, 0, 0.2, 1)' : 'transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), transform-origin 0.3s ease',
+                  willChange: 'transform'
+                }} 
+              />
+            </div>
+            
+            {!isSuperZoomed && (
+              <div style={{ position: 'absolute', bottom: '30px', color: 'rgba(255,255,255,0.7)', fontSize: '14px', background: 'rgba(0,0,0,0.5)', padding: '8px 16px', borderRadius: '20px', pointerEvents: 'none' }}>
+                Click image to super zoom
+              </div>
+            )}
           </div>
         )}
 
