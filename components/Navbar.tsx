@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useCart } from './CartProvider';
 import { ShoppingCart } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
+import logoImg from '../public/brand-icon.png';
 
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
@@ -40,7 +41,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
         {/* Left: Logo */}
         <div style={{ display: 'flex', alignItems: 'center', width: '150px', height: '80px', position: 'relative' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', background: 'transparent', position: 'absolute', top: '-10px', left: 0 }}>
-            <Image src="/brand-icon.png" alt="613cards.online Logo" width={150} height={150} className="navbar-logo" style={{ objectFit: 'contain', backgroundColor: 'transparent', transform: 'scale(1.5)', transformOrigin: 'top left', zIndex: 100 }} unoptimized priority />
+            <Image src={logoImg} alt="613cards.online Logo" width={150} height={150} className="navbar-logo" style={{ objectFit: 'contain', backgroundColor: 'transparent', transform: 'scale(1.5)', transformOrigin: 'top left', zIndex: 100 }} priority />
           </Link>
         </div>
 

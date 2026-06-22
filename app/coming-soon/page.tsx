@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { submitWaitlist } from './actions';
+import logoImg from '../../public/brand-icon.png';
 
 export default function ComingSoon() {
   const [email, setEmail] = useState('');
@@ -53,12 +54,11 @@ export default function ComingSoon() {
         {/* Much larger logo per user request, with negative margins to remove built-in image padding */}
         <div style={{ background: 'transparent', marginTop: '-30px', marginBottom: '-40px', display: 'flex', justifyContent: 'center' }}>
           <Image 
-            src="/brand-icon.png" 
+            src={logoImg} 
             alt="613cards.online Logo" 
             width={400} 
             height={400} 
             style={{ objectFit: 'contain', backgroundColor: 'transparent', maxWidth: '100%', height: 'auto' }} 
-            unoptimized
             priority 
           />
         </div>
