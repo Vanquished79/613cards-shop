@@ -120,11 +120,13 @@ export default function CheckoutPage() {
                     },
                     items: items.map(item => ({
                       name: item.name.substring(0, 127),
+                      description: `${item.name} - ${item.description || ''}`.substring(0, 127),
                       quantity: item.quantity.toString(),
                       unit_amount: {
                         currency_code: 'CAD',
                         value: item.price.toFixed(2)
-                      }
+                      },
+                      ...(item.imageUrl ? { image_url: item.imageUrl.startsWith('http') ? item.imageUrl : `https://613cards.online${item.imageUrl}` } : {})
                     }))
                   };
 

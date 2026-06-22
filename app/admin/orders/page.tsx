@@ -2,8 +2,11 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 export const dynamic = 'force-dynamic';
 
-export default async function OrdersPage() {
-  const orders = await prisma.order.findMany({
+import Link from 'next/link';
+
+export default async function OrdersPage({ searchParams }: { searchParams: { tab?: string } }) {
+  const tab = searchParams.tab || 'active';
+  const allOrders = await prisma.order.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
       items: {
@@ -11,6 +14,10 @@ export default async function OrdersPage() {
       }
     }
   });
+
+  const activeOrders = allOrders.filter(o => o.status !== 'DELIVERED');
+  const archivedOrders = allOrders.filter(o => o.status === 'DELIVERED');
+  const orders = tab === 'active' ? activeOrders : archivedOrders;
 
   async function updateTracking(formData: FormData) {
     'use server'
@@ -34,6 +41,35 @@ export default async function OrdersPage() {
   return (
     <div style={{ padding: '28px' }} className="glass-panel">
       <h1 style={{ marginBottom: '24px' }}>Manage Orders</h1>
+
+      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--glass-border)' }}>
+        <Link 
+          href="/admin/orders?tab=active"
+          style={{ 
+            color: tab === 'active' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            padding: '8px 0',
+            fontWeight: tab === 'active' ? 'bold' : 'normal',
+            borderBottom: tab === 'active' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            textDecoration: 'none',
+            fontSize: '16px'
+          }}
+        >
+          Active Orders ({activeOrders.length})
+        </Link>
+        <Link 
+          href="/admin/orders?tab=archived"
+          style={{ 
+            color: tab === 'archived' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            padding: '8px 0',
+            fontWeight: tab === 'archived' ? 'bold' : 'normal',
+            borderBottom: tab === 'archived' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            textDecoration: 'none',
+            fontSize: '16px'
+          }}
+        >
+          Archived ({archivedOrders.length})
+        </Link>
+      </div>
       
       {orders.length === 0 ? (
         <p style={{ color: 'var(--text-muted)' }}>No orders yet.</p>

@@ -8,6 +8,7 @@ export type CartItem = {
   price: number;
   quantity: number;
   imageUrl?: string | null;
+  description?: string | null;
 };
 
 type CartContextType = {
@@ -80,7 +81,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (existing) {
       existing.quantity += 1;
     } else {
-      newItems.push({ id: product.id, name: product.name, price: product.price, quantity: 1, imageUrl: product.imageUrl });
+      newItems.push({ id: product.id, name: product.name, price: product.price, quantity: 1, imageUrl: product.imageUrl, description: product.description });
     }
     
     const syncedItems = await syncWithServer(newItems);
