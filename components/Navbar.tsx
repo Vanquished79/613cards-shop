@@ -76,7 +76,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
           
           {/* Currency Selector (Custom Dropdown) */}
           <div 
-            style={{ position: 'relative' }}
+            style={{ position: 'relative', paddingBottom: '12px', marginBottom: '-12px' }}
             onMouseEnter={() => setHoveredCategory(-1)} // Reusing hoveredCategory state, -1 for currency
             onMouseLeave={() => setHoveredCategory(null)}
           >
@@ -106,7 +106,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
                 position: 'absolute', 
                 top: '100%', 
                 right: 0, 
-                marginTop: '8px',
+                marginTop: '12px',
                 background: 'rgba(26, 11, 46, 0.98)', 
                 backdropFilter: 'blur(16px)', 
                 border: '1px solid var(--glass-border)', 
@@ -215,7 +215,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
             return (
               <div 
                 key={c.id} 
-                style={{ position: 'relative', display: 'inline-block', paddingBottom: '8px', marginBottom: '-8px' }}
+                style={{ position: 'relative', display: 'inline-block', paddingBottom: '16px', marginBottom: '-16px' }}
                 onMouseEnter={() => setHoveredCategory(c.id)}
                 onMouseLeave={() => setHoveredCategory(null)}
               >
