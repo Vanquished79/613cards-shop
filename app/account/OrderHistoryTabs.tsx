@@ -82,7 +82,7 @@ export default function OrderHistoryTabs({ orders }: { orders: Order[] }) {
                 {/* Progress Tracker */}
                 <div style={{ marginBottom: '32px', position: 'relative' }}>
                   <div style={{ position: 'absolute', top: '12px', left: '10%', right: '10%', height: '2px', background: 'var(--glass-border)', zIndex: 0 }}></div>
-                  <div style={{ position: 'absolute', top: '12px', left: '10%', right: \`\${100 - (10 + (80 / (ORDER_STAGES.length - 1)) * Math.max(0, currentStageIndex))}%\`, height: '2px', background: 'var(--accent-color)', zIndex: 1, transition: 'right 0.5s ease' }}></div>
+                  <div style={{ position: 'absolute', top: '12px', left: '10%', right: `${100 - (10 + (80 / (ORDER_STAGES.length - 1)) * Math.max(0, currentStageIndex))}%`, height: '2px', background: 'var(--accent-color)', zIndex: 1, transition: 'right 0.5s ease' }}></div>
                   
                   <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
                     {ORDER_STAGES.map((stage, idx) => {
@@ -96,7 +96,7 @@ export default function OrderHistoryTabs({ orders }: { orders: Order[] }) {
                             height: '24px', 
                             borderRadius: '50%', 
                             background: isCompleted ? 'var(--accent-color)' : '#1a1a2e',
-                            border: \`2px solid \${isCompleted ? 'var(--accent-color)' : 'var(--glass-border)'}\`,
+                            border: `2px solid ${isCompleted ? 'var(--accent-color)' : 'var(--glass-border)'}`,
                             marginBottom: '8px',
                             display: 'flex',
                             alignItems: 'center',
@@ -127,7 +127,7 @@ export default function OrderHistoryTabs({ orders }: { orders: Order[] }) {
                 {order.trackingNumber && (
                   <div style={{ marginTop: '16px', fontSize: '14px' }}>
                     <span style={{ color: 'var(--text-muted)' }}>Tracking: </span>
-                    <strong style={{ color: 'var(--accent-color)' }}>{order.shippingCarrier ? \`\${order.shippingCarrier} - \` : ''}{order.trackingNumber}</strong>
+                    <strong style={{ color: 'var(--accent-color)' }}>{order.shippingCarrier ? `${order.shippingCarrier} - ` : ''}{order.trackingNumber}</strong>
                   </div>
                 )}
               </div>
