@@ -5,6 +5,7 @@ import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import logoImg from '../../public/brand-icon.png';
 
 function LoginForm() {
   const [error, setError] = useState('');
@@ -46,7 +47,7 @@ function LoginForm() {
       alignItems: 'center',
       gap: '28px',
     }}>
-      <Image src="/logo.png" alt="613cards.com" width={260} height={130} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
+      <Image src={logoImg} alt="613cards.online" width={260} height={130} style={{ objectFit: 'contain' }} priority />
 
       <div style={{ textAlign: 'center' }}>
         <h1 style={{ fontSize: '24px', fontWeight: '700', margin: 0 }}>Welcome Back</h1>
