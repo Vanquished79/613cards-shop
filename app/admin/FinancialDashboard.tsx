@@ -87,9 +87,44 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
     });
   };
 
+  // --- CSV Export Logic ---
+  const exportToCSV = () => {
+    const headers = ['Order ID', 'Date', 'Customer Name', 'Status', 'Total Amount', 'Tax Amount', 'Tax Rate'];
+    const rows = initialOrders.map(order => [
+      order.id,
+      new Date(order.createdAt).toISOString(),
+      `"${order.customerName?.replace(/"/g, '""') || ''}"`,
+      order.status,
+      order.totalAmount.toFixed(2),
+      // @ts-ignore
+      (order.taxAmount || 0).toFixed(2),
+      // @ts-ignore
+      (order.taxRate || 0).toString()
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `613cards_orders_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px' }}>
+        <button 
+          onClick={exportToCSV}
+          style={{ padding: '8px 16px', background: 'var(--accent-color)', color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+        >
+          Export CSV
+        </button>
+      </div>
+
       {/* Metric Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
         {[

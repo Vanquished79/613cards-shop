@@ -2,24 +2,38 @@
 
 import { useCart } from '@/components/CartProvider';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCurrency } from '@/components/CurrencyProvider';
 import { calculateShipping, FREE_SHIPPING_THRESHOLD } from '@/lib/shipping';
+import { CANADIAN_PROVINCES, calculateTaxes } from '@/lib/taxes';
 
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart, updateQuantity, removeFromCart } = useCart();
   const { formatPrice, currency } = useCurrency();
   const [isProcessing, setIsProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
+  
+  // Checkout Step 1 States
+  const [country, setCountry] = useState('');
+  const [province, setProvince] = useState('');
+
   const router = useRouter();
   const { data: session } = useSession();
 
-  // Shipping Calculations
+  // Calculations
   const shippingCost = calculateShipping(totalAmount);
-  const finalTotal = totalAmount + shippingCost;
   const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalAmount);
+  
+  const isStep1Complete = country && (country !== 'CA' || province);
+  
+  const taxInfo = useMemo(() => {
+    if (!isStep1Complete) return null;
+    return calculateTaxes(country, province, totalAmount + shippingCost);
+  }, [isStep1Complete, country, province, totalAmount, shippingCost]);
+
+  const finalTotal = totalAmount + shippingCost + (taxInfo ? taxInfo.amount : 0);
 
   if (items.length === 0 && !success) {
     return (
@@ -95,6 +109,13 @@ export default function CheckoutPage() {
               <span>{shippingCost === 0 ? 'FREE' : formatPrice(shippingCost)}</span>
             </div>
             
+            {taxInfo && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', color: 'var(--text-muted)' }}>
+                <span>Taxes ({taxInfo.name}):</span>
+                <span>{taxInfo.amount > 0 ? formatPrice(taxInfo.amount) : '0.00'}</span>
+              </div>
+            )}
+            
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '20px', fontWeight: 'bold', paddingTop: '8px', borderTop: '1px solid var(--glass-border)' }}>
               <span>Total:</span>
               <span style={{ color: 'var(--accent-color)' }}>{formatPrice(finalTotal)}</span>
@@ -105,127 +126,176 @@ export default function CheckoutPage() {
 
       <div>
         <div className="glass-panel" style={{ padding: '24px', position: 'sticky', top: '100px' }}>
-          <h3 style={{ marginBottom: '20px' }}>Payment Details</h3>
           
-          {amountToFreeShipping > 0 ? (
-             <div style={{ padding: '12px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', marginBottom: '20px' }}>
-               <div style={{ fontSize: '14px', marginBottom: '8px' }}>You are <strong>{formatPrice(amountToFreeShipping)}</strong> away from Free Shipping!</div>
-               <div style={{ height: '8px', background: 'var(--glass-border)', borderRadius: '4px', overflow: 'hidden' }}>
-                 <div style={{ width: `${(totalAmount / FREE_SHIPPING_THRESHOLD) * 100}%`, height: '100%', background: 'var(--accent-color)', transition: 'width 0.3s' }}></div>
-               </div>
-             </div>
-          ) : (
-            <div style={{ padding: '12px', background: 'rgba(74, 222, 128, 0.1)', color: '#4ade80', borderRadius: '8px', marginBottom: '20px', fontWeight: 'bold', textAlign: 'center' }}>
-              🎉 You've unlocked Free Shipping!
-            </div>
-          )}
-
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '12px', lineHeight: '1.5' }}>
-            Complete your purchase securely via PayPal. Your shipping address will be collected automatically.
+          <h3 style={{ marginBottom: '20px' }}>1. Shipping Destination</h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '16px' }}>
+            Please select your location to calculate applicable taxes.
           </p>
-          
-          {currency !== 'CAD' && (
-            <div style={{ padding: '12px', background: 'rgba(255, 183, 3, 0.1)', border: '1px solid rgba(255, 183, 3, 0.3)', borderRadius: '8px', color: '#ffb703', fontSize: '13px', marginBottom: '20px' }}>
-              <strong>Note:</strong> You will be billed <strong>C${finalTotal.toFixed(2)} CAD</strong>. Exchange rates shown are estimates.
-            </div>
-          )}
-          
-          <div style={{ zIndex: 1, position: 'relative', background: 'white', padding: '16px', borderRadius: '12px', marginTop: currency === 'CAD' ? '20px' : '0' }}>
-            <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test', currency: 'CAD' }}>
-              <PayPalButtons 
-                style={{ layout: 'vertical', color: 'gold', shape: 'rect' }}
-                createOrder={(data, actions) => {
-                  
-                  const purchaseUnit: any = {
-                    description: '613cards Order',
-                    amount: {
-                      currency_code: 'CAD',
-                      value: finalTotal.toFixed(2),
-                      breakdown: {
-                        item_total: {
-                          currency_code: 'CAD',
-                          value: totalAmount.toFixed(2)
-                        },
-                        shipping: {
-                          currency_code: 'CAD',
-                          value: shippingCost.toFixed(2)
-                        }
-                      }
-                    },
-                    items: items.map(item => ({
-                      name: item.name.substring(0, 127),
-                      ...(item.description ? { description: item.description.substring(0, 127) } : {}),
-                      quantity: item.quantity.toString(),
-                      unit_amount: {
-                        currency_code: 'CAD',
-                        value: item.price.toFixed(2)
-                      },
-                      ...(item.imageUrl ? { image_url: item.imageUrl.startsWith('http') ? item.imageUrl : `https://613cards.online${item.imageUrl}` } : {})
-                    }))
-                  };
 
-                  // If user is logged in and has an address, pre-fill it for PayPal
-                  if (session?.user && session.user.address) {
-                    const [firstName, ...lastNameParts] = (session.user.name || '').split(' ');
-                    const lastName = lastNameParts.join(' ');
-                    purchaseUnit.shipping = {
-                      name: { full_name: session.user.name },
-                      address: {
-                        address_line_1: session.user.address,
-                        admin_area_2: session.user.city || '',
-                        admin_area_1: session.user.state || '',
-                        postal_code: session.user.zip || '',
-                        country_code: 'US' // Assuming US for now
-                      }
-                    };
-                  }
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+            <select 
+              value={country} 
+              onChange={(e) => {
+                setCountry(e.target.value);
+                setProvince('');
+              }}
+              style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', outline: 'none' }}
+            >
+              <option value="">Select Country</option>
+              <option value="CA">Canada</option>
+              <option value="US">United States</option>
+              <option value="EU">Europe</option>
+              <option value="OTHER">Other</option>
+            </select>
 
-                  return actions.order.create({
-                    intent: 'CAPTURE',
-                    purchase_units: [purchaseUnit]
-                  });
-                }}
-                onApprove={async (data, actions) => {
-                  setIsProcessing(true);
-                  try {
-                    const details = await actions.order!.capture();
-                    // Save the order to our database
-                    const sessionId = localStorage.getItem('cartSessionId');
-                    const response = await fetch('/api/orders', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        paypalOrderId: details.id,
-                        customerName: details.payer?.name?.given_name + ' ' + details.payer?.name?.surname,
-                        email: details.payer?.email_address,
-                        address: details.purchase_units?.[0]?.shipping?.address?.address_line_1,
-                        city: details.purchase_units?.[0]?.shipping?.address?.admin_area_2,
-                        state: details.purchase_units?.[0]?.shipping?.address?.admin_area_1,
-                        zip: details.purchase_units?.[0]?.shipping?.address?.postal_code,
-                        totalAmount: finalTotal,
-                        items: items,
-                        userId: session?.user?.id ? parseInt(session.user.id) : null,
-                        sessionId: sessionId
-                      })
-                    });
-                    
-                    if (response.ok) {
-                      setSuccess(true);
-                      clearCart();
-                    } else {
-                      alert('Payment was successful but there was an error saving your order. Please contact support.');
-                    }
-                  } catch (error) {
-                    console.error(error);
-                    alert('An error occurred during checkout.');
-                  } finally {
-                    setIsProcessing(false);
-                  }
-                }}
-              />
-            </PayPalScriptProvider>
+            {country === 'CA' && (
+              <select 
+                value={province} 
+                onChange={(e) => setProvince(e.target.value)}
+                style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', outline: 'none' }}
+              >
+                <option value="">Select Province</option>
+                {CANADIAN_PROVINCES.map(p => (
+                  <option key={p.code} value={p.code}>{p.name}</option>
+                ))}
+              </select>
+            )}
           </div>
-          {isProcessing && <p style={{ textAlign: 'center', color: 'var(--accent-color)', marginTop: '16px' }}>Processing order...</p>}
+
+          <h3 style={{ marginBottom: '20px', color: isStep1Complete ? 'white' : 'var(--text-muted)' }}>2. Payment Details</h3>
+          
+          {!isStep1Complete ? (
+            <div style={{ padding: '20px', textAlign: 'center', border: '1px dashed var(--glass-border)', borderRadius: '8px', color: 'var(--text-muted)' }}>
+              Complete Step 1 to unlock payment options.
+            </div>
+          ) : (
+            <>
+              {amountToFreeShipping > 0 ? (
+                 <div style={{ padding: '12px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', marginBottom: '20px' }}>
+                   <div style={{ fontSize: '14px', marginBottom: '8px' }}>You are <strong>{formatPrice(amountToFreeShipping)}</strong> away from Free Shipping!</div>
+                   <div style={{ height: '8px', background: 'var(--glass-border)', borderRadius: '4px', overflow: 'hidden' }}>
+                     <div style={{ width: `${(totalAmount / FREE_SHIPPING_THRESHOLD) * 100}%`, height: '100%', background: 'var(--accent-color)', transition: 'width 0.3s' }}></div>
+                   </div>
+                 </div>
+              ) : (
+                <div style={{ padding: '12px', background: 'rgba(74, 222, 128, 0.1)', color: '#4ade80', borderRadius: '8px', marginBottom: '20px', fontWeight: 'bold', textAlign: 'center' }}>
+                  🎉 You've unlocked Free Shipping!
+                </div>
+              )}
+
+              <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '12px', lineHeight: '1.5' }}>
+                Complete your purchase securely via PayPal. Your shipping address will be collected automatically.
+              </p>
+              
+              {currency !== 'CAD' && (
+                <div style={{ padding: '12px', background: 'rgba(255, 183, 3, 0.1)', border: '1px solid rgba(255, 183, 3, 0.3)', borderRadius: '8px', color: '#ffb703', fontSize: '13px', marginBottom: '20px' }}>
+                  <strong>Note:</strong> You will be billed <strong>C${finalTotal.toFixed(2)} CAD</strong>. Exchange rates shown are estimates.
+                </div>
+              )}
+              
+              <div style={{ zIndex: 1, position: 'relative', background: 'white', padding: '16px', borderRadius: '12px', marginTop: currency === 'CAD' ? '20px' : '0' }}>
+                <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test', currency: 'CAD' }}>
+                  <PayPalButtons 
+                    style={{ layout: 'vertical', color: 'gold', shape: 'rect' }}
+                    createOrder={(data, actions) => {
+                      
+                      const purchaseUnit: any = {
+                        description: '613cards Order',
+                        amount: {
+                          currency_code: 'CAD',
+                          value: finalTotal.toFixed(2),
+                          breakdown: {
+                            item_total: {
+                              currency_code: 'CAD',
+                              value: totalAmount.toFixed(2)
+                            },
+                            shipping: {
+                              currency_code: 'CAD',
+                              value: shippingCost.toFixed(2)
+                            },
+                            tax_total: {
+                              currency_code: 'CAD',
+                              value: (taxInfo ? taxInfo.amount : 0).toFixed(2)
+                            }
+                          }
+                        },
+                        items: items.map(item => ({
+                          name: item.name.substring(0, 127),
+                          ...(item.description ? { description: item.description.substring(0, 127) } : {}),
+                          quantity: item.quantity.toString(),
+                          unit_amount: {
+                            currency_code: 'CAD',
+                            value: item.price.toFixed(2)
+                          },
+                          ...(item.imageUrl ? { image_url: item.imageUrl.startsWith('http') ? item.imageUrl : `https://613cards.online${item.imageUrl}` } : {})
+                        }))
+                      };
+
+                      // Pre-fill user's PayPal address info based on their dropdown selection + session
+                      purchaseUnit.shipping = {
+                        address: {
+                          country_code: country === 'OTHER' || country === 'EU' ? '' : country,
+                          ...(country === 'CA' ? { admin_area_1: province } : {})
+                        }
+                      };
+
+                      if (session?.user && session.user.address) {
+                        purchaseUnit.shipping.name = { full_name: session.user.name };
+                        purchaseUnit.shipping.address.address_line_1 = session.user.address;
+                        purchaseUnit.shipping.address.admin_area_2 = session.user.city || '';
+                        purchaseUnit.shipping.address.postal_code = session.user.zip || '';
+                      }
+
+                      return actions.order.create({
+                        intent: 'CAPTURE',
+                        purchase_units: [purchaseUnit]
+                      });
+                    }}
+                    onApprove={async (data, actions) => {
+                      setIsProcessing(true);
+                      try {
+                        const details = await actions.order!.capture();
+                        // Save the order to our database
+                        const sessionId = localStorage.getItem('cartSessionId');
+                        const response = await fetch('/api/orders', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            paypalOrderId: details.id,
+                            customerName: details.payer?.name?.given_name + ' ' + details.payer?.name?.surname,
+                            email: details.payer?.email_address,
+                            address: details.purchase_units?.[0]?.shipping?.address?.address_line_1,
+                            city: details.purchase_units?.[0]?.shipping?.address?.admin_area_2,
+                            state: details.purchase_units?.[0]?.shipping?.address?.admin_area_1,
+                            zip: details.purchase_units?.[0]?.shipping?.address?.postal_code,
+                            totalAmount: finalTotal,
+                            taxAmount: taxInfo ? taxInfo.amount : 0,
+                            taxRate: taxInfo ? taxInfo.rate : 0,
+                            items: items,
+                            userId: session?.user?.id ? parseInt(session.user.id) : null,
+                            sessionId: sessionId
+                          })
+                        });
+                        
+                        if (response.ok) {
+                          setSuccess(true);
+                          clearCart();
+                        } else {
+                          alert('Payment was successful but there was an error saving your order. Please contact support.');
+                        }
+                      } catch (error) {
+                        console.error(error);
+                        alert('An error occurred during checkout.');
+                      } finally {
+                        setIsProcessing(false);
+                      }
+                    }}
+                  />
+                </PayPalScriptProvider>
+              </div>
+              {isProcessing && <p style={{ textAlign: 'center', color: 'var(--accent-color)', marginTop: '16px' }}>Processing order...</p>}
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -92,6 +92,8 @@ model Order {
   state         String
   zip           String
   totalAmount   Float
+  taxAmount     Float    @default(0)
+  taxRate       Float    @default(0) // Stored as decimal (e.g. 0.13 for 13%)
   status        String      @default("PENDING") // PENDING, PAID, SHIPPED
   paypalOrderId String?
   trackingNumber String?
