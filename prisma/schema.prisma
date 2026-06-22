@@ -115,7 +115,18 @@ model ContactMessage {
   name      String
   email     String
   message   String
+  status    String   @default("OPEN") // OPEN, RESOLVED
   isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  replies   TicketReply[]
+}
+
+model TicketReply {
+  id        Int      @id @default(autoincrement())
+  messageId Int
+  message   ContactMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  body      String
+  isAdmin   Boolean  @default(true)
   createdAt DateTime @default(now())
 }
 
