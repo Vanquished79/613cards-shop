@@ -17,13 +17,14 @@ export default async function OrdersPage() {
     const id = parseInt(formData.get('orderId') as string);
     const trackingNumber = formData.get('trackingNumber') as string;
     const shippingCarrier = formData.get('shippingCarrier') as string;
+    const status = formData.get('status') as string;
     
     await prisma.order.update({
       where: { id },
       data: { 
         trackingNumber, 
         shippingCarrier,
-        status: trackingNumber ? 'SHIPPED' : 'PAID' // Auto update status if tracking provided
+        status: status || (trackingNumber ? 'SHIPPED' : 'PAID') // Fallback if status not provided
       }
     });
 
@@ -78,6 +79,17 @@ export default async function OrdersPage() {
                   <h4 style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '16px' }}>Shipping & Tracking</h4>
                   <form action={updateTracking} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <input type="hidden" name="orderId" value={order.id} />
+                    <select 
+                      name="status"
+                      defaultValue={order.status}
+                      style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '12px', marginBottom: '8px' }}
+                    >
+                      <option value="PAID">Paid</option>
+                      <option value="CONFIRMED">Confirmed</option>
+                      <option value="PACKING">Packing</option>
+                      <option value="SHIPPED">Shipped</option>
+                      <option value="DELIVERED">Delivered</option>
+                    </select>
                     <input 
                       name="shippingCarrier" 
                       placeholder="Carrier (e.g. USPS, FedEx)" 
@@ -91,7 +103,7 @@ export default async function OrdersPage() {
                       style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '12px' }} 
                     />
                     <button type="submit" style={{ padding: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', marginTop: '4px' }}>
-                      Save & Mark Shipped
+                      Save Updates
                     </button>
                   </form>
                 </div>

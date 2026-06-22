@@ -3,6 +3,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import OrderHistoryTabs from './OrderHistoryTabs';
 
 export const dynamic = 'force-dynamic';
 
@@ -99,48 +100,7 @@ export default async function AccountPage() {
 
         {/* Order History */}
         <div>
-          <div className="glass-panel" style={{ padding: '32px' }}>
-            <h2 style={{ fontSize: '20px', marginBottom: '24px' }}>Order History</h2>
-            
-            {user.orders.length === 0 ? (
-              <p style={{ color: 'var(--text-muted)' }}>You haven't placed any orders yet.</p>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                {user.orders.map((order) => (
-                  <div key={order.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
-                      <div>
-                        <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Order #{order.id}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{new Date(order.createdAt).toLocaleDateString()}</div>
-                      </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontWeight: 'bold', color: 'var(--accent-color)' }}>${order.totalAmount.toFixed(2)}</div>
-                        <div style={{ fontSize: '12px', padding: '4px 8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', display: 'inline-block', marginTop: '4px' }}>
-                          {order.status}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {order.items.map((item: any) => (
-                        <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-                          <span>{item.quantity}x {item.product.name}</span>
-                          <span style={{ color: 'var(--text-muted)' }}>${(item.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {order.trackingNumber && (
-                      <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)', fontSize: '14px' }}>
-                        <span style={{ color: 'var(--text-muted)' }}>Tracking: </span>
-                        <strong>{order.shippingCarrier ? `${order.shippingCarrier} - ` : ''}{order.trackingNumber}</strong>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <OrderHistoryTabs orders={user.orders} />
         </div>
 
       </div>
