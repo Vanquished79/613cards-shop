@@ -120,7 +120,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
       <div style={{ background: 'rgba(10, 6, 20, 0.95)', padding: '12px 40px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', backdropFilter: 'blur(12px)', borderTop: '1px solid var(--glass-border)' }}>
         
         {/* Left Spacer */}
-        <div style={{ flex: 1, display: { xs: 'none', md: 'block' } }} className="subnav-spacer" />
+        <div style={{ flex: 1 }} className="subnav-spacer" />
 
         {/* Center: Categories */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'center', justifyContent: 'center' }}>
