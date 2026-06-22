@@ -53,7 +53,7 @@ export default function ComingSoon() {
         {/* Much larger logo per user request, with negative margins to remove built-in image padding */}
         <div style={{ background: 'transparent', marginTop: '-30px', marginBottom: '-40px', display: 'flex', justifyContent: 'center' }}>
           <Image 
-            src="/logo-transparent.png" 
+            src="/brand-icon.png" 
             alt="613cards.online Logo" 
             width={400} 
             height={400} 

@@ -49,7 +49,7 @@ export async function submitWaitlist(email: string) {
           html: `
             <div style="font-family: 'Inter', Arial, sans-serif; background-color: #0a0118; padding: 40px 20px; color: #ffffff; text-align: center;">
               <div style="max-width: 600px; margin: 0 auto; background-color: #1a0b2e; border: 1px solid #302048; border-radius: 16px; padding: 40px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-                <img src="https://613cards.online/logo-transparent.png" alt="613cards.online Logo" style="width: 200px; margin-bottom: 20px;" />
+                <img src="https://613cards.online/brand-icon.png" alt="613cards.online Logo" style="width: 200px; margin-bottom: 20px;" />
                 
                 <h1 style="color: #ffb703; font-size: 28px; margin-top: 0;">You're on the list!</h1>
                 
