@@ -120,7 +120,7 @@ export default function CheckoutPage() {
                     },
                     items: items.map(item => ({
                       name: item.name.substring(0, 127),
-                      description: `${item.name} - ${item.description || ''}`.substring(0, 127),
+                      ...(item.description ? { description: item.description.substring(0, 127) } : {}),
                       quantity: item.quantity.toString(),
                       unit_amount: {
                         currency_code: 'CAD',
