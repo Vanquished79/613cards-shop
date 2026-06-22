@@ -13,16 +13,19 @@ export async function sendOrderConfirmation(email: string, customerName: string,
 
   try {
     await resend.emails.send({
-      from: '613cards <orders@613cards.com>',
+      from: '613cards <orders@613cards.online>',
       to: email,
       subject: `Order Confirmation #${orderId} - 613cards`,
       html: `
-        <div style="font-family: sans-serif; padding: 20px; color: #333;">
-          <h2>Thank you for your order, ${customerName}!</h2>
-          <p>We've received your order <strong>#${orderId}</strong> for <strong>$${total.toFixed(2)}</strong>.</p>
-          <p>We are currently processing it and will notify you as soon as it ships.</p>
-          <br/>
-          <p>Best regards,<br/>The 613cards Team</p>
+        <div style="font-family: 'Inter', Arial, sans-serif; background-color: #0a0118; padding: 40px 20px; color: #ffffff; text-align: center;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #1a0b2e; border: 1px solid #302048; border-radius: 16px; padding: 40px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            <h2 style="color: #ffb703; margin-top: 0;">Thank you for your order, ${customerName}!</h2>
+            <p style="color: #a1a1aa; text-align: left;">We've received your order <strong>#${orderId}</strong> for <strong>$${total.toFixed(2)}</strong>.</p>
+            <p style="color: #a1a1aa; text-align: left;">We are currently processing it and will notify you as soon as it ships.</p>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #302048; text-align: left;">
+              <p style="font-size: 14px; color: #ffb703; margin: 0;"><strong>The 613cards Team</strong></p>
+            </div>
+          </div>
         </div>
       `
     });
@@ -39,13 +42,41 @@ export async function sendAdminNotification(subject: string, text: string) {
 
   try {
     await resend.emails.send({
-      // You should verify this sender domain in Resend, or use onboarding@resend.dev for testing
-      from: 'System <notifications@613cards.com>', 
-      to: process.env.ADMIN_USERNAME || 'admin@613cards.com', // Sends to admin email
+      from: 'System <notifications@613cards.online>', 
+      to: process.env.ADMIN_USERNAME || 'admin@613cards.online',
       subject: subject,
       text: text,
     });
   } catch (error) {
     console.error('Failed to send admin notification email:', error);
+  }
+}
+
+export async function sendContactConfirmation(email: string, name: string) {
+  if (!canSend) return;
+
+  try {
+    await resend.emails.send({
+      from: '613cards <info@613cards.online>',
+      to: email,
+      subject: 'We received your message!',
+      html: `
+        <div style="font-family: 'Inter', Arial, sans-serif; background-color: #0a0118; padding: 40px 20px; color: #ffffff; text-align: center;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #1a0b2e; border: 1px solid #302048; border-radius: 16px; padding: 40px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            <img src="https://613cards.online/logo.png" alt="613cards Logo" style="width: 200px; margin-bottom: 20px;" />
+            <h1 style="color: #ffb703; font-size: 24px; margin-top: 0;">Message Received!</h1>
+            <p style="font-size: 16px; color: #a1a1aa; line-height: 1.6; text-align: left;">Hi ${name},</p>
+            <p style="font-size: 16px; color: #a1a1aa; line-height: 1.6; text-align: left;">
+              Thanks for reaching out to <strong>613cards.online</strong>. We have received your message and our team will get back to you as soon as possible!
+            </p>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #302048; text-align: left;">
+              <p style="font-size: 14px; color: #ffb703; margin: 0;"><strong>The 613cards Team</strong></p>
+            </div>
+          </div>
+        </div>
+      `
+    });
+  } catch (error) {
+    console.error('Failed to send contact confirmation email:', error);
   }
 }

@@ -13,12 +13,13 @@ export async function POST(request: Request) {
       data: { name, email, message }
     });
 
-    // Trigger email notification to admin
-    import('@/lib/email').then(({ sendAdminNotification }) => {
+    // Trigger email notification to admin AND auto-reply to user
+    import('@/lib/email').then(({ sendAdminNotification, sendContactConfirmation }) => {
       sendAdminNotification(
         `New Contact Message from ${name}`,
         `You received a new message from ${name} (${email}):\n\n${message}`
       );
+      sendContactConfirmation(email, name);
     }).catch(console.error);
 
     return NextResponse.json(newMessage, { status: 201 });
