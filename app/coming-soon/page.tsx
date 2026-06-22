@@ -13,14 +13,20 @@ export default function ComingSoon() {
     e.preventDefault();
     setStatus('loading');
     
-    const result = await submitWaitlist(email);
-    
-    if (result.success) {
-      setStatus('success');
-      setEmail('');
-    } else {
+    try {
+      const result = await submitWaitlist(email);
+      
+      if (result.success) {
+        setStatus('success');
+        setEmail('');
+      } else {
+        setStatus('error');
+        setErrorMessage(result.error || 'Something went wrong.');
+      }
+    } catch (err) {
+      console.error('Client submit error:', err);
       setStatus('error');
-      setErrorMessage(result.error || 'Something went wrong.');
+      setErrorMessage('A network or server error occurred. Please try again.');
     }
   }
 
