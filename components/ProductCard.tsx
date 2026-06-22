@@ -53,7 +53,11 @@ export function ProductCard({ product }: { product: any }) {
             <>
               {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>RC</span>}
               {product.isAutograph && <span style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(168, 85, 247, 0.3)', fontWeight: 'bold' }}>Auto</span>}
-              {product.isNumbered && <span style={{ background: 'rgba(234, 179, 8, 0.2)', color: '#facc15', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 'bold' }}>#'d</span>}
+              {product.isNumbered && (
+                <span style={{ background: 'rgba(234, 179, 8, 0.2)', color: '#facc15', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 'bold' }}>
+                  {product.serialNumber ? `#${product.serialNumber}` : "#'d"}
+                </span>
+              )}
               {product.isParallel && <span style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#f472b6', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 'bold' }}>Parallel</span>}
             </>
           )}

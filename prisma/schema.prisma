@@ -43,6 +43,7 @@ model Product {
   isRookie    Boolean  @default(false)
   isAutograph Boolean  @default(false)
   isNumbered  Boolean  @default(false)
+  serialNumber String? // e.g. "245/499"
   isParallel  Boolean  @default(false)
 
   createdAt   DateTime @default(now())

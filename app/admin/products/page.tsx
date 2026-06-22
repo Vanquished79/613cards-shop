@@ -32,6 +32,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       const isRookie = formData.get('isRookie') === 'on';
       const isAutograph = formData.get('isAutograph') === 'on';
       const isNumbered = formData.get('isNumbered') === 'on';
+      const serialNumber = (formData.get('serialNumber') as string) || null;
       const isParallel = formData.get('isParallel') === 'on';
 
       const imageFile = formData.get('imageFile') as File;
@@ -52,7 +53,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       await prisma.product.create({
         data: { 
           name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition,
-          type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, isParallel 
+          type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, serialNumber, isParallel 
         }
       });
       

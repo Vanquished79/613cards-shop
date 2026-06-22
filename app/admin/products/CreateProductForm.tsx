@@ -92,6 +92,7 @@ export default function CreateProductForm({ categories, createProductAction }: {
               <input type="checkbox" name="isNumbered" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Numbered
             </label>
+            <input name="serialNumber" placeholder="Serial Number (e.g. 245/499)" style={{ padding: '8px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', marginTop: '4px' }} />
             <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
               <input type="checkbox" name="isParallel" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Parallel

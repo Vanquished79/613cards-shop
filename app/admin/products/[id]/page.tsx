@@ -36,6 +36,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     const isRookie = formData.get('isRookie') === 'on';
     const isAutograph = formData.get('isAutograph') === 'on';
     const isNumbered = formData.get('isNumbered') === 'on';
+    const serialNumber = (formData.get('serialNumber') as string) || null;
     const isParallel = formData.get('isParallel') === 'on';
 
     // Check if the user uploaded a file instead of pasting a URL
@@ -58,7 +59,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
       where: { id: productId },
       data: { 
         name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition,
-        type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, isParallel
+        type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, serialNumber, isParallel
       }
     });
     
