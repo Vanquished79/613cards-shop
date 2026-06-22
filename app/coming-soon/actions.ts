@@ -42,7 +42,7 @@ export async function submitWaitlist(email: string) {
 
       // B) Send the Welcome Email automatically
       try {
-        await resend.emails.send({
+        const { error: emailError } = await resend.emails.send({
           from: '613cards <info@613cards.com>',
           to: email.toLowerCase(),
           subject: 'Welcome to the 613cards Waitlist!',
@@ -58,8 +58,12 @@ export async function submitWaitlist(email: string) {
             </div>
           `
         });
-      } catch (emailError) {
-        console.error('Resend Email Error:', emailError);
+
+        if (emailError) {
+          console.error('Resend API rejected the email:', emailError);
+        }
+      } catch (exception) {
+        console.error('Resend Network Error:', exception);
       }
     }
 
