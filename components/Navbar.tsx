@@ -40,7 +40,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
         {/* Left: Logo */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', background: 'transparent' }}>
-            <Image src="/logo.png" alt="613cards.com Logo" width={300} height={130} className="navbar-logo" style={{ objectFit: 'contain', mixBlendMode: 'lighten', backgroundColor: 'transparent' }} priority />
+            <Image src="/logo.png" alt="613cards.com Logo" width={450} height={180} className="navbar-logo" style={{ objectFit: 'contain', mixBlendMode: 'lighten', backgroundColor: 'transparent' }} priority />
           </Link>
         </div>
 
