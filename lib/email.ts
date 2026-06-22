@@ -80,3 +80,51 @@ export async function sendContactConfirmation(email: string, name: string) {
     console.error('Failed to send contact confirmation email:', error);
   }
 }
+
+export async function sendOrderStatusUpdate(email: string, customerName: string, orderId: number, status: string, trackingNumber?: string | null, carrier?: string | null) {
+  if (!canSend) {
+    console.log(`[Email Mock] Order status update for Order #${orderId} to ${status}`);
+    return;
+  }
+
+  let statusMessage = '';
+  switch (status) {
+    case 'CONFIRMED': statusMessage = 'Your order has been confirmed and we are getting ready to pack it!'; break;
+    case 'PACKING': statusMessage = 'Your order is currently being packed!'; break;
+    case 'SHIPPED': statusMessage = 'Great news! Your order has shipped.'; break;
+    case 'DELIVERED': statusMessage = 'Your order has been delivered! Enjoy your cards!'; break;
+    default: statusMessage = `Your order status has been updated to: ${status}`;
+  }
+
+  let trackingHtml = '';
+  if (trackingNumber) {
+    trackingHtml = `
+      <div style="margin-top: 20px; padding: 16px; background-color: rgba(255,255,255,0.05); border-radius: 8px;">
+        <p style="margin: 0; color: #a1a1aa;">Tracking Number: <strong>${trackingNumber}</strong> ${carrier ? `(${carrier})` : ''}</p>
+      </div>
+    `;
+  }
+
+  try {
+    await resend.emails.send({
+      from: '613cards <orders@613cards.online>',
+      to: email,
+      subject: `Order #${orderId} Update - ${status}`,
+      html: `
+        <div style="font-family: 'Inter', Arial, sans-serif; background-color: #0a0118; padding: 40px 20px; color: #ffffff; text-align: center;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #1a0b2e; border: 1px solid #302048; border-radius: 16px; padding: 40px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            <h2 style="color: #ffb703; margin-top: 0;">Order Update</h2>
+            <p style="color: #a1a1aa; text-align: left;">Hi ${customerName},</p>
+            <p style="color: #a1a1aa; text-align: left; font-size: 16px;">${statusMessage}</p>
+            ${trackingHtml}
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #302048; text-align: left;">
+              <p style="font-size: 14px; color: #ffb703; margin: 0;"><strong>The 613cards Team</strong></p>
+            </div>
+          </div>
+        </div>
+      `
+    });
+  } catch (error) {
+    console.error('Failed to send order status update email:', error);
+  }
+}

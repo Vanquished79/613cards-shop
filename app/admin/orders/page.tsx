@@ -27,14 +27,23 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
     const shippingCarrier = formData.get('shippingCarrier') as string;
     const status = formData.get('status') as string;
     
-    await prisma.order.update({
+    const oldOrder = await prisma.order.findUnique({ where: { id } });
+    
+    const finalStatus = status || (trackingNumber ? 'SHIPPED' : 'PAID');
+
+    const updatedOrder = await prisma.order.update({
       where: { id },
       data: { 
         trackingNumber, 
         shippingCarrier,
-        status: status || (trackingNumber ? 'SHIPPED' : 'PAID') // Fallback if status not provided
+        status: finalStatus
       }
     });
+
+    if (oldOrder && (oldOrder.status !== finalStatus || (!oldOrder.trackingNumber && trackingNumber))) {
+      const { sendOrderStatusUpdate } = await import('@/lib/email');
+      await sendOrderStatusUpdate(updatedOrder.email, updatedOrder.customerName, updatedOrder.id, finalStatus, trackingNumber, shippingCarrier);
+    }
 
     revalidatePath('/admin/orders');
   }
