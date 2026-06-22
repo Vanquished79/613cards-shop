@@ -61,7 +61,7 @@ export async function replyToTicket(ticketId: number, replyBody: string, adminNa
     }
   }
 
-  revalidatePath(\`/admin/messages/\${ticketId}\`);
+  revalidatePath(`/admin/messages/${ticketId}`);
   revalidatePath('/admin/messages');
   return { success: true };
 }
@@ -71,7 +71,7 @@ export async function toggleTicketStatus(ticketId: number, status: string) {
     where: { id: ticketId },
     data: { status }
   });
-  revalidatePath(\`/admin/messages/\${ticketId}\`);
+  revalidatePath(`/admin/messages/${ticketId}`);
   revalidatePath('/admin/messages');
   return { success: true };
 }

@@ -48,7 +48,7 @@ export default async function TicketDetailPage({ params }: { params: { id: strin
             fontWeight: 'bold',
             background: ticket.status === 'OPEN' ? 'rgba(74, 222, 128, 0.1)' : 'rgba(255, 255, 255, 0.1)',
             color: ticket.status === 'OPEN' ? '#4ade80' : 'var(--text-muted)',
-            border: \`1px solid \${ticket.status === 'OPEN' ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255, 255, 255, 0.2)'}\`
+            border: `1px solid ${ticket.status === 'OPEN' ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255, 255, 255, 0.2)'}`
           }}>
             {ticket.status}
           </span>
