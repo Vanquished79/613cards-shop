@@ -1,8 +1,24 @@
-export default function AdminPage() {
+import prisma from '@/lib/prisma';
+import FinancialDashboard from './FinancialDashboard';
+
+export const dynamic = 'force-dynamic';
+
+export default async function AdminPage() {
+  const orders = await prisma.order.findMany({
+    where: {
+      status: {
+        not: 'PENDING'
+      }
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+
   return (
-    <div className="glass-panel" style={{ padding: '32px' }}>
-      <h1>Dashboard Overview</h1>
-      <p style={{ color: 'var(--text-muted)', marginTop: '12px' }}>Welcome to the 613cards.com admin panel. Select an option from the sidebar to manage your shop.</p>
+    <div style={{ padding: '28px' }} className="glass-panel">
+      <h1 style={{ marginBottom: '24px' }}>Financial Dashboard</h1>
+      <FinancialDashboard initialOrders={orders} />
     </div>
   );
 }
