@@ -54,10 +54,11 @@ export default function ComingSoon() {
         <div style={{ background: 'transparent', marginTop: '-30px', marginBottom: '-40px', display: 'flex', justifyContent: 'center' }}>
           <Image 
             src="/logo-transparent.png" 
-            alt="613cards.com Logo" 
+            alt="613cards.online Logo" 
             width={400} 
             height={400} 
             style={{ objectFit: 'contain', backgroundColor: 'transparent', maxWidth: '100%', height: 'auto' }} 
+            unoptimized
             priority 
           />
         </div>
