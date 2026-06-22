@@ -43,7 +43,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: { tab
       <h1 style={{ marginBottom: '24px' }}>Manage Orders</h1>
 
       <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--glass-border)' }}>
-        <Link 
+        <a 
           href="/admin/orders?tab=active"
           style={{ 
             color: tab === 'active' ? 'var(--accent-color)' : 'var(--text-muted)', 
@@ -55,8 +55,8 @@ export default async function OrdersPage({ searchParams }: { searchParams: { tab
           }}
         >
           Active Orders ({activeOrders.length})
-        </Link>
-        <Link 
+        </a>
+        <a 
           href="/admin/orders?tab=archived"
           style={{ 
             color: tab === 'archived' ? 'var(--accent-color)' : 'var(--text-muted)', 
@@ -68,7 +68,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: { tab
           }}
         >
           Archived ({archivedOrders.length})
-        </Link>
+        </a>
       </div>
       
       {orders.length === 0 ? (
