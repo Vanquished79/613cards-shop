@@ -17,6 +17,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
   const { data: session } = useSession();
   const router = useRouter();
   const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
+  const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
   
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const topLevelCategories = categories.filter((c: any) => !c.parentId);
@@ -75,12 +76,10 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
           
           {/* Currency Selector (Custom Dropdown) */}
-          <div 
-            style={{ position: 'relative', paddingBottom: '12px', marginBottom: '-12px' }}
-            onMouseEnter={() => setHoveredCategory(-1)} // Reusing hoveredCategory state, -1 for currency
-            onMouseLeave={() => setHoveredCategory(null)}
-          >
-            <div style={{ 
+          <div style={{ position: 'relative' }}>
+            <div 
+              onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
+              style={{ 
               display: 'flex', 
               alignItems: 'center', 
               gap: '6px', 
@@ -101,55 +100,61 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
               <span style={{ fontSize: '10px' }}>▼</span>
             </div>
             
-            {hoveredCategory === -1 && (
-              <div style={{ 
-                position: 'absolute', 
-                top: '100%', 
-                right: 0, 
-                marginTop: '12px',
-                background: 'rgba(26, 11, 46, 0.98)', 
-                backdropFilter: 'blur(16px)', 
-                border: '1px solid var(--glass-border)', 
-                borderRadius: '12px', 
-                padding: '8px 0', 
-                minWidth: '100px', 
-                display: 'flex', 
-                flexDirection: 'column', 
-                boxShadow: '0 10px 30px rgba(0,0,0,0.5)', 
-                zIndex: 50 
-              }}>
-                {['CAD', 'USD', 'EUR', 'GBP', 'AUD'].map((c) => (
-                  <button 
-                    key={c}
-                    onClick={() => { setCurrency(c as any); setHoveredCategory(null); }}
-                    style={{ 
-                      background: currency === c ? 'rgba(255, 183, 3, 0.1)' : 'transparent', 
-                      color: currency === c ? 'var(--accent-color)' : 'var(--text-muted)', 
-                      border: 'none',
-                      textAlign: 'left',
-                      fontSize: '14px', 
-                      fontWeight: currency === c ? 'bold' : 'normal',
-                      padding: '8px 20px', 
-                      cursor: 'pointer',
-                      transition: 'background 0.2s, color 0.2s' 
-                    }}
-                    onMouseOver={(e) => { 
-                      if (currency !== c) {
-                        e.currentTarget.style.color = 'white'; 
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; 
-                      }
-                    }}
-                    onMouseOut={(e) => { 
-                      if (currency !== c) {
-                        e.currentTarget.style.color = 'var(--text-muted)'; 
-                        e.currentTarget.style.background = 'transparent';
-                      }
-                    }}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
+            {isCurrencyOpen && (
+              <>
+                <div 
+                  onClick={() => setIsCurrencyOpen(false)} 
+                  style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 40 }}
+                />
+                <div style={{ 
+                  position: 'absolute', 
+                  top: '100%', 
+                  right: 0, 
+                  marginTop: '8px',
+                  background: 'rgba(26, 11, 46, 0.98)', 
+                  backdropFilter: 'blur(16px)', 
+                  border: '1px solid var(--glass-border)', 
+                  borderRadius: '12px', 
+                  padding: '8px 0', 
+                  minWidth: '100px', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.5)', 
+                  zIndex: 50 
+                }}>
+                  {['CAD', 'USD', 'EUR', 'GBP', 'AUD'].map((c) => (
+                    <button 
+                      key={c}
+                      onClick={() => { setCurrency(c as any); setIsCurrencyOpen(false); }}
+                      style={{ 
+                        background: currency === c ? 'rgba(255, 183, 3, 0.1)' : 'transparent', 
+                        color: currency === c ? 'var(--accent-color)' : 'var(--text-muted)', 
+                        border: 'none',
+                        textAlign: 'left',
+                        fontSize: '14px', 
+                        fontWeight: currency === c ? 'bold' : 'normal',
+                        padding: '8px 20px', 
+                        cursor: 'pointer',
+                        transition: 'background 0.2s, color 0.2s' 
+                      }}
+                      onMouseOver={(e) => { 
+                        if (currency !== c) {
+                          e.currentTarget.style.color = 'white'; 
+                          e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; 
+                        }
+                      }}
+                      onMouseOut={(e) => { 
+                        if (currency !== c) {
+                          e.currentTarget.style.color = 'var(--text-muted)'; 
+                          e.currentTarget.style.background = 'transparent';
+                        }
+                      }}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </>
             )}
           </div>
 
