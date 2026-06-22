@@ -46,7 +46,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     whereClause.name = { contains: q, mode: 'insensitive' };
   }
   if (categoryId) {
-    whereClause.categoryId = categoryId;
+    const childCategories = await prisma.category.findMany({ where: { parentId: categoryId } });
+    if (childCategories.length > 0) {
+      const categoryIds = [categoryId, ...childCategories.map((c: any) => c.id)];
+      whereClause.categoryId = { in: categoryIds };
+    } else {
+      whereClause.categoryId = categoryId;
+    }
   }
   if (condition) {
     whereClause.condition = condition;
