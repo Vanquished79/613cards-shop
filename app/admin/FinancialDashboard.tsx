@@ -122,7 +122,8 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
     const headers = [
       'Order ID', 'Date', 'Customer Name', 'Status', 
       'Total Amount', 'Tax Amount', 'Tax Rate',
-      'Address', 'City', 'State/Province', 'ZIP/Postal Code'
+      'Address', 'City', 'State/Province', 'ZIP/Postal Code',
+      'PayPal Transaction ID'
     ];
     
     // Filter orders if user wants only tax-exempt orders
@@ -143,7 +144,9 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
       `"${order.address?.replace(/"/g, '""') || 'N/A'}"`,
       `"${order.city?.replace(/"/g, '""') || 'N/A'}"`,
       `"${order.state?.replace(/"/g, '""') || 'N/A'}"`,
-      `"${order.zip?.replace(/"/g, '""') || 'N/A'}"`
+      `"${order.zip?.replace(/"/g, '""') || 'N/A'}"`,
+      // @ts-ignore
+      `"${order.paypalOrderId || 'N/A'}"`
     ]);
     const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
     

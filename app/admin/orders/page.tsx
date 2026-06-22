@@ -4,9 +4,11 @@ export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
 
-export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ tab?: string, search?: string }> }) {
   const resolvedParams = await searchParams;
   const tab = resolvedParams.tab || 'active';
+  const search = resolvedParams.search || '';
+  
   const allOrders = await prisma.order.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
@@ -16,8 +18,19 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
     }
   });
 
-  const activeOrders = allOrders.filter(o => o.status !== 'DELIVERED');
-  const archivedOrders = allOrders.filter(o => o.status === 'DELIVERED');
+  let filteredOrders = allOrders;
+  if (search) {
+    const s = search.toLowerCase();
+    filteredOrders = allOrders.filter(o => 
+      o.paypalOrderId?.toLowerCase().includes(s) ||
+      o.customerName?.toLowerCase().includes(s) ||
+      o.email?.toLowerCase().includes(s) ||
+      o.id.toString() === s
+    );
+  }
+
+  const activeOrders = filteredOrders.filter(o => o.status !== 'DELIVERED');
+  const archivedOrders = filteredOrders.filter(o => o.status === 'DELIVERED');
   const orders = tab === 'active' ? activeOrders : archivedOrders;
 
   async function updateTracking(formData: FormData) {
@@ -52,33 +65,52 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
     <div style={{ padding: '28px' }} className="glass-panel">
       <h1 style={{ marginBottom: '24px' }}>Manage Orders</h1>
 
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--glass-border)' }}>
-        <a 
-          href="/admin/orders?tab=active"
-          style={{ 
-            color: tab === 'active' ? 'var(--accent-color)' : 'var(--text-muted)', 
-            padding: '8px 0',
-            fontWeight: tab === 'active' ? 'bold' : 'normal',
-            borderBottom: tab === 'active' ? '2px solid var(--accent-color)' : '2px solid transparent',
-            textDecoration: 'none',
-            fontSize: '16px'
-          }}
-        >
-          Active Orders ({activeOrders.length})
-        </a>
-        <a 
-          href="/admin/orders?tab=archived"
-          style={{ 
-            color: tab === 'archived' ? 'var(--accent-color)' : 'var(--text-muted)', 
-            padding: '8px 0',
-            fontWeight: tab === 'archived' ? 'bold' : 'normal',
-            borderBottom: tab === 'archived' ? '2px solid var(--accent-color)' : '2px solid transparent',
-            textDecoration: 'none',
-            fontSize: '16px'
-          }}
-        >
-          Archived ({archivedOrders.length})
-        </a>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '8px' }}>
+        <div style={{ display: 'flex', gap: '16px' }}>
+          <a 
+            href={`/admin/orders?tab=active${search ? `&search=${search}` : ''}`}
+            style={{ 
+              color: tab === 'active' ? 'var(--accent-color)' : 'var(--text-muted)', 
+              padding: '8px 0',
+              fontWeight: tab === 'active' ? 'bold' : 'normal',
+              borderBottom: tab === 'active' ? '2px solid var(--accent-color)' : '2px solid transparent',
+              textDecoration: 'none',
+              fontSize: '16px'
+            }}
+          >
+            Active Orders ({activeOrders.length})
+          </a>
+          <a 
+            href={`/admin/orders?tab=archived${search ? `&search=${search}` : ''}`}
+            style={{ 
+              color: tab === 'archived' ? 'var(--accent-color)' : 'var(--text-muted)', 
+              padding: '8px 0',
+              fontWeight: tab === 'archived' ? 'bold' : 'normal',
+              borderBottom: tab === 'archived' ? '2px solid var(--accent-color)' : '2px solid transparent',
+              textDecoration: 'none',
+              fontSize: '16px'
+            }}
+          >
+            Archived ({archivedOrders.length})
+          </a>
+        </div>
+        
+        <form method="GET" action="/admin/orders" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          {tab !== 'active' && <input type="hidden" name="tab" value={tab} />}
+          <input 
+            type="text" 
+            name="search" 
+            defaultValue={search} 
+            placeholder="Search PayPal ID, Name..." 
+            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', width: '220px' }}
+          />
+          <button type="submit" style={{ padding: '8px 16px', background: 'var(--accent-color)', color: 'black', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
+            Search
+          </button>
+          {search && (
+            <a href={`/admin/orders?tab=${tab}`} style={{ padding: '8px 16px', color: 'white', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', fontSize: '14px' }}>Clear</a>
+          )}
+        </form>
       </div>
       
       {orders.length === 0 ? (
