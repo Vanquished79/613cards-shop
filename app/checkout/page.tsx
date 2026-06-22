@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCurrency } from '@/components/CurrencyProvider';
 import { calculateShipping, FREE_SHIPPING_THRESHOLD } from '@/lib/shipping';
-import { CANADIAN_PROVINCES, calculateTaxes } from '@/lib/taxes';
+import { CANADIAN_PROVINCES, EUROPEAN_COUNTRIES, calculateTaxes } from '@/lib/taxes';
 
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart, updateQuantity, removeFromCart } = useCart();
@@ -144,7 +144,12 @@ export default function CheckoutPage() {
               <option value="" style={{ background: '#1a1025', color: 'white' }}>Select Country</option>
               <option value="CA" style={{ background: '#1a1025', color: 'white' }}>Canada</option>
               <option value="US" style={{ background: '#1a1025', color: 'white' }}>United States</option>
-              <option value="EU" style={{ background: '#1a1025', color: 'white' }}>Europe</option>
+              <option value="AU" style={{ background: '#1a1025', color: 'white' }}>Australia</option>
+              <optgroup label="Europe" style={{ background: '#1a1025', color: 'var(--text-muted)' }}>
+                {EUROPEAN_COUNTRIES.map(c => (
+                  <option key={c.code} value={c.code} style={{ background: '#1a1025', color: 'white' }}>{c.name}</option>
+                ))}
+              </optgroup>
               <option value="OTHER" style={{ background: '#1a1025', color: 'white' }}>Other</option>
             </select>
 
@@ -234,7 +239,7 @@ export default function CheckoutPage() {
                       // Pre-fill user's PayPal address info based on their dropdown selection + session
                       purchaseUnit.shipping = {
                         address: {
-                          country_code: country === 'OTHER' || country === 'EU' ? '' : country,
+                          country_code: country === 'OTHER' ? '' : country,
                           ...(country === 'CA' ? { admin_area_1: province } : {})
                         }
                       };
