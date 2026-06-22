@@ -32,7 +32,8 @@ export async function middleware(request: NextRequest) {
     pathname === '/favicon.ico';
 
   if (isMaintenanceMode && !isAdminUser && !isExemptRoute) {
-    return NextResponse.redirect(new URL('/coming-soon', request.url));
+    // Temporarily disabled so the user can test account creation/checkout
+    // return NextResponse.redirect(new URL('/coming-soon', request.url));
   }
 
   return NextResponse.next();
