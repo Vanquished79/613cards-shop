@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { DeleteButton } from './DeleteButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,7 @@ export default async function WaitlistPage() {
               <tr style={{ borderBottom: '1px solid var(--glass-border)' }}>
                 <th style={{ padding: '12px 0', color: 'var(--text-muted)' }}>Email Address</th>
                 <th style={{ padding: '12px 0', color: 'var(--text-muted)' }}>Date Subscribed</th>
+                <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -36,6 +38,11 @@ export default async function WaitlistPage() {
                   <td style={{ padding: '16px 0', fontWeight: '500' }}>{sub.email}</td>
                   <td style={{ padding: '16px 0', color: 'var(--text-muted)' }}>
                     {sub.createdAt.toLocaleDateString()} at {sub.createdAt.toLocaleTimeString()}
+                  </td>
+                  <td style={{ padding: '16px 0', textAlign: 'right' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <DeleteButton id={sub.id} email={sub.email} />
+                    </div>
                   </td>
                 </tr>
               ))}
