@@ -53,11 +53,11 @@ export default function ComingSoon() {
         {/* Much larger logo per user request, with negative margins to remove built-in image padding */}
         <div style={{ background: 'transparent', marginTop: '-30px', marginBottom: '-40px', display: 'flex', justifyContent: 'center' }}>
           <Image 
-            src="/logo.png" 
+            src="/logo-transparent.png" 
             alt="613cards.com Logo" 
             width={400} 
             height={400} 
-            style={{ objectFit: 'contain', mixBlendMode: 'lighten', maxWidth: '100%', height: 'auto' }} 
+            style={{ objectFit: 'contain', backgroundColor: 'transparent', maxWidth: '100%', height: 'auto' }} 
             priority 
           />
         </div>
