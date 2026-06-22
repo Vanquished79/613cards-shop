@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Maintenance Mode (Coming Soon) Logic
-  const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true';
+  const isMaintenanceMode = true; // process.env.MAINTENANCE_MODE === 'true';
   const isAdminUser = token?.role === 'ADMIN';
   
   const isExemptRoute = 
@@ -29,11 +29,11 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/api/auth') || 
     pathname.startsWith('/_next') || 
     pathname === '/logo.png' || 
+    pathname === '/logo-transparent.png' || 
     pathname === '/favicon.ico';
 
   if (isMaintenanceMode && !isAdminUser && !isExemptRoute) {
-    // Temporarily disabled so the user can test account creation/checkout
-    // return NextResponse.redirect(new URL('/coming-soon', request.url));
+    return NextResponse.redirect(new URL('/coming-soon', request.url));
   }
 
   return NextResponse.next();
