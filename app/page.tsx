@@ -79,38 +79,55 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     };
   });
 
+  const isFiltering = !!q || !!categoryId || !!condition || !!sort;
+  let resultsTitle = "Latest Additions";
+  if (q) resultsTitle = `Results for "${q}"`;
+  else if (categoryId) {
+    const cat = categories.find((c: any) => c.id === categoryId);
+    if (cat) resultsTitle = `${cat.name} Products`;
+  }
+
+  const resultsSection = (
+    <div style={{ width: '100%', maxWidth: '1000px' }}>
+      <h2 style={{ fontSize: '28px', margin: '0 0 20px 0' }}>
+        {resultsTitle.split(' ')[0]} <span style={{ color: 'var(--accent-color)' }}>{resultsTitle.split(' ').slice(1).join(' ')}</span>
+      </h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        {latestWithStock.length === 0 ? (
+          <p style={{ color: 'var(--text-muted)' }}>No products found. Try adjusting your search!</p>
+        ) : (
+          latestWithStock.map((p: any) => (
+            <ProductCard key={p.id} product={p} />
+          ))
+        )}
+      </div>
+    </div>
+  );
+
+  const featuredSection = featuredWithStock.length > 0 && (
+    <div style={{ width: '100%', maxWidth: '1000px', marginBottom: '20px' }}>
+      <h2 style={{ fontSize: '28px', margin: '0 0 20px 0' }}>Featured <span style={{ color: 'var(--accent-color)' }}>Products</span></h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        {featuredWithStock.map((p: any) => (
+          <ProductCard key={p.id} product={p} />
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <main style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', gap: '40px', padding: '40px 0' }}>
-      
-      {/* Header removed by user request */}
-
-      <div style={{ width: '100%', maxWidth: '1000px' }}>
-        <ShopFilters categories={categories} />
-      </div>
-
-      {featuredWithStock.length > 0 && (
-        <div style={{ width: '100%', maxWidth: '1000px', marginBottom: '20px' }}>
-          <h2 style={{ fontSize: '28px', margin: '0 0 20px 0' }}>Featured <span style={{ color: 'var(--accent-color)' }}>Products</span></h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-            {featuredWithStock.map((p: any) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        </div>
+      {isFiltering ? (
+        <>
+          {resultsSection}
+          {featuredSection}
+        </>
+      ) : (
+        <>
+          {featuredSection}
+          {resultsSection}
+        </>
       )}
-
-      <div style={{ width: '100%', maxWidth: '1000px' }}>
-        <h2 style={{ fontSize: '28px', margin: '0 0 20px 0' }}>Latest <span style={{ color: 'var(--accent-color)' }}>Additions</span></h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-          {latestWithStock.length === 0 ? (
-            <p style={{ color: 'var(--text-muted)' }}>No products match your filters. Try adjusting them!</p>
-          ) : (
-            latestWithStock.map((p: any) => (
-              <ProductCard key={p.id} product={p} />
-            ))
-          )}
-        </div>
-      </div>
     </main>
   );
 }
