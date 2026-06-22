@@ -47,14 +47,24 @@ export async function submitWaitlist(email: string) {
           to: email.toLowerCase(),
           subject: 'Welcome to the 613cards Waitlist!',
           html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1c152a;">
-              <h1 style="color: #ffb703;">You're on the list!</h1>
-              <p>Hey there,</p>
-              <p>Thanks for joining the waitlist for <strong>613cards.com</strong>! We are working hard behind the scenes to bring you the ultimate trading card shop.</p>
-              <p>We'll notify you the moment we launch so you can get first access to our exclusive drops and inventory.</p>
-              <br/>
-              <p>Best regards,</p>
-              <p><strong>The 613cards Team</strong></p>
+            <div style="font-family: 'Inter', Arial, sans-serif; background-color: #0a0118; padding: 40px 20px; color: #ffffff; text-align: center;">
+              <div style="max-width: 600px; margin: 0 auto; background-color: #1a0b2e; border: 1px solid #302048; border-radius: 16px; padding: 40px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                <img src="https://613cards.online/logo.png" alt="613cards Logo" style="width: 200px; margin-bottom: 20px;" />
+                
+                <h1 style="color: #ffb703; font-size: 28px; margin-top: 0;">You're on the list!</h1>
+                
+                <p style="font-size: 16px; color: #a1a1aa; line-height: 1.6; text-align: left;">Hey there,</p>
+                <p style="font-size: 16px; color: #a1a1aa; line-height: 1.6; text-align: left;">
+                  Thanks for joining the waitlist for <strong style="color: #ffffff;">613cards.online</strong>! We are working hard behind the scenes to bring you the ultimate trading card shop.
+                </p>
+                <p style="font-size: 16px; color: #a1a1aa; line-height: 1.6; text-align: left;">
+                  We'll notify you the moment we launch so you can get first access to our exclusive drops and inventory.
+                </p>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #302048; text-align: left;">
+                  <p style="font-size: 14px; color: #ffb703; margin: 0;"><strong>The 613cards Team</strong></p>
+                </div>
+              </div>
             </div>
           `
         });
