@@ -2,7 +2,7 @@
 
 import { useCart } from '@/components/CartProvider';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCurrency } from '@/components/CurrencyProvider';
@@ -18,9 +18,16 @@ export default function CheckoutPage() {
   // Checkout Step 1 States
   const [country, setCountry] = useState('');
   const [province, setProvince] = useState('');
+  const [taxEnabled, setTaxEnabled] = useState(true);
 
   const router = useRouter();
   const { data: session } = useSession();
+
+  useEffect(() => {
+    fetch('/api/settings').then(r => r.json()).then(data => {
+      if (data.taxEnabled !== undefined) setTaxEnabled(data.taxEnabled);
+    }).catch(e => console.error(e));
+  }, []);
 
   // Calculations
   const shippingCost = calculateShipping(totalAmount);
@@ -29,9 +36,9 @@ export default function CheckoutPage() {
   const isStep1Complete = country && (country !== 'CA' || province);
   
   const taxInfo = useMemo(() => {
-    if (!isStep1Complete) return null;
+    if (!isStep1Complete || !taxEnabled) return null;
     return calculateTaxes(country, province, totalAmount + shippingCost);
-  }, [isStep1Complete, country, province, totalAmount, shippingCost]);
+  }, [isStep1Complete, country, province, totalAmount, shippingCost, taxEnabled]);
 
   const finalTotal = totalAmount + shippingCost + (taxInfo ? taxInfo.amount : 0);
 

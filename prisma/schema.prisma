@@ -138,3 +138,9 @@ model WaitlistSubscriber {
   email     String   @unique
   createdAt DateTime @default(now())
 }
+
+model StoreSettings {
+  id           Int      @id @default(1)
+  taxEnabled   Boolean  @default(false)
+  updatedAt    DateTime @updatedAt
+}

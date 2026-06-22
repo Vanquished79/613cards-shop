@@ -1,18 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type Order = {
   id: number;
   totalAmount: number;
-  createdAt: Date;
+  createdAt: string;
   customerName: string;
   status: string;
+  taxAmount?: number;
+  taxRate?: number;
 };
 
 export default function FinancialDashboard({ initialOrders }: { initialOrders: Order[] }) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+  const [taxEnabled, setTaxEnabled] = useState(false);
+  const [isUpdatingTax, setIsUpdatingTax] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/settings').then(r => r.json()).then(data => {
+      if (data.taxEnabled !== undefined) setTaxEnabled(data.taxEnabled);
+    }).catch(e => console.error(e));
+  }, []);
+
+  const toggleTax = async () => {
+    setIsUpdatingTax(true);
+    const newValue = !taxEnabled;
+    try {
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taxEnabled: newValue })
+      });
+      setTaxEnabled(newValue);
+    } catch (e) {
+      console.error(e);
+    }
+    setIsUpdatingTax(false);
+  };
 
   // Compute metrics
   const now = new Date();
@@ -116,7 +142,25 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px', gap: '16px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ color: 'var(--text-muted)' }}>Charge Taxes:</span>
+          <button 
+            onClick={toggleTax}
+            disabled={isUpdatingTax}
+            style={{ 
+              width: '44px', height: '24px', borderRadius: '12px', border: 'none', cursor: 'pointer', position: 'relative',
+              background: taxEnabled ? '#4ade80' : 'rgba(255,255,255,0.2)',
+              transition: 'background 0.3s'
+            }}
+          >
+            <div style={{
+              width: '20px', height: '20px', borderRadius: '50%', background: 'white', position: 'absolute', top: '2px',
+              left: taxEnabled ? '22px' : '2px', transition: 'left 0.3s', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }} />
+          </button>
+        </div>
+
         <button 
           onClick={exportToCSV}
           style={{ padding: '8px 16px', background: 'var(--accent-color)', color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}

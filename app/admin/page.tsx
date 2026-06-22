@@ -15,10 +15,15 @@ export default async function AdminPage() {
     }
   });
 
+  const serializedOrders = orders.map(order => ({
+    ...order,
+    createdAt: order.createdAt.toISOString()
+  }));
+
   return (
     <div style={{ padding: '28px' }} className="glass-panel">
       <h1 style={{ marginBottom: '24px' }}>Financial Dashboard</h1>
-      <FinancialDashboard initialOrders={orders} />
+      <FinancialDashboard initialOrders={serializedOrders} />
     </div>
   );
 }
