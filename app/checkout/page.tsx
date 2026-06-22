@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCurrency } from '@/components/CurrencyProvider';
+import { calculateShipping, FREE_SHIPPING_THRESHOLD } from '@/lib/shipping';
 
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart, updateQuantity, removeFromCart } = useCart();
@@ -14,6 +15,11 @@ export default function CheckoutPage() {
   const [success, setSuccess] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
+
+  // Shipping Calculations
+  const shippingCost = calculateShipping(totalAmount);
+  const finalTotal = totalAmount + shippingCost;
+  const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalAmount);
 
   if (items.length === 0 && !success) {
     return (
@@ -79,9 +85,19 @@ export default function CheckoutPage() {
                 </div>
               </div>
             ))}
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '20px', fontWeight: 'bold', paddingTop: '8px' }}>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', color: 'var(--text-muted)', paddingTop: '8px' }}>
+              <span>Subtotal:</span>
+              <span>{formatPrice(totalAmount)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', color: 'var(--text-muted)' }}>
+              <span>Shipping:</span>
+              <span>{shippingCost === 0 ? 'FREE' : formatPrice(shippingCost)}</span>
+            </div>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '20px', fontWeight: 'bold', paddingTop: '8px', borderTop: '1px solid var(--glass-border)' }}>
               <span>Total:</span>
-              <span style={{ color: 'var(--accent-color)' }}>{formatPrice(totalAmount)}</span>
+              <span style={{ color: 'var(--accent-color)' }}>{formatPrice(finalTotal)}</span>
             </div>
           </div>
         </div>
@@ -90,13 +106,27 @@ export default function CheckoutPage() {
       <div>
         <div className="glass-panel" style={{ padding: '24px', position: 'sticky', top: '100px' }}>
           <h3 style={{ marginBottom: '20px' }}>Payment Details</h3>
+          
+          {amountToFreeShipping > 0 ? (
+             <div style={{ padding: '12px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', marginBottom: '20px' }}>
+               <div style={{ fontSize: '14px', marginBottom: '8px' }}>You are <strong>{formatPrice(amountToFreeShipping)}</strong> away from Free Shipping!</div>
+               <div style={{ height: '8px', background: 'var(--glass-border)', borderRadius: '4px', overflow: 'hidden' }}>
+                 <div style={{ width: `${(totalAmount / FREE_SHIPPING_THRESHOLD) * 100}%`, height: '100%', background: 'var(--accent-color)', transition: 'width 0.3s' }}></div>
+               </div>
+             </div>
+          ) : (
+            <div style={{ padding: '12px', background: 'rgba(74, 222, 128, 0.1)', color: '#4ade80', borderRadius: '8px', marginBottom: '20px', fontWeight: 'bold', textAlign: 'center' }}>
+              🎉 You've unlocked Free Shipping!
+            </div>
+          )}
+
           <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '12px', lineHeight: '1.5' }}>
             Complete your purchase securely via PayPal. Your shipping address will be collected automatically.
           </p>
           
           {currency !== 'CAD' && (
             <div style={{ padding: '12px', background: 'rgba(255, 183, 3, 0.1)', border: '1px solid rgba(255, 183, 3, 0.3)', borderRadius: '8px', color: '#ffb703', fontSize: '13px', marginBottom: '20px' }}>
-              <strong>Note:</strong> You will be billed <strong>C${totalAmount.toFixed(2)} CAD</strong>. Exchange rates shown are estimates.
+              <strong>Note:</strong> You will be billed <strong>C${finalTotal.toFixed(2)} CAD</strong>. Exchange rates shown are estimates.
             </div>
           )}
           
@@ -110,11 +140,15 @@ export default function CheckoutPage() {
                     description: '613cards Order',
                     amount: {
                       currency_code: 'CAD',
-                      value: totalAmount.toFixed(2),
+                      value: finalTotal.toFixed(2),
                       breakdown: {
                         item_total: {
                           currency_code: 'CAD',
                           value: totalAmount.toFixed(2)
+                        },
+                        shipping: {
+                          currency_code: 'CAD',
+                          value: shippingCost.toFixed(2)
                         }
                       }
                     },
@@ -168,7 +202,7 @@ export default function CheckoutPage() {
                         city: details.purchase_units?.[0]?.shipping?.address?.admin_area_2,
                         state: details.purchase_units?.[0]?.shipping?.address?.admin_area_1,
                         zip: details.purchase_units?.[0]?.shipping?.address?.postal_code,
-                        totalAmount: totalAmount,
+                        totalAmount: finalTotal,
                         items: items,
                         userId: session?.user?.id ? parseInt(session.user.id) : null,
                         sessionId: sessionId
