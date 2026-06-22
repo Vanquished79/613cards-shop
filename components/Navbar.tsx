@@ -119,7 +119,6 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
           Home
         </Link>
-        <Link href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Shop</Link>
         <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' }}
               onMouseOver={(e) => e.currentTarget.style.color = 'white'}
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
