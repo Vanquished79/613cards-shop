@@ -113,16 +113,11 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
       {/* Bottom Sub-Nav Row: Categories */}
       <div style={{ background: 'rgba(10, 6, 20, 0.4)', padding: '10px 40px', display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'center', justifyContent: 'center', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         
-        {/* Main Links */}
+        {/* Left Links */}
         <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' }}
               onMouseOver={(e) => e.currentTarget.style.color = 'white'}
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
           Home
-        </Link>
-        <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
-          Contact
         </Link>
         {session?.user?.role === 'ADMIN' && (
           <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Admin</Link>
@@ -172,6 +167,14 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
             </div>
           );
         })}
+
+        {/* Right Links */}
+        <div style={{ width: '1px', height: '16px', background: 'var(--glass-border)', margin: '0 8px' }} />
+        <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' }}
+              onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+          Contact
+        </Link>
       </div>
     </header>
   );
