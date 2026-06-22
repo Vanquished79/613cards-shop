@@ -125,9 +125,35 @@ export default function OrderHistoryTabs({ orders }: { orders: Order[] }) {
                 </div>
 
                 {order.trackingNumber && (
-                  <div style={{ marginTop: '16px', fontSize: '14px' }}>
-                    <span style={{ color: 'var(--text-muted)' }}>Tracking: </span>
-                    <strong style={{ color: 'var(--accent-color)' }}>{order.shippingCarrier ? `${order.shippingCarrier} - ` : ''}{order.trackingNumber}</strong>
+                  <div style={{ marginTop: '16px', fontSize: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <span style={{ color: 'var(--text-muted)' }}>Tracking: </span>
+                      <strong style={{ color: 'var(--accent-color)' }}>{order.shippingCarrier ? `${order.shippingCarrier} - ` : ''}{order.trackingNumber}</strong>
+                    </div>
+                    {order.status !== 'DELIVERED' && (
+                      <button 
+                        onClick={async () => {
+                          const { markOrderAsDelivered } = await import('./actions');
+                          await markOrderAsDelivered(order.id);
+                        }}
+                        style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
+                      >
+                        Mark as Delivered
+                      </button>
+                    )}
+                  </div>
+                )}
+                {!order.trackingNumber && order.status !== 'DELIVERED' && (
+                  <div style={{ marginTop: '16px', textAlign: 'right' }}>
+                    <button 
+                      onClick={async () => {
+                        const { markOrderAsDelivered } = await import('./actions');
+                        await markOrderAsDelivered(order.id);
+                      }}
+                      style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
+                    >
+                      Mark as Delivered
+                    </button>
                   </div>
                 )}
               </div>

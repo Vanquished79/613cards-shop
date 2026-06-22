@@ -84,11 +84,11 @@ export default async function OrdersPage() {
                       defaultValue={order.status}
                       style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '12px', marginBottom: '8px' }}
                     >
-                      <option value="PAID">Paid</option>
-                      <option value="CONFIRMED">Confirmed</option>
-                      <option value="PACKING">Packing</option>
-                      <option value="SHIPPED">Shipped</option>
-                      <option value="DELIVERED">Delivered</option>
+                      <option value="PAID" style={{ background: '#1a0b2e', color: 'white' }}>Paid</option>
+                      <option value="CONFIRMED" style={{ background: '#1a0b2e', color: 'white' }}>Confirmed</option>
+                      <option value="PACKING" style={{ background: '#1a0b2e', color: 'white' }}>Packing</option>
+                      <option value="SHIPPED" style={{ background: '#1a0b2e', color: 'white' }}>Shipped</option>
+                      <option value="DELIVERED" style={{ background: '#1a0b2e', color: 'white' }}>Delivered</option>
                     </select>
                     <input 
                       name="shippingCarrier" 
