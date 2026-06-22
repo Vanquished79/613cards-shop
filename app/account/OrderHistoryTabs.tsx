@@ -122,6 +122,28 @@ export default function OrderHistoryTabs({ orders }: { orders: Order[] }) {
                       <span style={{ color: 'var(--text-muted)' }}>${(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                   ))}
+                  
+                  {(() => {
+                    const subtotal = order.items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+                    const shippingFee = Math.max(0, order.totalAmount - subtotal);
+                    
+                    return (
+                      <>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '8px', marginTop: '4px' }}>
+                          <span style={{ color: 'var(--text-muted)' }}>Subtotal</span>
+                          <span style={{ color: 'var(--text-muted)' }}>${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+                          <span style={{ color: 'var(--text-muted)' }}>Shipping</span>
+                          <span style={{ color: 'var(--text-muted)' }}>{shippingFee < 0.01 ? 'FREE' : `$${shippingFee.toFixed(2)}`}</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 'bold', paddingTop: '4px' }}>
+                          <span>Total</span>
+                          <span style={{ color: 'var(--accent-color)' }}>${order.totalAmount.toFixed(2)}</span>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
 
                 {order.trackingNumber && (
