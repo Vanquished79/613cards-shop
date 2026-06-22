@@ -114,9 +114,15 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
   };
 
   // --- CSV Export Logic ---
-  const exportToCSV = () => {
+  const exportToCSV = (filterTaxExempt: boolean = false) => {
     const headers = ['Order ID', 'Date', 'Customer Name', 'Status', 'Total Amount', 'Tax Amount', 'Tax Rate'];
-    const rows = initialOrders.map(order => [
+    
+    // Filter orders if user wants only tax-exempt orders
+    const ordersToExport = filterTaxExempt 
+      ? initialOrders.filter(o => !o.taxAmount || o.taxAmount <= 0)
+      : initialOrders;
+
+    const rows = ordersToExport.map(order => [
       order.id,
       new Date(order.createdAt).toISOString(),
       `"${order.customerName?.replace(/"/g, '""') || ''}"`,
@@ -133,7 +139,8 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `613cards_orders_${new Date().toISOString().split('T')[0]}.csv`);
+    const filename = filterTaxExempt ? `613cards_tax_exempt_orders_${new Date().toISOString().split('T')[0]}.csv` : `613cards_orders_${new Date().toISOString().split('T')[0]}.csv`;
+    link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -161,12 +168,22 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
           </button>
         </div>
 
-        <button 
-          onClick={exportToCSV}
-          style={{ padding: '8px 16px', background: 'var(--accent-color)', color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
-        >
-          Export CSV
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button 
+            onClick={() => exportToCSV(true)}
+            style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+            title="Export only orders that did not collect tax"
+          >
+            Export Tax-Exempt
+          </button>
+          
+          <button 
+            onClick={() => exportToCSV(false)}
+            style={{ padding: '8px 16px', background: 'var(--accent-color)', color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            Export All
+          </button>
+        </div>
       </div>
 
       {/* Metric Cards */}
