@@ -114,13 +114,13 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
       <div style={{ background: 'rgba(10, 6, 20, 0.4)', padding: '10px 40px', display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'center', justifyContent: 'center', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         
         {/* Left Links */}
-        <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' }}
+        <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
               onMouseOver={(e) => e.currentTarget.style.color = 'white'}
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
           Home
         </Link>
         {session?.user?.role === 'ADMIN' && (
-          <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Admin</Link>
+          <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold' }}>Admin</Link>
         )}
 
         <div style={{ width: '1px', height: '16px', background: 'var(--glass-border)', margin: '0 8px' }} />
@@ -170,7 +170,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
 
         {/* Right Links */}
         <div style={{ width: '1px', height: '16px', background: 'var(--glass-border)', margin: '0 8px' }} />
-        <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' }}
+        <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
               onMouseOver={(e) => e.currentTarget.style.color = 'white'}
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
           Contact
