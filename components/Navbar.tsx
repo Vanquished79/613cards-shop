@@ -72,6 +72,11 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
         {/* Right: Links, Account, Cart */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
           <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '15px', textTransform: 'uppercase', transition: 'color 0.2s' }}
+                  onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+                  onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+              Home
+            </Link>
             <Link href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '15px', textTransform: 'uppercase' }}>Shop</Link>
             <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '15px', textTransform: 'uppercase', transition: 'color 0.2s' }}
                   onMouseOver={(e) => e.currentTarget.style.color = 'white'}
