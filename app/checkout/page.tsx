@@ -141,11 +141,11 @@ export default function CheckoutPage() {
               }}
               style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', outline: 'none' }}
             >
-              <option value="">Select Country</option>
-              <option value="CA">Canada</option>
-              <option value="US">United States</option>
-              <option value="EU">Europe</option>
-              <option value="OTHER">Other</option>
+              <option value="" style={{ background: '#1a1025', color: 'white' }}>Select Country</option>
+              <option value="CA" style={{ background: '#1a1025', color: 'white' }}>Canada</option>
+              <option value="US" style={{ background: '#1a1025', color: 'white' }}>United States</option>
+              <option value="EU" style={{ background: '#1a1025', color: 'white' }}>Europe</option>
+              <option value="OTHER" style={{ background: '#1a1025', color: 'white' }}>Other</option>
             </select>
 
             {country === 'CA' && (
@@ -154,9 +154,9 @@ export default function CheckoutPage() {
                 onChange={(e) => setProvince(e.target.value)}
                 style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', outline: 'none' }}
               >
-                <option value="">Select Province</option>
+                <option value="" style={{ background: '#1a1025', color: 'white' }}>Select Province</option>
                 {CANADIAN_PROVINCES.map(p => (
-                  <option key={p.code} value={p.code}>{p.name}</option>
+                  <option key={p.code} value={p.code} style={{ background: '#1a1025', color: 'white' }}>{p.name}</option>
                 ))}
               </select>
             )}
