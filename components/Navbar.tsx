@@ -69,27 +69,8 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
           </form>
         </div>
 
-        {/* Right: Links, Account, Cart */}
+        {/* Right: Account, Cart */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '15px', textTransform: 'uppercase', transition: 'color 0.2s' }}
-                  onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                  onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
-              Home
-            </Link>
-            <Link href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '15px', textTransform: 'uppercase' }}>Shop</Link>
-            <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '15px', textTransform: 'uppercase', transition: 'color 0.2s' }}
-                  onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                  onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
-              Contact
-            </Link>
-            {session?.user?.role === 'ADMIN' && (
-              <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontWeight: 600, fontSize: '15px', textTransform: 'uppercase' }}>Admin</Link>
-            )}
-          </div>
-
-          <div style={{ width: '1px', height: '24px', background: 'var(--glass-border)' }} />
-
           {session ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
               <Link href="/account" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '14px', transition: 'color 0.2s' }}
@@ -131,6 +112,25 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
 
       {/* Bottom Sub-Nav Row: Categories */}
       <div style={{ background: 'rgba(10, 6, 20, 0.4)', padding: '10px 40px', display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'center', justifyContent: 'center', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        
+        {/* Main Links */}
+        <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' }}
+              onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+          Home
+        </Link>
+        <Link href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Shop</Link>
+        <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' }}
+              onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+          Contact
+        </Link>
+        {session?.user?.role === 'ADMIN' && (
+          <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Admin</Link>
+        )}
+
+        <div style={{ width: '1px', height: '16px', background: 'var(--glass-border)', margin: '0 8px' }} />
+
         <Link href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold' }}>All Categories</Link>
         {topLevelCategories.map((c: any) => {
           const children = categories.filter((sub: any) => sub.parentId === c.id);
