@@ -22,10 +22,10 @@ export async function middleware(request: NextRequest) {
   const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true';
   const isAdminUser = token?.role === 'ADMIN';
   
-  // Allow these routes through maintenance mode always
   const isExemptRoute = 
     pathname.startsWith('/coming-soon') || 
     pathname.startsWith('/login') || 
+    pathname.startsWith('/register') || 
     pathname.startsWith('/api/auth') || 
     pathname.startsWith('/_next') || 
     pathname === '/logo.png' || 
