@@ -36,17 +36,17 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 30, width: '100%', borderBottom: '1px solid var(--glass-border)', background: 'rgba(26, 11, 46, 0.95)', backdropFilter: 'blur(12px)' }}>
       {/* Top Main Row */}
-      <div style={{ display: 'flex', alignItems: 'center', padding: '12px 40px', gap: '40px', flexWrap: 'wrap' }}>
+      <div className="navbar-top-row">
         
         {/* Left: Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', width: '150px', height: '80px', position: 'relative' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', background: 'transparent', position: 'absolute', top: '-10px', left: 0 }}>
-            <Image src={logoImg} alt="613cards.online Logo" width={150} height={150} className="navbar-logo" style={{ objectFit: 'contain', backgroundColor: 'transparent', transform: 'scale(1.5)', transformOrigin: 'top left', zIndex: 100 }} priority />
+        <div className="navbar-logo-container">
+          <Link href="/" className="navbar-logo-link">
+            <Image src={logoImg} alt="613cards.online Logo" width={150} height={150} className="navbar-logo-img" priority />
           </Link>
         </div>
 
         {/* Center: Global Search Bar */}
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', minWidth: '300px' }}>
+        <div className="navbar-search-container">
           <form onSubmit={handleSearch} style={{ display: 'flex', width: '100%', maxWidth: '600px', position: 'relative' }}>
             <input 
               type="text" 
@@ -74,7 +74,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
         </div>
 
         {/* Right: Currency, Account, Cart */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+        <div className="navbar-right-container">
           
           {/* Currency Selector (Custom Dropdown) */}
           <div style={{ position: 'relative' }}>
