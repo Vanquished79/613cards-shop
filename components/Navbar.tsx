@@ -74,28 +74,84 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
         {/* Right: Currency, Account, Cart */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
           
-          {/* Currency Selector */}
-          <select 
-            value={currency} 
-            onChange={(e) => setCurrency(e.target.value as any)}
-            style={{ 
-              background: 'transparent', 
+          {/* Currency Selector (Custom Dropdown) */}
+          <div 
+            style={{ position: 'relative' }}
+            onMouseEnter={() => setHoveredCategory(-1)} // Reusing hoveredCategory state, -1 for currency
+            onMouseLeave={() => setHoveredCategory(null)}
+          >
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '6px', 
               color: 'var(--text-muted)', 
-              border: 'none', 
-              outline: 'none', 
               fontSize: '14px', 
               fontWeight: 600, 
               cursor: 'pointer',
-              appearance: 'none',
-              WebkitAppearance: 'none'
+              padding: '6px 12px',
+              borderRadius: '20px',
+              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'rgba(255,255,255,0.05)',
+              transition: 'all 0.2s'
             }}
-          >
-            <option value="CAD" style={{ background: '#1a0b2e', color: 'white' }}>CAD</option>
-            <option value="USD" style={{ background: '#1a0b2e', color: 'white' }}>USD</option>
-            <option value="EUR" style={{ background: '#1a0b2e', color: 'white' }}>EUR</option>
-            <option value="GBP" style={{ background: '#1a0b2e', color: 'white' }}>GBP</option>
-            <option value="AUD" style={{ background: '#1a0b2e', color: 'white' }}>AUD</option>
-          </select>
+            onMouseOver={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+            >
+              <span>{currency}</span>
+              <span style={{ fontSize: '10px' }}>▼</span>
+            </div>
+            
+            {hoveredCategory === -1 && (
+              <div style={{ 
+                position: 'absolute', 
+                top: '100%', 
+                right: 0, 
+                marginTop: '8px',
+                background: 'rgba(26, 11, 46, 0.98)', 
+                backdropFilter: 'blur(16px)', 
+                border: '1px solid var(--glass-border)', 
+                borderRadius: '12px', 
+                padding: '8px 0', 
+                minWidth: '100px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                boxShadow: '0 10px 30px rgba(0,0,0,0.5)', 
+                zIndex: 50 
+              }}>
+                {['CAD', 'USD', 'EUR', 'GBP', 'AUD'].map((c) => (
+                  <button 
+                    key={c}
+                    onClick={() => { setCurrency(c as any); setHoveredCategory(null); }}
+                    style={{ 
+                      background: currency === c ? 'rgba(255, 183, 3, 0.1)' : 'transparent', 
+                      color: currency === c ? 'var(--accent-color)' : 'var(--text-muted)', 
+                      border: 'none',
+                      textAlign: 'left',
+                      fontSize: '14px', 
+                      fontWeight: currency === c ? 'bold' : 'normal',
+                      padding: '8px 20px', 
+                      cursor: 'pointer',
+                      transition: 'background 0.2s, color 0.2s' 
+                    }}
+                    onMouseOver={(e) => { 
+                      if (currency !== c) {
+                        e.currentTarget.style.color = 'white'; 
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; 
+                      }
+                    }}
+                    onMouseOut={(e) => { 
+                      if (currency !== c) {
+                        e.currentTarget.style.color = 'var(--text-muted)'; 
+                        e.currentTarget.style.background = 'transparent';
+                      }
+                    }}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {session ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
