@@ -4,8 +4,9 @@ export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
 
-export default async function OrdersPage({ searchParams }: { searchParams: { tab?: string } }) {
-  const tab = searchParams.tab || 'active';
+export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  const resolvedParams = await searchParams;
+  const tab = resolvedParams.tab || 'active';
   const allOrders = await prisma.order.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
