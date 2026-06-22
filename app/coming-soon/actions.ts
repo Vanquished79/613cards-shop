@@ -56,7 +56,7 @@ export async function submitWaitlist(email: string) {
                 
                 <p style="font-size: 16px; color: #a1a1aa; line-height: 1.6; text-align: left; -webkit-text-fill-color: #a1a1aa;">Hey there,</p>
                 <p style="font-size: 16px; color: #a1a1aa; line-height: 1.6; text-align: left; -webkit-text-fill-color: #a1a1aa;">
-                  Thanks for joining the waitlist for <strong style="color: #ffffff; background-image: linear-gradient(to right, #ffffff, #ffffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">613cards</strong>! We are working hard behind the scenes to bring you the ultimate trading card shop.
+                  Thanks for joining our waitlist! We are working hard behind the scenes to bring you the ultimate trading card shop.
                 </p>
                 <p style="font-size: 16px; color: #a1a1aa; line-height: 1.6; text-align: left; -webkit-text-fill-color: #a1a1aa;">
                   We'll notify you the moment we launch so you can get first access to our exclusive drops and inventory.
