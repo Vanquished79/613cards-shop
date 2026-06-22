@@ -107,10 +107,25 @@ export default function CheckoutPage() {
                 createOrder={(data, actions) => {
                   
                   const purchaseUnit: any = {
+                    description: '613cards Order',
                     amount: {
                       currency_code: 'CAD',
-                      value: totalAmount.toFixed(2)
-                    }
+                      value: totalAmount.toFixed(2),
+                      breakdown: {
+                        item_total: {
+                          currency_code: 'CAD',
+                          value: totalAmount.toFixed(2)
+                        }
+                      }
+                    },
+                    items: items.map(item => ({
+                      name: item.name.substring(0, 127),
+                      quantity: item.quantity.toString(),
+                      unit_amount: {
+                        currency_code: 'CAD',
+                        value: item.price.toFixed(2)
+                      }
+                    }))
                   };
 
                   // If user is logged in and has an address, pre-fill it for PayPal
