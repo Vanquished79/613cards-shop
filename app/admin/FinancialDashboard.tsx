@@ -10,6 +10,10 @@ type Order = {
   status: string;
   taxAmount?: number;
   taxRate?: number;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
 };
 
 export default function FinancialDashboard({ initialOrders }: { initialOrders: Order[] }) {
@@ -115,7 +119,11 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
 
   // --- CSV Export Logic ---
   const exportToCSV = (filterTaxExempt: boolean = false) => {
-    const headers = ['Order ID', 'Date', 'Customer Name', 'Status', 'Total Amount', 'Tax Amount', 'Tax Rate'];
+    const headers = [
+      'Order ID', 'Date', 'Customer Name', 'Status', 
+      'Total Amount', 'Tax Amount', 'Tax Rate',
+      'Address', 'City', 'State/Province', 'ZIP/Postal Code'
+    ];
     
     // Filter orders if user wants only tax-exempt orders
     const ordersToExport = filterTaxExempt 
@@ -131,7 +139,11 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
       // @ts-ignore
       (order.taxAmount || 0).toFixed(2),
       // @ts-ignore
-      (order.taxRate || 0).toString()
+      (order.taxRate || 0).toString(),
+      `"${order.address?.replace(/"/g, '""') || 'N/A'}"`,
+      `"${order.city?.replace(/"/g, '""') || 'N/A'}"`,
+      `"${order.state?.replace(/"/g, '""') || 'N/A'}"`,
+      `"${order.zip?.replace(/"/g, '""') || 'N/A'}"`
     ]);
     const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
     
