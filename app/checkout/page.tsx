@@ -5,9 +5,11 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { useCurrency } from '@/components/CurrencyProvider';
 
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart, updateQuantity, removeFromCart } = useCart();
+  const { formatPrice, currency } = useCurrency();
   const [isProcessing, setIsProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
@@ -73,13 +75,13 @@ export default function CheckoutPage() {
                   </div>
                 </div>
                 <div style={{ fontWeight: 'bold' }}>
-                  ${(item.price * item.quantity).toFixed(2)}
+                  {formatPrice(item.price * item.quantity)}
                 </div>
               </div>
             ))}
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '20px', fontWeight: 'bold', paddingTop: '8px' }}>
               <span>Total:</span>
-              <span style={{ color: 'var(--accent-color)' }}>${totalAmount.toFixed(2)}</span>
+              <span style={{ color: 'var(--accent-color)' }}>{formatPrice(totalAmount)}</span>
             </div>
           </div>
         </div>
@@ -88,19 +90,25 @@ export default function CheckoutPage() {
       <div>
         <div className="glass-panel" style={{ padding: '24px', position: 'sticky', top: '100px' }}>
           <h3 style={{ marginBottom: '20px' }}>Payment Details</h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '20px', lineHeight: '1.5' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '12px', lineHeight: '1.5' }}>
             Complete your purchase securely via PayPal. Your shipping address will be collected automatically.
           </p>
           
-          <div style={{ zIndex: 1, position: 'relative', background: 'white', padding: '16px', borderRadius: '12px' }}>
-            <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test', currency: 'USD' }}>
+          {currency !== 'CAD' && (
+            <div style={{ padding: '12px', background: 'rgba(255, 183, 3, 0.1)', border: '1px solid rgba(255, 183, 3, 0.3)', borderRadius: '8px', color: '#ffb703', fontSize: '13px', marginBottom: '20px' }}>
+              <strong>Note:</strong> You will be billed <strong>C${totalAmount.toFixed(2)} CAD</strong>. Exchange rates shown are estimates.
+            </div>
+          )}
+          
+          <div style={{ zIndex: 1, position: 'relative', background: 'white', padding: '16px', borderRadius: '12px', marginTop: currency === 'CAD' ? '20px' : '0' }}>
+            <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test', currency: 'CAD' }}>
               <PayPalButtons 
                 style={{ layout: 'vertical', color: 'gold', shape: 'rect' }}
                 createOrder={(data, actions) => {
                   
                   const purchaseUnit: any = {
                     amount: {
-                      currency_code: 'USD',
+                      currency_code: 'CAD',
                       value: totalAmount.toFixed(2)
                     }
                   };

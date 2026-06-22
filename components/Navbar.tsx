@@ -9,9 +9,11 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
+import { useCurrency } from './CurrencyProvider';
 
 export function Navbar({ categories = [] }: { categories?: any[] }) {
   const { items, setIsCartOpen } = useCart();
+  const { currency, setCurrency } = useCurrency();
   const { data: session } = useSession();
   const router = useRouter();
   const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
@@ -69,8 +71,32 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
           </form>
         </div>
 
-        {/* Right: Account, Cart */}
+        {/* Right: Currency, Account, Cart */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+          
+          {/* Currency Selector */}
+          <select 
+            value={currency} 
+            onChange={(e) => setCurrency(e.target.value as any)}
+            style={{ 
+              background: 'transparent', 
+              color: 'var(--text-muted)', 
+              border: 'none', 
+              outline: 'none', 
+              fontSize: '14px', 
+              fontWeight: 600, 
+              cursor: 'pointer',
+              appearance: 'none',
+              WebkitAppearance: 'none'
+            }}
+          >
+            <option value="CAD" style={{ background: '#1a0b2e', color: 'white' }}>CAD</option>
+            <option value="USD" style={{ background: '#1a0b2e', color: 'white' }}>USD</option>
+            <option value="EUR" style={{ background: '#1a0b2e', color: 'white' }}>EUR</option>
+            <option value="GBP" style={{ background: '#1a0b2e', color: 'white' }}>GBP</option>
+            <option value="AUD" style={{ background: '#1a0b2e', color: 'white' }}>AUD</option>
+          </select>
+
           {session ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
               <Link href="/account" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '14px', transition: 'color 0.2s' }}

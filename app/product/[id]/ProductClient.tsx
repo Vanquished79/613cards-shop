@@ -3,9 +3,11 @@
 import { useCart } from '@/components/CartProvider';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useCurrency } from '@/components/CurrencyProvider';
 
 export function ProductClient({ product }: { product: any }) {
   const { addToCart } = useCart();
+  const { formatPrice } = useCurrency();
   const [isImageExpanded, setIsImageExpanded] = useState(false);
   const [isSuperZoomed, setIsSuperZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
@@ -135,10 +137,10 @@ export function ProductClient({ product }: { product: any }) {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
               {product.compareAtPrice && product.compareAtPrice > product.price && (
                 <span style={{ color: 'var(--text-muted)', textDecoration: 'line-through', fontSize: '18px', marginBottom: '4px' }}>
-                  ${product.compareAtPrice.toFixed(2)}
+                  {formatPrice(product.compareAtPrice)}
                 </span>
               )}
-              <span style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${product.price.toFixed(2)}</span>
+              <span style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--accent-color)' }}>{formatPrice(product.price)}</span>
             </div>
           </div>
 

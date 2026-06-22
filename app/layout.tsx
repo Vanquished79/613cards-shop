@@ -15,6 +15,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 import { Providers } from "@/components/Providers";
+import { CurrencyProvider } from "@/components/CurrencyProvider";
 import prisma from "@/lib/prisma";
 
 export default async function RootLayout({
@@ -29,11 +30,13 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <CartProvider>
-            <ConditionalLayout categories={categories}>
-              {children}
-            </ConditionalLayout>
-          </CartProvider>
+          <CurrencyProvider>
+            <CartProvider>
+              <ConditionalLayout categories={categories}>
+                {children}
+              </ConditionalLayout>
+            </CartProvider>
+          </CurrencyProvider>
         </Providers>
       </body>
     </html>

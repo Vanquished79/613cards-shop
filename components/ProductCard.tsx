@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { useCart } from './CartProvider';
+import { useCurrency } from './CurrencyProvider';
 
 export function ProductCard({ product }: { product: any }) {
   const { addToCart } = useCart();
+  const { formatPrice } = useCurrency();
 
   return (
     <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', position: 'relative' }}>
@@ -68,10 +70,10 @@ export function ProductCard({ product }: { product: any }) {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {product.compareAtPrice && product.compareAtPrice > product.price && (
               <span style={{ color: 'var(--text-muted)', textDecoration: 'line-through', fontSize: '14px', marginBottom: '2px' }}>
-                ${product.compareAtPrice.toFixed(2)}
+                {formatPrice(product.compareAtPrice)}
               </span>
             )}
-            <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>${product.price.toFixed(2)}</span>
+            <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>{formatPrice(product.price)}</span>
           </div>
         <button 
           className="btn-primary" 
