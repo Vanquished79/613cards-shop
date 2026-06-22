@@ -5,8 +5,9 @@ import { ReplyForm } from './ReplyForm';
 
 export const dynamic = 'force-dynamic';
 
-export default async function TicketDetailPage({ params }: { params: { id: string } }) {
-  const ticketId = parseInt(params.id);
+export default async function TicketDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const ticketId = parseInt(resolvedParams.id);
   
   const ticket = await prisma.contactMessage.findUnique({
     where: { id: ticketId },

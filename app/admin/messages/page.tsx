@@ -3,8 +3,9 @@ import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-export default async function MessagesPage({ searchParams }: { searchParams: { status?: string } }) {
-  const currentStatus = searchParams.status || 'OPEN';
+export default async function MessagesPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+  const resolvedParams = await searchParams;
+  const currentStatus = resolvedParams.status || 'OPEN';
 
   const messages = await prisma.contactMessage.findMany({
     where: { status: currentStatus },
