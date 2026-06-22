@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { Navbar } from './Navbar';
 import { CartSlideOut } from './CartSlideOut';
 
-export function ConditionalLayout({ children }: { children: React.ReactNode }) {
+export function ConditionalLayout({ children, categories = [] }: { children: React.ReactNode, categories?: any[] }) {
   const pathname = usePathname();
   const isComingSoon = pathname === '/coming-soon';
 
@@ -14,7 +14,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Navbar />
+      <Navbar categories={categories} />
       <CartSlideOut />
       <div className="container">
         {children}

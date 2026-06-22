@@ -39,16 +39,6 @@ function ShopFiltersInner({ categories }: { categories: any[] }) {
 
   return (
     <form onSubmit={handleSubmit} className="glass-panel filters-container" style={{ marginBottom: '32px' }}>
-      
-      <div style={{ flex: '1 1 200px', display: 'flex', alignItems: 'center', position: 'relative' }}>
-        <input 
-          name="q" 
-          defaultValue={q} 
-          placeholder="Search cards..." 
-          style={{ ...inputStyle, width: '100%', paddingLeft: '40px' }} 
-        />
-        <Search size={18} style={{ position: 'absolute', left: '14px', color: 'var(--text-muted)' }} />
-      </div>
 
       <div style={{ flex: '1 1 150px' }}>
         <select name="categoryId" defaultValue={categoryId} style={{ ...inputStyle, width: '100%', WebkitAppearance: 'none', appearance: 'none' }}>

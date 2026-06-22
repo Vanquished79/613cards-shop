@@ -15,6 +15,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 import { Providers } from "@/components/Providers";
+import prisma from "@/lib/prisma";
 
 export default async function RootLayout({
   children,
@@ -22,13 +23,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
+  const categories = await prisma.category.findMany();
 
   return (
     <html lang="en">
       <body className={inter.className}>
         <Providers>
           <CartProvider>
-            <ConditionalLayout>
+            <ConditionalLayout categories={categories}>
               {children}
             </ConditionalLayout>
           </CartProvider>

@@ -72,10 +72,6 @@ body {
   padding: 12px 40px;
   background: rgba(26, 11, 46, 0.95);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--glass-border);
-  position: sticky;
-  top: 0;
-  z-index: 30;
   flex-wrap: wrap;
 }
 
