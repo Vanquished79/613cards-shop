@@ -2,9 +2,11 @@
 
 import { useCart } from '@/components/CartProvider';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export function ProductClient({ product }: { product: any }) {
   const { addToCart } = useCart();
+  const [isImageExpanded, setIsImageExpanded] = useState(false);
 
   return (
     <div style={{ maxWidth: '1000px', margin: '40px auto', padding: '0 20px' }}>
@@ -15,7 +17,11 @@ export function ProductClient({ product }: { product: any }) {
       <div className="glass-panel product-details-container">
         
         {/* Left Side: Image */}
-        <div className="product-image-container" style={{ flex: '1 1 300px', height: '400px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative' }}>
+        <div 
+          className="product-image-container" 
+          style={{ flex: '1 1 300px', height: '400px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative', cursor: product.imageUrl ? 'zoom-in' : 'default' }}
+          onClick={() => product.imageUrl && setIsImageExpanded(true)}
+        >
           {product.imageUrl ? (
             <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.5))' }} />
           ) : (
@@ -28,6 +34,25 @@ export function ProductClient({ product }: { product: any }) {
             </div>
           )}
         </div>
+
+        {/* Full Screen Image Overlay */}
+        {isImageExpanded && product.imageUrl && (
+          <div 
+            style={{
+              position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', 
+              backgroundColor: 'rgba(0, 0, 0, 0.9)', zIndex: 9999, 
+              display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out'
+            }}
+            onClick={() => setIsImageExpanded(false)}
+          >
+            <div style={{ position: 'absolute', top: '20px', right: '20px', color: 'white', fontSize: '32px', cursor: 'pointer' }}>&times;</div>
+            <img 
+              src={product.imageUrl} 
+              alt={product.name} 
+              style={{ maxWidth: '90vw', maxHeight: '90vh', objectFit: 'contain', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.8))' }} 
+            />
+          </div>
+        )}
 
         {/* Right Side: Details */}
         <div style={{ flex: '2 1 400px', display: 'flex', flexDirection: 'column' }}>
