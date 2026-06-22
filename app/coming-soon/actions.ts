@@ -43,7 +43,7 @@ export async function submitWaitlist(email: string) {
       // B) Send the Welcome Email automatically
       try {
         const { error: emailError } = await resend.emails.send({
-          from: '613cards <info@613cards.com>',
+          from: '613cards <info@613cards.online>',
           to: email.toLowerCase(),
           subject: 'Welcome to the 613cards Waitlist!',
           html: `
