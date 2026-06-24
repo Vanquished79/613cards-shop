@@ -196,7 +196,6 @@ body {
   
   .filters-container > div {
     flex: 1 1 100% !important;
-  }
 }
 
 /* Form Layout Mobile (Admin) */
@@ -207,5 +206,24 @@ body {
   
   .subnav-spacer {
     display: none !important;
+  }
+}
+
+/* Product Grid Layout */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .product-grid {
+    grid-template-columns: 1fr;
   }
 }
