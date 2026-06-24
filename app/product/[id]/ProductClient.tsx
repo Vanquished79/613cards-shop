@@ -4,6 +4,7 @@ import { useCart } from '@/components/CartProvider';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useCurrency } from '@/components/CurrencyProvider';
+import { getNumberedColor } from '@/lib/utils';
 
 export function ProductClient({ product }: { product: any }) {
   const { addToCart } = useCart();
@@ -218,11 +219,14 @@ export function ProductClient({ product }: { product: any }) {
                     )}
                     {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>Rookie Card</span>}
                     {product.isAutograph && <span style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(168, 85, 247, 0.3)', fontWeight: 'bold' }}>Autograph</span>}
-                    {product.isNumbered && (
-                      <span style={{ background: 'rgba(234, 179, 8, 0.2)', color: '#facc15', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 'bold' }}>
-                        {product.serialNumber ? `Numbered #${product.serialNumber}` : 'Numbered'}
-                      </span>
-                    )}
+                    {product.isNumbered && (() => {
+                      const colors = getNumberedColor(product.serialNumber);
+                      return (
+                        <span style={{ background: colors.bg, color: colors.text, padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: `1px solid ${colors.border}`, fontWeight: 'bold' }}>
+                          {product.serialNumber ? `Numbered #${product.serialNumber}` : 'Numbered'}
+                        </span>
+                      );
+                    })()}
                     {product.isParallel && <span style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#f472b6', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 'bold' }}>Parallel</span>}
                     {!product.isRookie && !product.isAutograph && !product.isNumbered && !product.isParallel && (
                       <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Base Card</span>
