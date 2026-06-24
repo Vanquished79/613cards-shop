@@ -8,7 +8,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const dynamic = 'force-dynamic';
 
-export default async function RegisterPage() {
+export default async function RegisterPage({ searchParams }: { searchParams: { error?: string } }) {
   const session = await getServerSession(authOptions);
   
   if (session) {
@@ -22,13 +22,13 @@ export default async function RegisterPage() {
     const password = formData.get('password') as string;
     
     if (!name || !email || !password || password.length < 6) {
-      return; // Basic validation
+      redirect('/register?error=Please+fill+out+all+fields+correctly');
     }
 
     try {
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
-        return; // Email already in use
+        redirect('/register?error=Email+already+in+use');
       }
 
       const passwordHash = await bcrypt.hash(password, 10);
@@ -41,11 +41,16 @@ export default async function RegisterPage() {
           role: 'CUSTOMER'
         }
       });
-
-      redirect('/login?registered=true');
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      if (e.message !== 'NEXT_REDIRECT') {
+        console.error(e);
+        redirect('/register?error=An+error+occurred');
+      } else {
+        throw e; // rethrow NEXT_REDIRECT
+      }
     }
+    
+    redirect('/login?registered=true');
   }
 
   return (
@@ -56,6 +61,12 @@ export default async function RegisterPage() {
         <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginBottom: '32px' }}>
           Join 613cards to save your address and track orders.
         </p>
+
+        {searchParams.error && (
+          <div style={{ padding: '12px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '8px', marginBottom: '24px', fontSize: '14px', textAlign: 'center' }}>
+            {searchParams.error}
+          </div>
+        )}
 
         <form action={registerUser} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
