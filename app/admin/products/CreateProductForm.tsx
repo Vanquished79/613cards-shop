@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 export default function CreateProductForm({ categories, createProductAction }: { categories: any[], createProductAction: (formData: FormData) => Promise<{ error?: string, success?: boolean } | void> }) {
   const [productType, setProductType] = useState('CARD');
+  const [fileInputs, setFileInputs] = useState([0]);
 
   async function handleSubmit(formData: FormData) {
     const result = await createProductAction(formData);
@@ -60,9 +61,18 @@ export default function CreateProductForm({ categories, createProductAction }: {
       <input name="compareAtPrice" type="number" step="0.01" placeholder="Compare At Price (Optional Sale Price)" style={inputStyle} />
       <input name="stock" type="number" placeholder="Stock Quantity" required style={inputStyle} />
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Upload Image (from computer)</label>
-        <input name="imageFile" type="file" accept="image/*" style={inputStyle} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <label style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Upload Image(s) (Hold Ctrl/Cmd to select multiple, or click add more)</label>
+        {fileInputs.map((id) => (
+          <input key={id} name="imageFile" type="file" accept="image/*" multiple style={inputStyle} />
+        ))}
+        <button 
+          type="button" 
+          onClick={() => setFileInputs([...fileInputs, fileInputs.length])}
+          style={{ padding: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px dashed var(--glass-border)', borderRadius: '8px', cursor: 'pointer', fontSize: '12px' }}
+        >
+          + Add another image upload field
+        </button>
       </div>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>

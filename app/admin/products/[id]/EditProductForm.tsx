@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 export default function EditProductForm({ product, categories, updateProductAction }: { product: any, categories: any[], updateProductAction: (formData: FormData) => void }) {
   const [productType, setProductType] = useState(product.type || 'CARD');
+  const [deletedImages, setDeletedImages] = useState<string[]>([]);
+  const [fileInputs, setFileInputs] = useState([0]);
 
   return (
     <form action={updateProductAction} encType="multipart/form-data" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -74,15 +76,59 @@ export default function EditProductForm({ product, categories, updateProductActi
       </div>
       
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Upload Additional Image(s)</label>
+          {fileInputs.map((id) => (
+            <input key={id} name="imageFile" type="file" accept="image/*" multiple style={inputStyle} />
+          ))}
+          <button 
+            type="button" 
+            onClick={() => setFileInputs([...fileInputs, fileInputs.length])}
+            style={{ padding: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px dashed var(--glass-border)', borderRadius: '8px', cursor: 'pointer', fontSize: '12px' }}
+          >
+            + Add another image upload field
+          </button>
+        </div>
         <div>
-          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Upload New Image (Optional)</label>
-          <input name="imageFile" type="file" accept="image/*" style={inputStyle} />
+          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Main Image URL (Override)</label>
+          <input name="imageUrl" defaultValue={product.imageUrl || ''} placeholder="https://..." style={inputStyle} />
         </div>
       </div>
       
-      <div>
-        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Or Paste Image URL</label>
-        <input name="imageUrl" defaultValue={product.imageUrl || ''} style={inputStyle} />
+      {/* Existing Images Gallery Management */}
+      <div style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+        <label style={{ display: 'block', marginBottom: '16px', color: 'var(--text-muted)', fontSize: '14px', fontWeight: 'bold' }}>Manage Images</label>
+        
+        {/* Hidden input to pass deleted images array to the server */}
+        <input type="hidden" name="deletedImages" value={JSON.stringify(deletedImages)} />
+        
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          {/* Main Image */}
+          {product.imageUrl && (
+            <div style={{ position: 'relative', width: '100px', height: '100px', borderRadius: '8px', border: '2px solid var(--accent-color)', overflow: 'hidden', background: 'black' }}>
+              <img src={product.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="Main" />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'var(--accent-color)', color: 'black', fontSize: '10px', textAlign: 'center', fontWeight: 'bold', padding: '2px' }}>MAIN</div>
+            </div>
+          )}
+          
+          {/* Gallery Images */}
+          {product.additionalImages?.map((imgUrl: string) => {
+            const isDeleted = deletedImages.includes(imgUrl);
+            if (isDeleted) return null;
+            return (
+              <div key={imgUrl} style={{ position: 'relative', width: '100px', height: '100px', borderRadius: '8px', border: '1px solid var(--glass-border)', overflow: 'hidden', background: 'black', opacity: isDeleted ? 0.3 : 1 }}>
+                <img src={imgUrl} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="Gallery" />
+                <button 
+                  type="button" 
+                  onClick={(e) => { e.preventDefault(); setDeletedImages([...deletedImages, imgUrl]); }}
+                  style={{ position: 'absolute', top: '4px', right: '4px', width: '20px', height: '20px', borderRadius: '50%', background: 'red', color: 'white', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', padding: 0 }}
+                >
+                  &times;
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Dynamic Card Fields */}

@@ -29,6 +29,7 @@ model Product {
   compareAtPrice Float?
   stock          Int      @default(0)
   imageUrl    String?
+  additionalImages String[] @default([])
   condition   String?
   isFeatured  Boolean  @default(false)
   categoryId  Int

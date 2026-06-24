@@ -9,6 +9,9 @@ export async function GET() {
     await prisma.$executeRawUnsafe(`ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "taxAmount" DOUBLE PRECISION NOT NULL DEFAULT 0;`);
     await prisma.$executeRawUnsafe(`ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "taxRate" DOUBLE PRECISION NOT NULL DEFAULT 0;`);
     
+    // Add additionalImages to Product
+    await prisma.$executeRawUnsafe(`ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "additionalImages" TEXT[] DEFAULT ARRAY[]::TEXT[];`);
+    
     // Create the StoreSettings table
     await prisma.$executeRawUnsafe(`
       CREATE TABLE IF NOT EXISTS "StoreSettings" (

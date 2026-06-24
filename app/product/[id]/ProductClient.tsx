@@ -11,6 +11,9 @@ export function ProductClient({ product }: { product: any }) {
   const [isImageExpanded, setIsImageExpanded] = useState(false);
   const [isSuperZoomed, setIsSuperZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+  const [selectedImage, setSelectedImage] = useState(product.imageUrl);
+
+  const allImages = [product.imageUrl, ...(product.additionalImages || [])].filter(Boolean);
 
   const handleOverlayMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isSuperZoomed) return;
@@ -29,26 +32,48 @@ export function ProductClient({ product }: { product: any }) {
       <div className="glass-panel product-details-container">
         
         {/* Left Side: Image */}
-        <div 
-          className="product-image-container" 
-          style={{ flex: '1 1 300px', height: '400px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative', cursor: product.imageUrl ? 'zoom-in' : 'default' }}
-          onClick={() => {
-            if (product.imageUrl) {
-              setIsImageExpanded(true);
-              setIsSuperZoomed(false);
-              setZoomPos({ x: 50, y: 50 });
-            }
-          }}
-        >
-          {product.imageUrl ? (
-            <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.5))' }} />
-          ) : (
-            <span style={{ color: 'var(--text-muted)' }}>No Image Available</span>
-          )}
+        <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div 
+            className="product-image-container" 
+            style={{ width: '100%', height: '400px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative', cursor: selectedImage ? 'zoom-in' : 'default' }}
+            onClick={() => {
+              if (selectedImage) {
+                setIsImageExpanded(true);
+                setIsSuperZoomed(false);
+                setZoomPos({ x: 50, y: 50 });
+              }
+            }}
+          >
+            {selectedImage ? (
+              <img src={selectedImage} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.5))' }} />
+            ) : (
+              <span style={{ color: 'var(--text-muted)' }}>No Image Available</span>
+            )}
 
-          {product.compareAtPrice && product.compareAtPrice > product.price && (
-            <div style={{ position: 'absolute', top: '16px', right: '16px', background: '#ff3366', color: 'white', padding: '8px 16px', borderRadius: '20px', fontWeight: 'bold', fontSize: '14px', boxShadow: '0 4px 10px rgba(255,51,102,0.4)' }}>
-              SALE
+            {product.compareAtPrice && product.compareAtPrice > product.price && (
+              <div style={{ position: 'absolute', top: '16px', right: '16px', background: '#ff3366', color: 'white', padding: '8px 16px', borderRadius: '20px', fontWeight: 'bold', fontSize: '14px', boxShadow: '0 4px 10px rgba(255,51,102,0.4)' }}>
+                SALE
+              </div>
+            )}
+          </div>
+          
+          {/* Thumbnails Gallery */}
+          {allImages.length > 1 && (
+            <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
+              {allImages.map((img: string, idx: number) => (
+                <div 
+                  key={idx}
+                  onClick={() => setSelectedImage(img)}
+                  style={{ 
+                    width: '80px', height: '80px', flexShrink: 0, 
+                    borderRadius: '8px', background: 'rgba(0,0,0,0.2)', 
+                    border: selectedImage === img ? '2px solid var(--accent-color)' : '2px solid transparent',
+                    cursor: 'pointer', overflow: 'hidden', padding: '4px'
+                  }}
+                >
+                  <img src={img} alt={`${product.name} thumbnail ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -107,7 +132,7 @@ export function ProductClient({ product }: { product: any }) {
               }}
             >
               <img 
-                src={product.imageUrl} 
+                src={selectedImage} 
                 alt={product.name} 
                 style={{ 
                   maxWidth: '100%', 

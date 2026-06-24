@@ -35,14 +35,22 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       const serialNumber = (formData.get('serialNumber') as string) || null;
       const isParallel = formData.get('isParallel') === 'on';
 
-      const imageFile = formData.get('imageFile') as File;
+      const imageFiles = formData.getAll('imageFile') as File[];
       const fallbackUrl = formData.get('imageUrl') as string;
       let finalImageUrl = fallbackUrl || null;
+      let additionalImages: string[] = [];
 
-      if (imageFile && imageFile.size > 0) {
-        const uploadedUrl = await uploadProductImage(imageFile);
-        if (uploadedUrl) {
-          finalImageUrl = uploadedUrl;
+      for (let i = 0; i < imageFiles.length; i++) {
+        const file = imageFiles[i];
+        if (file && file.size > 0) {
+          const uploadedUrl = await uploadProductImage(file);
+          if (uploadedUrl) {
+            if (!finalImageUrl) {
+              finalImageUrl = uploadedUrl;
+            } else {
+              additionalImages.push(uploadedUrl);
+            }
+          }
         }
       }
       
@@ -52,7 +60,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       
       await prisma.product.create({
         data: { 
-          name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition,
+          name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, additionalImages, isFeatured, condition,
           type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, serialNumber, isParallel 
         }
       });

@@ -40,14 +40,33 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     const isParallel = formData.get('isParallel') === 'on';
 
     // Check if the user uploaded a file instead of pasting a URL
-    const imageFile = formData.get('imageFile') as File;
+    const imageFiles = formData.getAll('imageFile') as File[];
     const fallbackUrl = formData.get('imageUrl') as string;
     let finalImageUrl = fallbackUrl || product?.imageUrl || null;
+    
+    // Existing additional images from the DB
+    let additionalImages = product?.additionalImages ? [...product.additionalImages] : [];
+    
+    // Remove any deleted images
+    const deletedImagesRaw = formData.get('deletedImages') as string;
+    if (deletedImagesRaw) {
+      try {
+        const deletedImages = JSON.parse(deletedImagesRaw);
+        additionalImages = additionalImages.filter(img => !deletedImages.includes(img));
+      } catch (e) {}
+    }
 
-    if (imageFile && imageFile.size > 0) {
-      const uploadedUrl = await uploadProductImage(imageFile);
-      if (uploadedUrl) {
-        finalImageUrl = uploadedUrl;
+    for (let i = 0; i < imageFiles.length; i++) {
+      const file = imageFiles[i];
+      if (file && file.size > 0) {
+        const uploadedUrl = await uploadProductImage(file);
+        if (uploadedUrl) {
+          if (!finalImageUrl) {
+            finalImageUrl = uploadedUrl;
+          } else {
+            additionalImages.push(uploadedUrl);
+          }
+        }
       }
     }
     
@@ -58,7 +77,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     await prisma.product.update({
       where: { id: productId },
       data: { 
-        name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, isFeatured, condition,
+        name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, additionalImages, isFeatured, condition,
         type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, serialNumber, isParallel
       }
     });
