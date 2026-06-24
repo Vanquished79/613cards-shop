@@ -45,11 +45,11 @@ export default function AdminBuyListClient({ initialSubmissions }: { initialSubm
                 onChange={(e) => handleUpdateStatus(sub.id, e.target.value)}
                 style={{ padding: '6px 12px', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', color: 'white', border: '1px solid var(--glass-border)' }}
               >
-                <option value="PENDING">Pending</option>
-                <option value="REVIEWING">Reviewing</option>
-                <option value="APPROVED">Approved</option>
-                <option value="REJECTED">Rejected</option>
-                <option value="COMPLETED">Completed</option>
+                <option value="PENDING" style={{ background: '#1a1025' }}>Pending</option>
+                <option value="REVIEWING" style={{ background: '#1a1025' }}>Reviewing</option>
+                <option value="APPROVED" style={{ background: '#1a1025' }}>Approved</option>
+                <option value="REJECTED" style={{ background: '#1a1025' }}>Rejected</option>
+                <option value="COMPLETED" style={{ background: '#1a1025' }}>Completed</option>
               </select>
             </div>
           </div>
@@ -76,7 +76,16 @@ export default function AdminBuyListClient({ initialSubmissions }: { initialSubm
             <tbody>
               {sub.items.map((item: any) => (
                 <tr key={item.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <td style={{ padding: '12px 4px', fontWeight: 'bold' }}>{item.cardName}</td>
+                  <td style={{ padding: '12px 4px', fontWeight: 'bold' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      {item.imageUrl && (
+                        <a href={item.imageUrl} target="_blank" rel="noreferrer">
+                          <img src={item.imageUrl} alt={item.cardName} style={{ width: '40px', height: '56px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+                        </a>
+                      )}
+                      <span>{item.cardName}</span>
+                    </div>
+                  </td>
                   <td style={{ padding: '12px 4px', color: 'var(--text-muted)' }}>{item.cardSeries || '-'}</td>
                   <td style={{ padding: '12px 4px', color: 'var(--text-muted)' }}>{item.condition}</td>
                   <td style={{ padding: '12px 4px', color: 'var(--text-muted)' }}>
