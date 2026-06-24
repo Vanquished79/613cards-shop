@@ -3,38 +3,49 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/lib/prisma';
 
-export async function PATCH(
+export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const resolvedParams = await params;
   try {
     const session = await getServerSession(authOptions);
-    if (!session || session.user?.role !== 'ADMIN') {
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const submissionId = parseInt(resolvedParams.id);
     if (isNaN(submissionId)) return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 
-    const { status, cashOffer, creditOffer } = await req.json();
+    const user = await prisma.user.findUnique({ where: { email: session.user.email as string } });
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const submission = await prisma.buyListSubmission.update({
+    const submission = await prisma.buyListSubmission.findUnique({
+      where: { id: submissionId }
+    });
+
+    if (!submission || submission.userId !== user.id) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+
+    const { payoutMethod, paypalEmail } = await req.json();
+
+    const updated = await prisma.buyListSubmission.update({
       where: { id: submissionId },
       data: { 
-        status,
-        ...(cashOffer !== undefined && { cashOffer }),
-        ...(creditOffer !== undefined && { creditOffer })
+        status: 'ACCEPTED',
+        payoutMethod,
+        ...(paypalEmail && { paypalEmail })
       }
     });
 
     await prisma.buyListItem.updateMany({
       where: { submissionId: submissionId },
-      data: { status }
+      data: { status: 'ACCEPTED' }
     });
 
-    return NextResponse.json({ success: true, submission });
+    return NextResponse.json({ success: true, submission: updated });
   } catch (error: any) {
-    console.error('Update BuyList error:', error);
+    console.error('Accept Offer error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/lib/prisma';
 
-export async function PATCH(
+export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -16,25 +16,33 @@ export async function PATCH(
     const submissionId = parseInt(resolvedParams.id);
     if (isNaN(submissionId)) return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 
-    const { status, cashOffer, creditOffer } = await req.json();
+    const submission = await prisma.buyListSubmission.findUnique({
+      where: { id: submissionId }
+    });
 
-    const submission = await prisma.buyListSubmission.update({
+    if (!submission) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+    // Handle payouts
+    if (submission.payoutMethod === 'STORE_CREDIT' && submission.creditOffer) {
+      await prisma.user.update({
+        where: { id: submission.userId },
+        data: { storeCredit: { increment: submission.creditOffer } }
+      });
+    }
+
+    const updated = await prisma.buyListSubmission.update({
       where: { id: submissionId },
-      data: { 
-        status,
-        ...(cashOffer !== undefined && { cashOffer }),
-        ...(creditOffer !== undefined && { creditOffer })
-      }
+      data: { status: 'COMPLETED' }
     });
 
     await prisma.buyListItem.updateMany({
       where: { submissionId: submissionId },
-      data: { status }
+      data: { status: 'COMPLETED' }
     });
 
-    return NextResponse.json({ success: true, submission });
+    return NextResponse.json({ success: true, submission: updated });
   } catch (error: any) {
-    console.error('Update BuyList error:', error);
+    console.error('Complete BuyList error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

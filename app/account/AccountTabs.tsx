@@ -92,9 +92,87 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontWeight: 'bold', color: 'var(--accent-color)' }}>Status: {sub.status}</div>
-                    {sub.totalOffered && <div style={{ fontSize: '14px' }}>Offer: ${sub.totalOffered.toFixed(2)}</div>}
                   </div>
                 </div>
+
+                {sub.status === 'OFFER_MADE' && (
+                  <div style={{ padding: '24px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid #3b82f6', borderRadius: '8px', marginBottom: '16px' }}>
+                    <h3 style={{ margin: '0 0 16px 0', color: '#3b82f6' }}>You have an offer!</h3>
+                    <p style={{ margin: '0 0 16px 0' }}>The admin has reviewed your cards and made the following offers:</p>
+                    <div style={{ display: 'flex', gap: '24px', marginBottom: '24px' }}>
+                      <div style={{ flex: 1, padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '8px' }}>Cash Offer (PayPal)</div>
+                        <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${sub.cashOffer?.toFixed(2)}</div>
+                      </div>
+                      <div style={{ flex: 1, padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '8px' }}>Store Credit Offer</div>
+                        <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#22c55e' }}>${sub.creditOffer?.toFixed(2)}</div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <button 
+                        onClick={async () => {
+                          const email = prompt("Enter your PayPal Email address:");
+                          if (!email) return;
+                          try {
+                            const res = await fetch(`/api/user/buy-list/${sub.id}/accept`, {
+                              method: 'POST', headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ payoutMethod: 'PAYPAL', paypalEmail: email })
+                            });
+                            if (res.ok) window.location.reload();
+                          } catch (err) { alert('Error accepting offer'); }
+                        }}
+                        style={{ flex: 1, padding: '12px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                      >
+                        Accept Cash
+                      </button>
+                      <button 
+                        onClick={async () => {
+                          if (!confirm("Accept Store Credit offer?")) return;
+                          try {
+                            const res = await fetch(`/api/user/buy-list/${sub.id}/accept`, {
+                              method: 'POST', headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ payoutMethod: 'STORE_CREDIT' })
+                            });
+                            if (res.ok) window.location.reload();
+                          } catch (err) { alert('Error accepting offer'); }
+                        }}
+                        style={{ flex: 1, padding: '12px', background: '#22c55e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                      >
+                        Accept Store Credit
+                      </button>
+                      <button 
+                        onClick={async () => {
+                          if (!confirm("Are you sure you want to decline this offer?")) return;
+                          try {
+                            const res = await fetch(`/api/user/buy-list/${sub.id}/decline`, { method: 'POST' });
+                            if (res.ok) window.location.reload();
+                          } catch (err) { alert('Error declining offer'); }
+                        }}
+                        style={{ padding: '12px 24px', background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--glass-border)', borderRadius: '4px', cursor: 'pointer' }}
+                      >
+                        Decline
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {sub.status === 'ACCEPTED' && (
+                  <div style={{ padding: '16px', background: 'rgba(34, 197, 94, 0.1)', border: '1px solid #22c55e', borderRadius: '8px', marginBottom: '16px' }}>
+                    <h3 style={{ margin: '0 0 8px 0', color: '#22c55e' }}>Offer Accepted</h3>
+                    <p style={{ margin: '0 0 8px 0', fontSize: '14px' }}>Please mail your cards securely to:</p>
+                    <div style={{ padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '4px', fontFamily: 'monospace', color: 'var(--text-muted)' }}>
+                      613 Cards Shop<br/>
+                      123 Trading Card Ln<br/>
+                      Ottawa, ON K1A 0B1<br/>
+                      Canada
+                    </div>
+                    <p style={{ margin: '12px 0 0 0', fontSize: '14px', color: 'var(--text-muted)' }}>
+                      You selected: {sub.payoutMethod === 'PAYPAL' ? `PayPal (${sub.paypalEmail})` : 'Store Credit'}.
+                      We will process your payout once we receive and verify your cards!
+                    </p>
+                  </div>
+                )}
                 
                 <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
                   <h4 style={{ margin: '0 0 12px 0', fontSize: '14px' }}>Cards ({sub.items.length})</h4>

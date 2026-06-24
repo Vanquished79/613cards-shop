@@ -20,6 +20,10 @@ export default function CheckoutPage() {
   const [province, setProvince] = useState('');
   const [taxEnabled, setTaxEnabled] = useState(true);
 
+  // Store Credit
+  const [storeCredit, setStoreCredit] = useState(0);
+  const [useStoreCredit, setUseStoreCredit] = useState(false);
+
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -27,7 +31,14 @@ export default function CheckoutPage() {
     fetch('/api/settings').then(r => r.json()).then(data => {
       if (data.taxEnabled !== undefined) setTaxEnabled(data.taxEnabled);
     }).catch(e => console.error(e));
-  }, []);
+
+    // Fetch user profile for store credit
+    if (session?.user) {
+      fetch('/api/user/profile').then(r => r.json()).then(data => {
+        if (data.storeCredit) setStoreCredit(data.storeCredit);
+      }).catch(e => console.error(e));
+    }
+  }, [session]);
 
   // Calculations
   const shippingCost = calculateShipping(totalAmount);
@@ -41,6 +52,48 @@ export default function CheckoutPage() {
   }, [isStep1Complete, country, province, totalAmount, shippingCost, taxEnabled]);
 
   const finalTotal = totalAmount + shippingCost + (taxInfo ? taxInfo.amount : 0);
+  const storeCreditUsed = useStoreCredit ? Math.min(storeCredit, finalTotal) : 0;
+  const amountToPay = Math.max(0, finalTotal - storeCreditUsed);
+
+  const handlePlaceOrderDirectly = async () => {
+    setIsProcessing(true);
+    try {
+      const sessionId = localStorage.getItem('cartSessionId');
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          paypalOrderId: `SC-${Date.now()}`,
+          customerName: session?.user?.name || 'Store Credit User',
+          email: session?.user?.email,
+          address: session?.user?.address || 'N/A',
+          city: session?.user?.city || 'N/A',
+          state: session?.user?.state || 'N/A',
+          zip: session?.user?.zip || 'N/A',
+          country: country,
+          totalAmount: finalTotal,
+          taxAmount: taxInfo ? taxInfo.amount : 0,
+          taxRate: taxInfo ? taxInfo.rate : 0,
+          items: items,
+          userId: session?.user?.id ? parseInt(session.user.id as string) : null,
+          sessionId: sessionId,
+          storeCreditUsed: storeCreditUsed
+        })
+      });
+      
+      if (response.ok) {
+        setSuccess(true);
+        clearCart();
+      } else {
+        alert('Error saving your order. Please contact support.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('An error occurred during checkout.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   if (items.length === 0 && !success) {
     return (
@@ -208,43 +261,71 @@ export default function CheckoutPage() {
                 </div>
               )}
               
+              {storeCredit > 0 && (
+                <div style={{ padding: '16px', background: 'rgba(34, 197, 94, 0.1)', border: '1px solid #22c55e', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <h4 style={{ margin: '0 0 4px 0', color: '#22c55e' }}>Store Credit Available: {formatPrice(storeCredit)}</h4>
+                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>You can apply this to your order balance.</span>
+                  </div>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input 
+                      type="checkbox" 
+                      checked={useStoreCredit} 
+                      onChange={(e) => setUseStoreCredit(e.target.checked)} 
+                      style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                    />
+                    <span style={{ fontWeight: 'bold' }}>Use Credit</span>
+                  </label>
+                </div>
+              )}
+
+              {useStoreCredit && storeCreditUsed > 0 && (
+                <div style={{ padding: '12px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', fontSize: '16px' }}>
+                  <span>Store Credit Applied:</span>
+                  <span style={{ color: '#22c55e', fontWeight: 'bold' }}>-{formatPrice(storeCreditUsed)}</span>
+                </div>
+              )}
+              
               <div style={{ zIndex: 1, position: 'relative', background: 'white', padding: '16px', borderRadius: '12px', marginTop: currency === 'CAD' ? '20px' : '0' }}>
-                <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test', currency: 'CAD' }}>
-                  <PayPalButtons 
-                    style={{ layout: 'vertical', color: 'gold', shape: 'rect' }}
-                    createOrder={(data, actions) => {
-                      
-                      const purchaseUnit: any = {
-                        description: '613cards Order',
-                        amount: {
-                          currency_code: 'CAD',
-                          value: finalTotal.toFixed(2),
-                          breakdown: {
-                            item_total: {
-                              currency_code: 'CAD',
-                              value: totalAmount.toFixed(2)
-                            },
-                            shipping: {
-                              currency_code: 'CAD',
-                              value: shippingCost.toFixed(2)
-                            },
-                            tax_total: {
-                              currency_code: 'CAD',
-                              value: (taxInfo ? taxInfo.amount : 0).toFixed(2)
-                            }
-                          }
-                        },
-                        items: items.map(item => ({
-                          name: item.name.substring(0, 127),
-                          ...(item.description ? { description: item.description.substring(0, 127) } : {}),
-                          quantity: item.quantity.toString(),
-                          unit_amount: {
+                {amountToPay === 0 ? (
+                  <button 
+                    onClick={handlePlaceOrderDirectly}
+                    disabled={isProcessing}
+                    style={{ width: '100%', padding: '16px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '8px', fontSize: '18px', fontWeight: 'bold', cursor: isProcessing ? 'not-allowed' : 'pointer' }}
+                  >
+                    {isProcessing ? 'Processing...' : 'Place Order (Fully Covered by Store Credit)'}
+                  </button>
+                ) : (
+                  <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test', currency: 'CAD' }}>
+                    <PayPalButtons 
+                      style={{ layout: 'vertical', color: 'gold', shape: 'rect' }}
+                      createOrder={(data, actions) => {
+                        
+                        // We must format exactly amountToPay. But PayPal expects the sum of breakdown.
+                        // To bypass complex PayPal breakdown issues with negative discounts, 
+                        // if store credit is used, we just pass the total amountToPay and no breakdown.
+                        const purchaseUnit: any = {
+                          description: '613cards Order',
+                          amount: {
                             currency_code: 'CAD',
-                            value: item.price.toFixed(2)
+                            value: amountToPay.toFixed(2),
+                            ...(storeCreditUsed === 0 ? {
+                              breakdown: {
+                                item_total: { currency_code: 'CAD', value: totalAmount.toFixed(2) },
+                                shipping: { currency_code: 'CAD', value: shippingCost.toFixed(2) },
+                                tax_total: { currency_code: 'CAD', value: (taxInfo ? taxInfo.amount : 0).toFixed(2) }
+                              }
+                            } : {})
                           },
-                          ...(item.imageUrl ? { image_url: item.imageUrl.startsWith('http') ? item.imageUrl : `https://613cards.online${item.imageUrl}` } : {})
-                        }))
-                      };
+                          ...(storeCreditUsed === 0 ? {
+                            items: items.map(item => ({
+                              name: item.name.substring(0, 127),
+                              ...(item.description ? { description: item.description.substring(0, 127) } : {}),
+                              quantity: item.quantity.toString(),
+                              unit_amount: { currency_code: 'CAD', value: item.price.toFixed(2) }
+                            }))
+                          } : {})
+                        };
 
                       // Pre-fill user's PayPal address info based on their dropdown selection + session
                       purchaseUnit.shipping = {
@@ -288,8 +369,9 @@ export default function CheckoutPage() {
                             taxAmount: taxInfo ? taxInfo.amount : 0,
                             taxRate: taxInfo ? taxInfo.rate : 0,
                             items: items,
-                            userId: session?.user?.id ? parseInt(session.user.id) : null,
-                            sessionId: sessionId
+                            userId: session?.user?.id ? parseInt(session.user.id as string) : null,
+                            sessionId: sessionId,
+                            storeCreditUsed: storeCreditUsed
                           })
                         });
                         

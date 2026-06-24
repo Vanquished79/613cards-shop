@@ -57,6 +57,14 @@ export async function POST(request: Request) {
         });
       }
 
+      // 4. Deduct store credit
+      if (userId && body.storeCreditUsed && body.storeCreditUsed > 0) {
+        await tx.user.update({
+          where: { id: userId },
+          data: { storeCredit: { decrement: body.storeCreditUsed } }
+        });
+      }
+
       return newOrder;
     });
 
