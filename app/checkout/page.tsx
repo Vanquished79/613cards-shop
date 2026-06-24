@@ -180,9 +180,16 @@ export default function CheckoutPage() {
               </div>
             )}
             
+            {useStoreCredit && storeCreditUsed > 0 && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', color: '#22c55e', paddingTop: '8px' }}>
+                <span>Store Credit Applied:</span>
+                <span>-{formatPrice(storeCreditUsed)}</span>
+              </div>
+            )}
+
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '20px', fontWeight: 'bold', paddingTop: '8px', borderTop: '1px solid var(--glass-border)' }}>
               <span>Total:</span>
-              <span style={{ color: 'var(--accent-color)' }}>{formatPrice(finalTotal)}</span>
+              <span style={{ color: 'var(--accent-color)' }}>{formatPrice(amountToPay)}</span>
             </div>
           </div>
         </div>
@@ -277,13 +284,6 @@ export default function CheckoutPage() {
                     />
                     <span style={{ fontWeight: 'bold' }}>Use Credit</span>
                   </label>
-                </div>
-              )}
-
-              {useStoreCredit && storeCreditUsed > 0 && (
-                <div style={{ padding: '12px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', fontSize: '16px' }}>
-                  <span>Store Credit Applied:</span>
-                  <span style={{ color: '#22c55e', fontWeight: 'bold' }}>-{formatPrice(storeCreditUsed)}</span>
                 </div>
               )}
               

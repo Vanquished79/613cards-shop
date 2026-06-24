@@ -188,12 +188,25 @@ export function ProductClient({ product }: { product: any }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
             <h1 style={{ margin: 0, fontSize: '32px' }}>{product.name}</h1>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-              {product.compareAtPrice && product.compareAtPrice > product.price && (
+              {product.compareAtPrice && product.compareAtPrice > (selectedVariation ? selectedVariation.price : (product.variations.length > 0 ? Math.min(...product.variations.map((v:any) => v.price)) : 0)) && (
                 <span style={{ color: 'var(--text-muted)', textDecoration: 'line-through', fontSize: '18px', marginBottom: '4px' }}>
                   {formatPrice(product.compareAtPrice)}
                 </span>
               )}
-              <span style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--accent-color)' }}>{formatPrice(product.price)}</span>
+              <span style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--accent-color)' }}>
+                {selectedVariation 
+                  ? formatPrice(selectedVariation.price)
+                  : (() => {
+                      const prices = product.variations?.map((v: any) => v.price) || [];
+                      if (prices.length === 0) return 'Unavailable';
+                      const minPrice = Math.min(...prices);
+                      const maxPrice = Math.max(...prices);
+                      return minPrice === maxPrice 
+                        ? formatPrice(minPrice) 
+                        : `${formatPrice(minPrice)} - ${formatPrice(maxPrice)}`;
+                    })()
+                }
+              </span>
             </div>
           </div>
 
