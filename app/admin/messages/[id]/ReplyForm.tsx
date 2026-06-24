@@ -3,11 +3,14 @@
 import { useState } from 'react';
 import { replyToTicket, toggleTicketStatus, deleteTicket } from '../actions';
 import { useRouter } from 'next/navigation';
+import { useModal } from '@/components/ModalProvider';
+import { toast } from 'react-hot-toast';
 
 export function ReplyForm({ ticketId }: { ticketId: number }) {
   const [reply, setReply] = useState('');
   const [isSending, setIsSending] = useState(false);
   const router = useRouter();
+  const { confirm } = useModal();
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
@@ -20,18 +23,21 @@ export function ReplyForm({ ticketId }: { ticketId: number }) {
     if (res.success) {
       setReply('');
     } else {
-      alert(res.error || 'Failed to send reply');
+      toast.error(res.error || 'Failed to send reply');
     }
   }
 
   async function handleClose() {
-    if (confirm('Are you sure you want to mark this ticket as resolved?')) {
+    const isConfirmed = await confirm({ title: 'Resolve Ticket', message: 'Are you sure you want to mark this ticket as resolved?' });
+    if (isConfirmed) {
       await toggleTicketStatus(ticketId, 'RESOLVED');
+      toast.success('Ticket marked as resolved');
     }
   }
 
   async function handleDelete() {
-    if (confirm('Are you sure you want to completely delete this ticket and all history?')) {
+    const isConfirmed = await confirm({ title: 'Delete Ticket', message: 'Are you sure you want to completely delete this ticket and all history?' });
+    if (isConfirmed) {
       await deleteTicket(ticketId);
       router.push('/admin/messages');
     }

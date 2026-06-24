@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 export default function CreateProductForm({ categories, createProductAction }: { categories: any[], createProductAction: (formData: FormData) => Promise<{ error?: string, success?: boolean } | void> }) {
   const [productType, setProductType] = useState('CARD');
@@ -9,7 +10,7 @@ export default function CreateProductForm({ categories, createProductAction }: {
   async function handleSubmit(formData: FormData) {
     const result = await createProductAction(formData);
     if (result?.error) {
-      alert("Failed to add product:\n\n" + result.error);
+      toast.error("Failed to add product:\n\n" + result.error);
     } else {
       // Refresh or clear if needed, but Next.js router handles revalidation.
       window.location.href = '/admin/products';

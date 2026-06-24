@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useModal } from '@/components/ModalProvider';
+import { toast } from 'react-hot-toast';
 
 import { ProductCard } from '@/components/ProductCard';
 
@@ -11,6 +13,7 @@ const ORDER_STAGES = ['PAID', 'CONFIRMED', 'PACKING', 'SHIPPED', 'DELIVERED'];
 
 export default function AccountTabs({ orders, wishlistItems = [], buyListSubmissions = [] }: { orders: Order[], wishlistItems?: WishlistItem[], buyListSubmissions?: any[] }) {
   const [activeTab, setActiveTab] = useState<'active' | 'archived' | 'wishlist' | 'buylist'>('active');
+  const { confirm, prompt } = useModal();
 
   const activeOrders = orders.filter((o) => o.status !== 'DELIVERED');
   const archivedOrders = orders.filter((o) => o.status === 'DELIVERED');
@@ -112,15 +115,18 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     <div style={{ display: 'flex', gap: '12px' }}>
                       <button 
                         onClick={async () => {
-                          const email = prompt("Enter your PayPal Email address:");
+                          const email = await prompt({ title: 'Accept Cash Offer', message: 'Enter your PayPal Email address:', placeholder: 'you@example.com' });
                           if (!email) return;
                           try {
                             const res = await fetch(`/api/user/buy-list/${sub.id}/accept`, {
                               method: 'POST', headers: { 'Content-Type': 'application/json' },
                               body: JSON.stringify({ payoutMethod: 'PAYPAL', paypalEmail: email })
                             });
-                            if (res.ok) window.location.reload();
-                          } catch (err) { alert('Error accepting offer'); }
+                            if (res.ok) {
+                              toast.success('Offer accepted! Check the submission details for mailing instructions.');
+                              window.location.reload();
+                            }
+                          } catch (err) { toast.error('Error accepting offer'); }
                         }}
                         style={{ flex: 1, padding: '12px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                       >
@@ -128,14 +134,18 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                       </button>
                       <button 
                         onClick={async () => {
-                          if (!confirm("Accept Store Credit offer?")) return;
+                          const isConfirmed = await confirm({ title: 'Accept Store Credit', message: 'Are you sure you want to accept the Store Credit offer?' });
+                          if (!isConfirmed) return;
                           try {
                             const res = await fetch(`/api/user/buy-list/${sub.id}/accept`, {
                               method: 'POST', headers: { 'Content-Type': 'application/json' },
                               body: JSON.stringify({ payoutMethod: 'STORE_CREDIT' })
                             });
-                            if (res.ok) window.location.reload();
-                          } catch (err) { alert('Error accepting offer'); }
+                            if (res.ok) {
+                              toast.success('Offer accepted! Check the submission details for mailing instructions.');
+                              window.location.reload();
+                            }
+                          } catch (err) { toast.error('Error accepting offer'); }
                         }}
                         style={{ flex: 1, padding: '12px', background: '#22c55e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                       >
@@ -143,11 +153,15 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                       </button>
                       <button 
                         onClick={async () => {
-                          if (!confirm("Are you sure you want to decline this offer?")) return;
+                          const isConfirmed = await confirm({ title: 'Decline Offer', message: 'Are you sure you want to decline this offer?' });
+                          if (!isConfirmed) return;
                           try {
                             const res = await fetch(`/api/user/buy-list/${sub.id}/decline`, { method: 'POST' });
-                            if (res.ok) window.location.reload();
-                          } catch (err) { alert('Error declining offer'); }
+                            if (res.ok) {
+                              toast.success('Offer declined.');
+                              window.location.reload();
+                            }
+                          } catch (err) { toast.error('Error declining offer'); }
                         }}
                         style={{ padding: '12px 24px', background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--glass-border)', borderRadius: '4px', cursor: 'pointer' }}
                       >

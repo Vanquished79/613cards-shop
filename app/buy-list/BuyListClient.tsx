@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 export default function BuyListClient() {
   const router = useRouter();
@@ -56,7 +57,7 @@ export default function BuyListClient() {
       
       setSuccess(true);
     } catch (err: any) {
-      alert(err.message || "There was an error submitting your buy-list. Please try again.");
+      toast.error(err.message || "There was an error submitting your buy-list. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

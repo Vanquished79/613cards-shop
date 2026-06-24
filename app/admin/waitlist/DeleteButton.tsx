@@ -3,12 +3,15 @@
 import { useState } from 'react';
 import { removeSubscriber } from './actions';
 import { Trash2 } from 'lucide-react';
+import { useModal } from '@/components/ModalProvider';
 
 export function DeleteButton({ id, email }: { id: number, email: string }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const { confirm } = useModal();
 
   async function handleDelete() {
-    if (!confirm(`Are you sure you want to remove ${email} from the waitlist?`)) return;
+    const isConfirmed = await confirm({ title: 'Remove Subscriber', message: `Are you sure you want to remove ${email} from the waitlist?` });
+    if (!isConfirmed) return;
     
     setIsDeleting(true);
     await removeSubscriber(id, email);

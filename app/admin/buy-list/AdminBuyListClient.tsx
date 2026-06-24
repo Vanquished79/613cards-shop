@@ -2,10 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useModal } from '@/components/ModalProvider';
+import { toast } from 'react-hot-toast';
 
 export default function AdminBuyListClient({ initialSubmissions }: { initialSubmissions: any[] }) {
   const router = useRouter();
   const [submissions, setSubmissions] = useState(initialSubmissions);
+  const { confirm } = useModal();
 
   const handleUpdateStatus = async (id: number, status: string) => {
     try {
@@ -17,8 +20,9 @@ export default function AdminBuyListClient({ initialSubmissions }: { initialSubm
       if (!res.ok) throw new Error('Update failed');
       
       setSubmissions(submissions.map(s => s.id === id ? { ...s, status } : s));
+      toast.success('Status updated');
     } catch (err) {
-      alert("Error updating status");
+      toast.error('Error updating status');
     }
   };
 
@@ -83,7 +87,7 @@ export default function AdminBuyListClient({ initialSubmissions }: { initialSubm
                   const creditInput = document.getElementById(`creditOffer-${sub.id}`) as HTMLInputElement;
                   const cashOffer = parseFloat(cashInput.value);
                   const creditOffer = parseFloat(creditInput.value);
-                  if (isNaN(cashOffer) || isNaN(creditOffer)) return alert('Please enter valid numbers');
+                  if (isNaN(cashOffer) || isNaN(creditOffer)) return toast.error('Please enter valid numbers');
                   
                   try {
                     const res = await fetch(`/api/admin/buy-list/${sub.id}`, {
@@ -93,8 +97,9 @@ export default function AdminBuyListClient({ initialSubmissions }: { initialSubm
                     });
                     if (!res.ok) throw new Error('Failed');
                     setSubmissions(submissions.map(s => s.id === sub.id ? { ...s, status: 'OFFER_MADE', cashOffer, creditOffer } : s));
+                    toast.success('Offer sent to customer!');
                   } catch (err) {
-                    alert('Error saving offer');
+                    toast.error('Error saving offer');
                   }
                 }}
                 style={{ padding: '8px 16px', borderRadius: '4px', background: '#3b82f6', color: 'white', border: 'none', cursor: 'pointer', height: 'fit-content' }}
@@ -122,13 +127,15 @@ export default function AdminBuyListClient({ initialSubmissions }: { initialSubm
               <div style={{ marginTop: '12px' }}>
                 <button 
                   onClick={async () => {
-                    if (!confirm('Have you physically received the cards and verified them? Clicking OK will issue the payout and mark as COMPLETED.')) return;
+                    const isConfirmed = await confirm({ title: 'Complete Payout', message: 'Have you physically received the cards and verified them? Clicking Confirm will issue the payout and mark as COMPLETED.' });
+                    if (!isConfirmed) return;
                     try {
                       const res = await fetch(`/api/admin/buy-list/${sub.id}/complete`, { method: 'POST' });
                       if (!res.ok) throw new Error('Failed');
                       setSubmissions(submissions.map(s => s.id === sub.id ? { ...s, status: 'COMPLETED' } : s));
+                      toast.success('Payout issued and status completed!');
                     } catch (err) {
-                      alert('Error completing payout');
+                      toast.error('Error completing payout');
                     }
                   }}
                   style={{ padding: '6px 12px', background: '#22c55e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}

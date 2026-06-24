@@ -19,6 +19,9 @@ import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { WishlistProvider } from "@/components/WishlistProvider";
 import prisma from "@/lib/prisma";
 
+import { ModalProvider } from '@/components/ModalProvider';
+import { Toaster } from 'react-hot-toast';
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -32,13 +35,23 @@ export default async function RootLayout({
       <body className={inter.className}>
         <Providers>
           <WishlistProvider>
-            <CurrencyProvider>
-              <CartProvider>
-                <ConditionalLayout categories={categories}>
-                  {children}
-                </ConditionalLayout>
-              </CartProvider>
-            </CurrencyProvider>
+            <ModalProvider>
+              <Toaster 
+                position="top-right" 
+                toastOptions={{ 
+                  style: { background: 'rgba(0,0,0,0.8)', color: '#fff', border: '1px solid var(--glass-border)', backdropFilter: 'blur(8px)' },
+                  success: { iconTheme: { primary: '#4ade80', secondary: '#000' } },
+                  error: { iconTheme: { primary: '#f87171', secondary: '#000' } }
+                }} 
+              />
+              <CurrencyProvider>
+                <CartProvider>
+                  <ConditionalLayout categories={categories}>
+                    {children}
+                  </ConditionalLayout>
+                </CartProvider>
+              </CurrencyProvider>
+            </ModalProvider>
           </WishlistProvider>
         </Providers>
       </body>

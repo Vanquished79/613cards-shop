@@ -4,6 +4,7 @@ import { useCart } from '@/components/CartProvider';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { useCurrency } from '@/components/CurrencyProvider';
 import { calculateShipping, FREE_SHIPPING_THRESHOLD } from '@/lib/shipping';
@@ -85,11 +86,11 @@ export default function CheckoutPage() {
         setSuccess(true);
         clearCart();
       } else {
-        alert('Error saving your order. Please contact support.');
+        toast.error('Error saving your order. Please contact support.');
       }
     } catch (error) {
       console.error(error);
-      alert('An error occurred during checkout.');
+      toast.error('An error occurred during checkout.');
     } finally {
       setIsProcessing(false);
     }
@@ -379,11 +380,11 @@ export default function CheckoutPage() {
                           setSuccess(true);
                           clearCart();
                         } else {
-                          alert('Payment was successful but there was an error saving your order. Please contact support.');
+                          toast.error('Payment was successful but there was an error saving your order. Please contact support.');
                         }
                       } catch (error) {
                         console.error(error);
-                        alert('An error occurred during checkout.');
+                        toast.error('An error occurred during checkout.');
                       } finally {
                         setIsProcessing(false);
                       }
