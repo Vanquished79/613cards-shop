@@ -82,8 +82,8 @@ model CartItem {
   id                 Int      @id @default(autoincrement())
   userId             Int
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productVariationId Int
-  productVariation   ProductVariation @relation(fields: [productVariationId], references: [id], onDelete: Cascade)
+  productVariationId Int?
+  productVariation   ProductVariation? @relation(fields: [productVariationId], references: [id], onDelete: Cascade)
   quantity           Int
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
@@ -145,8 +145,8 @@ model OrderItem {
   id                 Int      @id @default(autoincrement())
   orderId            Int
   order              Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productVariationId Int
-  productVariation   ProductVariation @relation(fields: [productVariationId], references: [id], onDelete: Restrict)
+  productVariationId Int?
+  productVariation   ProductVariation? @relation(fields: [productVariationId], references: [id], onDelete: Restrict)
   quantity           Int
   price              Float    // Price at the time of purchase
 }
