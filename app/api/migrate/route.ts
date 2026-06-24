@@ -27,11 +27,35 @@ export async function GET() {
         CONSTRAINT "WishlistItem_pkey" PRIMARY KEY ("id")
       );
       
-      -- Add constraints manually if not exist. Doing it safely by checking if they exist is harder in raw postgres, 
-      -- but IF NOT EXISTS isn't supported for constraints. 
-      -- We will just try/catch the migration or ignore error if table already exists, but CREATE TABLE IF NOT EXISTS handles the table.
-      -- Let's create unique index:
       CREATE UNIQUE INDEX IF NOT EXISTS "WishlistItem_userId_productId_key" ON "WishlistItem"("userId", "productId");
+
+      -- Phase 3 Expansions
+      CREATE TABLE IF NOT EXISTS "BuyListSubmission" (
+        "id" SERIAL NOT NULL,
+        "userId" INTEGER NOT NULL,
+        "status" TEXT NOT NULL DEFAULT 'PENDING',
+        "totalOffered" DOUBLE PRECISION,
+        "notes" TEXT,
+        "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "BuyListSubmission_pkey" PRIMARY KEY ("id")
+      );
+
+      CREATE TABLE IF NOT EXISTS "BuyListItem" (
+        "id" SERIAL NOT NULL,
+        "submissionId" INTEGER NOT NULL,
+        "cardName" TEXT NOT NULL,
+        "cardSeries" TEXT,
+        "condition" TEXT NOT NULL,
+        "isGraded" BOOLEAN NOT NULL DEFAULT false,
+        "gradingCompany" TEXT,
+        "grade" TEXT,
+        "quantity" INTEGER NOT NULL DEFAULT 1,
+        "expectedPrice" DOUBLE PRECISION,
+        "offeredPrice" DOUBLE PRECISION,
+        "status" TEXT NOT NULL DEFAULT 'PENDING',
+        CONSTRAINT "BuyListItem_pkey" PRIMARY KEY ("id")
+      );
     `);
     
     // Add additionalImages to Product

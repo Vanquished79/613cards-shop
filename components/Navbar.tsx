@@ -161,6 +161,9 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
 
           {session ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+              <Link href="/buy-list" style={{ color: 'var(--accent-color)', textDecoration: 'none', fontWeight: 600, fontSize: '14px', transition: 'color 0.2s' }}>
+                Buy-List
+              </Link>
               <Link href="/account" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '14px', transition: 'color 0.2s' }}
                     onMouseOver={(e) => e.currentTarget.style.color = 'white'}
                     onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
@@ -206,6 +209,11 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
               onMouseOver={(e) => e.currentTarget.style.color = 'white'}
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
           Home
+        </Link>
+        <Link href="/buy-list" style={{ color: 'var(--accent-color)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
+              onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'var(--accent-color)'}>
+          Sell to Us
         </Link>
         {session?.user?.role === 'ADMIN' && (
           <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold' }}>Admin</Link>

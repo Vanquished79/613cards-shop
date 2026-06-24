@@ -16,6 +16,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <h2 style={{ fontSize: '18px', marginBottom: '12px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '12px' }}>Admin Dashboard</h2>
         <Link href="/admin" style={{ color: 'var(--text-main)', textDecoration: 'none', padding: '8px', borderRadius: '8px' }} className="hover-bg">Overview</Link>
         <Link href="/admin/orders" style={{ color: 'var(--text-main)', textDecoration: 'none', padding: '8px', borderRadius: '8px' }} className="hover-bg">Orders</Link>
+        <Link href="/admin/buy-list" style={{ color: 'var(--text-main)', textDecoration: 'none', padding: '8px', borderRadius: '8px' }} className="hover-bg">Buy-List</Link>
         <Link href="/admin/products" style={{ color: 'var(--text-main)', textDecoration: 'none', padding: '8px', borderRadius: '8px' }} className="hover-bg">Products</Link>
         <Link href="/admin/categories" style={{ color: 'var(--text-main)', textDecoration: 'none', padding: '8px', borderRadius: '8px' }} className="hover-bg">Categories</Link>
         <Link href="/admin/waitlist" style={{ color: 'var(--text-main)', textDecoration: 'none', padding: '8px', borderRadius: '8px' }} className="hover-bg">Waitlist</Link>

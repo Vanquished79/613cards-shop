@@ -25,6 +25,10 @@ export default async function AccountPage() {
       wishlistItems: {
         orderBy: { createdAt: 'desc' },
         include: { product: true }
+      },
+      buyListSubmissions: {
+        orderBy: { createdAt: 'desc' },
+        include: { items: true }
       }
     }
   });
@@ -46,6 +50,10 @@ export default async function AccountPage() {
         wishlistItems: {
           orderBy: { createdAt: 'desc' },
           include: { product: true }
+        },
+        buyListSubmissions: {
+          orderBy: { createdAt: 'desc' },
+          include: { items: true }
         }
       }
     });
@@ -122,7 +130,7 @@ export default async function AccountPage() {
 
         {/* Account Tabs */}
         <div>
-          <AccountTabs orders={user.orders} wishlistItems={user.wishlistItems} />
+          <AccountTabs orders={user.orders} wishlistItems={user.wishlistItems} buyListSubmissions={user.buyListSubmissions} />
         </div>
 
       </div>

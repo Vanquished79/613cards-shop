@@ -87,6 +87,7 @@ model User {
   role         String   @default("CUSTOMER") // CUSTOMER, ADMIN
   orders       Order[]
   wishlistItems WishlistItem[]
+  buyListSubmissions BuyListSubmission[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -165,4 +166,32 @@ model WishlistItem {
   createdAt DateTime @default(now())
 
   @@unique([userId, productId])
+}
+
+model BuyListSubmission {
+  id           Int           @id @default(autoincrement())
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status       String        @default("PENDING") // PENDING, REVIEWING, APPROVED, REJECTED, COMPLETED
+  totalOffered Float?
+  notes        String?
+  items        BuyListItem[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model BuyListItem {
+  id             Int               @id @default(autoincrement())
+  submissionId   Int
+  submission     BuyListSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  cardName       String
+  cardSeries     String?
+  condition      String
+  isGraded       Boolean           @default(false)
+  gradingCompany String?
+  grade          String?
+  quantity       Int               @default(1)
+  expectedPrice  Float?            // What the user hopes to get
+  offeredPrice   Float?            // What the admin offers
+  status         String            @default("PENDING") // PENDING, ACCEPTED, REJECTED
 }

@@ -9,8 +9,8 @@ type WishlistItem = any;
 
 const ORDER_STAGES = ['PAID', 'CONFIRMED', 'PACKING', 'SHIPPED', 'DELIVERED'];
 
-export default function AccountTabs({ orders, wishlistItems = [] }: { orders: Order[], wishlistItems?: WishlistItem[] }) {
-  const [activeTab, setActiveTab] = useState<'active' | 'archived' | 'wishlist'>('active');
+export default function AccountTabs({ orders, wishlistItems = [], buyListSubmissions = [] }: { orders: Order[], wishlistItems?: WishlistItem[], buyListSubmissions?: any[] }) {
+  const [activeTab, setActiveTab] = useState<'active' | 'archived' | 'wishlist' | 'buylist'>('active');
 
   const activeOrders = orders.filter((o) => o.status !== 'DELIVERED');
   const archivedOrders = orders.filter((o) => o.status === 'DELIVERED');
@@ -64,14 +64,57 @@ export default function AccountTabs({ orders, wishlistItems = [] }: { orders: Or
         >
           Wishlist ({wishlistItems.length})
         </button>
+        <button 
+          onClick={() => setActiveTab('buylist')}
+          style={{ 
+            background: 'transparent', border: 'none', 
+            color: activeTab === 'buylist' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            padding: '8px 0', fontWeight: activeTab === 'buylist' ? 'bold' : 'normal',
+            borderBottom: activeTab === 'buylist' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            cursor: 'pointer', fontSize: '16px'
+          }}
+        >
+          Sell Orders ({buyListSubmissions.length})
+        </button>
       </div>
 
-      {activeTab === 'wishlist' ? (
+      {activeTab === 'buylist' ? (
+        buyListSubmissions.length === 0 ? (
+          <p style={{ color: 'var(--text-muted)' }}>You haven't submitted any sell orders yet.</p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {buyListSubmissions.map((sub: any) => (
+              <div key={sub.id} className="glass-panel" style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                  <div>
+                    <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Submission #{sub.id}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{new Date(sub.createdAt).toLocaleDateString()}</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontWeight: 'bold', color: 'var(--accent-color)' }}>Status: {sub.status}</div>
+                    {sub.totalOffered && <div style={{ fontSize: '14px' }}>Offer: ${sub.totalOffered.toFixed(2)}</div>}
+                  </div>
+                </div>
+                
+                <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px 0', fontSize: '14px' }}>Cards ({sub.items.length})</h4>
+                  {sub.items.map((item: any) => (
+                    <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '8px' }}>
+                      <span>{item.quantity}x {item.cardName} {item.cardSeries ? `(${item.cardSeries})` : ''} - {item.condition} {item.isGraded ? `[${item.gradingCompany} ${item.grade}]` : ''}</span>
+                      <span style={{ color: 'var(--text-muted)' }}>{item.status}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      ) : activeTab === 'wishlist' ? (
         wishlistItems.length === 0 ? (
           <p style={{ color: 'var(--text-muted)' }}>You haven't wishlisted any items yet.</p>
         ) : (
           <div className="product-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
-            {wishlistItems.map((item) => (
+            {wishlistItems.map((item: any) => (
               <ProductCard key={item.product.id} product={item.product} />
             ))}
           </div>
