@@ -6,9 +6,18 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     // Manually add the missing columns to the database via SQL
-    await prisma.$executeRawUnsafe(`ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "taxAmount" DOUBLE PRECISION NOT NULL DEFAULT 0;`);
-    await prisma.$executeRawUnsafe(`ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "taxRate" DOUBLE PRECISION NOT NULL DEFAULT 0;`);
-    await prisma.$executeRawUnsafe(`ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "country" TEXT;`);
+    await prisma.$executeRawUnsafe(`
+      ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "taxAmount" DOUBLE PRECISION NOT NULL DEFAULT 0;
+      ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "taxRate" DOUBLE PRECISION NOT NULL DEFAULT 0;
+      ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "country" TEXT;
+      
+      -- Phase 1 Expansions
+      ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "isPreorder" BOOLEAN NOT NULL DEFAULT false;
+      ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "releaseDate" TIMESTAMP(3);
+      ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "isGraded" BOOLEAN NOT NULL DEFAULT false;
+      ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "gradingCompany" TEXT;
+      ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "grade" TEXT;
+    `);
     
     // Add additionalImages to Product
     await prisma.$executeRawUnsafe(`ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "additionalImages" TEXT[] DEFAULT ARRAY[]::TEXT[];`);
