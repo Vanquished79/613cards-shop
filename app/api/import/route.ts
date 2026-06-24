@@ -92,8 +92,8 @@ export async function POST(request: Request) {
               productData.description = val; break;
             case 'price':
               productData.price = parseFloat(val) || 0; break;
-            case 'inventory':
-              productData.inventory = parseInt(val) || 0; break;
+            case 'stock':
+              productData.stock = parseInt(val) || 0; break;
             case 'isrookie':
               productData.isRookie = val.toLowerCase() === 'true'; break;
             case 'isautograph':
@@ -137,7 +137,7 @@ export async function POST(request: Request) {
             name: productData.name,
             description: productData.description || '',
             price: productData.price,
-            inventory: productData.inventory,
+            stock: productData.stock || 0,
             isRookie: productData.isRookie || false,
             isAutograph: productData.isAutograph || false,
             isNumbered: productData.isNumbered || false,
