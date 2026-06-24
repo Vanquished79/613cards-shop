@@ -38,7 +38,7 @@ export default function AdminBuyListClient({ initialSubmissions }: { initialSubm
             </div>
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontWeight: 'bold', color: 'var(--accent-color)', marginBottom: '8px' }}>
-                Status: {sub.status}
+                Status: {sub.status.replace(/_/g, ' ')}
               </div>
               <select 
                 value={sub.status} 

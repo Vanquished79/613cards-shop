@@ -91,7 +91,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{new Date(sub.createdAt).toLocaleDateString()}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontWeight: 'bold', color: 'var(--accent-color)' }}>Status: {sub.status}</div>
+                    <div style={{ fontWeight: 'bold', color: 'var(--accent-color)' }}>Status: {sub.status.replace(/_/g, ' ')}</div>
                   </div>
                 </div>
 
