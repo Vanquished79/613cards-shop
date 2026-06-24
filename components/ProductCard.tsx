@@ -38,7 +38,10 @@ export function ProductCard({ product }: { product: any }) {
         </Link>
           
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{product.category?.name || 'Uncategorized'}</span>
+          <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
+            {product.category?.name || 'Uncategorized'}
+            {product.cardSeries ? ` • ${product.cardSeries}` : ''}
+          </span>
           <span style={{ fontSize: '14px', color: product.availableStock > 0 ? '#4ade80' : '#ff8080', fontWeight: 'bold' }}>
             {product.availableStock > 0 ? `${product.availableStock} in stock` : 'Out of Stock'}
           </span>
