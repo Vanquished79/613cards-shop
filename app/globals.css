@@ -196,6 +196,7 @@ body {
   
   .filters-container > div {
     flex: 1 1 100% !important;
+  }
 }
 
 /* Form Layout Mobile (Admin) */
