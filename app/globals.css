@@ -208,6 +208,15 @@ body {
   .subnav-spacer {
     display: none !important;
   }
+  
+  .admin-layout-container {
+    flex-direction: column !important;
+  }
+  
+  .admin-layout-container aside {
+    width: 100% !important;
+    position: static !important;
+  }
 }
 
 /* Product Grid Layout */
