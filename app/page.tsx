@@ -100,7 +100,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
       <h2 style={{ fontSize: '28px', margin: '0 0 20px 0' }}>
         {resultsTitle.split(' ')[0]} <span style={{ color: 'var(--accent-color)' }}>{resultsTitle.split(' ').slice(1).join(' ')}</span>
       </h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
         {latestWithStock.length === 0 ? (
           <p style={{ color: 'var(--text-muted)' }}>No products found. Try adjusting your search!</p>
         ) : (
@@ -115,7 +115,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
   const featuredSection = featuredWithStock.length > 0 && (
     <div style={{ width: '100%', maxWidth: '1000px', marginBottom: '20px' }}>
       <h2 style={{ fontSize: '28px', margin: '0 0 20px 0' }}>Featured <span style={{ color: 'var(--accent-color)' }}>Products</span></h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
         {featuredWithStock.map((p: any) => (
           <ProductCard key={p.id} product={p} />
         ))}
