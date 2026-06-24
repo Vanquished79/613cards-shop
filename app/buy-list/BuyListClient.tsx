@@ -49,11 +49,14 @@ export default function BuyListClient() {
         body: formData
       });
 
-      if (!res.ok) throw new Error('Submission failed');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Submission failed');
+      }
       
       setSuccess(true);
-    } catch (err) {
-      alert("There was an error submitting your buy-list. Please try again.");
+    } catch (err: any) {
+      alert(err.message || "There was an error submitting your buy-list. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

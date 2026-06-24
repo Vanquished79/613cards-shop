@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     const userId = parseInt(session.user.id as string);
     if (isNaN(userId)) {
-      return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 });
+      return NextResponse.json({ error: 'You are logged in as the default Admin account which cannot submit buy-lists. Please create a normal customer account to test this form.' }, { status: 400 });
     }
 
     const formData = await req.formData();
