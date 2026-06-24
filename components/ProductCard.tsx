@@ -37,11 +37,11 @@ export function ProductCard({ product }: { product: any }) {
           </h3>
         </Link>
           
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-            {product.category?.name || 'Uncategorized'}
-            {product.cardSeries ? ` • ${product.cardSeries}` : ''}
-          </span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{product.category?.name || 'Uncategorized'}</span>
+            {product.cardSeries && <span style={{ fontSize: '13px', color: 'var(--text-muted)', opacity: 0.8 }}>{product.cardSeries}</span>}
+          </div>
           <span style={{ fontSize: '14px', color: product.availableStock > 0 ? '#4ade80' : '#ff8080', fontWeight: 'bold' }}>
             {product.availableStock > 0 ? `${product.availableStock} in stock` : 'Out of Stock'}
           </span>
