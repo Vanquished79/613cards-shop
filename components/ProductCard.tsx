@@ -21,6 +21,12 @@ export function ProductCard({ product }: { product: any }) {
             <span style={{ color: 'var(--text-muted)' }}>No Image</span>
           )}
           
+          {product.isPreorder && (
+            <div style={{ position: 'absolute', top: '12px', left: '12px', background: '#3b82f6', color: 'white', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '12px', boxShadow: '0 4px 10px rgba(59,130,246,0.4)' }}>
+              PRE-ORDER
+            </div>
+          )}
+          
           {product.compareAtPrice && product.compareAtPrice > product.price && (
             <div style={{ position: 'absolute', top: '12px', right: '12px', background: '#ff3366', color: 'white', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '12px', boxShadow: '0 4px 10px rgba(255,51,102,0.4)' }}>
               SALE
@@ -49,9 +55,21 @@ export function ProductCard({ product }: { product: any }) {
         </div>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '12px' }}>
-          {product.condition && product.condition !== 'N/A' && (
+          {product.condition && product.condition !== 'N/A' && !product.isGraded && (
             <span style={{ background: 'rgba(255,255,255,0.1)', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(255,255,255,0.2)' }}>
               {product.condition}
+            </span>
+          )}
+          
+          {product.isGraded && product.gradingCompany && product.grade && (
+            <span style={{ background: 'rgba(234, 179, 8, 0.2)', color: '#facc15', padding: '2px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 'bold' }}>
+              {product.gradingCompany} {product.grade}
+            </span>
+          )}
+
+          {product.type === 'BREAK' && (
+            <span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', padding: '2px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', fontWeight: 'bold' }}>
+              BREAK SPOT
             </span>
           )}
 

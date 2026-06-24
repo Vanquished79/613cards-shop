@@ -25,6 +25,9 @@ function ShopFiltersInner({ categories }: { categories: any[] }) {
     const isRookie = formData.get('isRookie');
     const isAuto = formData.get('isAutograph');
     const isNum = formData.get('isNumbered');
+    const isGraded = formData.get('isGraded');
+    const isPreorder = formData.get('isPreorder');
+    const isBreak = formData.get('isBreak');
 
     if (search) params.set('q', search);
     if (cat) params.set('categoryId', cat);
@@ -33,6 +36,9 @@ function ShopFiltersInner({ categories }: { categories: any[] }) {
     if (isRookie) params.set('isRookie', 'true');
     if (isAuto) params.set('isAutograph', 'true');
     if (isNum) params.set('isNumbered', 'true');
+    if (isGraded) params.set('isGraded', 'true');
+    if (isPreorder) params.set('isPreorder', 'true');
+    if (isBreak) params.set('isBreak', 'true');
 
     router.push(`/?${params.toString()}`);
   }
@@ -97,6 +103,18 @@ function ShopFiltersInner({ categories }: { categories: any[] }) {
         <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
           <input type="checkbox" name="isNumbered" value="true" defaultChecked={searchParams.get('isNumbered') === 'true'} />
           Numbered
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+          <input type="checkbox" name="isGraded" value="true" defaultChecked={searchParams.get('isGraded') === 'true'} />
+          Graded
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+          <input type="checkbox" name="isPreorder" value="true" defaultChecked={searchParams.get('isPreorder') === 'true'} />
+          Pre-orders
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+          <input type="checkbox" name="isBreak" value="true" defaultChecked={searchParams.get('isBreak') === 'true'} />
+          Breaks
         </label>
       </div>
 

@@ -41,10 +41,18 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
   if (sort === 'price_asc') orderBy = { price: 'asc' };
   if (sort === 'price_desc') orderBy = { price: 'desc' };
 
+  const isRookie = resolvedParams.isRookie === 'true';
+  const isAutograph = resolvedParams.isAutograph === 'true';
+  const isNumbered = resolvedParams.isNumbered === 'true';
+  const isGraded = resolvedParams.isGraded === 'true';
+  const isPreorder = resolvedParams.isPreorder === 'true';
+  const isBreak = resolvedParams.isBreak === 'true';
+
   let whereClause: any = {};
   if (q) {
     whereClause.OR = [
       { name: { contains: q, mode: 'insensitive' } },
+      { cardName: { contains: q, mode: 'insensitive' } },
       { cardSeries: { contains: q, mode: 'insensitive' } },
       { description: { contains: q, mode: 'insensitive' } },
     ];
@@ -62,9 +70,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     whereClause.condition = condition;
   }
   
-  if (resolvedParams.isRookie === 'true') whereClause.isRookie = true;
-  if (resolvedParams.isAutograph === 'true') whereClause.isAutograph = true;
-  if (resolvedParams.isNumbered === 'true') whereClause.isNumbered = true;
+  if (isRookie) whereClause.isRookie = true;
+  if (isAutograph) whereClause.isAutograph = true;
+  if (isNumbered) whereClause.isNumbered = true;
+  if (isGraded) whereClause.isGraded = true;
+  if (isPreorder) whereClause.isPreorder = true;
+  if (isBreak) whereClause.type = 'BREAK';
 
   const latestProducts = await prisma.product.findMany({ 
     where: whereClause,

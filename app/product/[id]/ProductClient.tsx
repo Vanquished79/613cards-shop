@@ -187,6 +187,13 @@ export function ProductClient({ product }: { product: any }) {
             </p>
           </div>
 
+          {product.isPreorder && product.releaseDate && (
+            <div style={{ padding: '12px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.3)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ color: '#60a5fa', fontWeight: 'bold' }}>📅 Expected Release Date:</span>
+              <span>{new Date(product.releaseDate).toLocaleDateString()}</span>
+            </div>
+          )}
+
           {product.type === 'CARD' && (
             <div style={{ marginBottom: '32px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '8px', overflow: 'hidden' }}>
               <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid var(--glass-border)', fontWeight: 'bold' }}>
@@ -212,9 +219,19 @@ export function ProductClient({ product }: { product: any }) {
                   </div>
                 )}
                 <div style={{ padding: '12px 16px', background: '#1a0b2e', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-                    {product.condition && product.condition !== 'N/A' && (
+                    {product.condition && product.condition !== 'N/A' && !product.isGraded && (
                       <span style={{ background: 'rgba(255,255,255,0.1)', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(255,255,255,0.2)' }}>
                         {product.condition}
+                      </span>
+                    )}
+                    {product.isGraded && product.gradingCompany && product.grade && (
+                      <span style={{ background: 'rgba(234, 179, 8, 0.2)', color: '#facc15', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 'bold' }}>
+                        {product.gradingCompany} {product.grade}
+                      </span>
+                    )}
+                    {product.type === 'BREAK' && (
+                      <span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', fontWeight: 'bold' }}>
+                        BREAK SPOT
                       </span>
                     )}
                     {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>Rookie Card</span>}
@@ -251,7 +268,7 @@ export function ProductClient({ product }: { product: any }) {
             >
               {product.availableStock === 0 
                 ? (product.stock > 0 ? 'In Another User\'s Cart' : 'Out of Stock') 
-                : 'Add to Cart'}
+                : (product.isPreorder ? 'Pre-order Now' : product.type === 'BREAK' ? 'Buy Spot' : 'Add to Cart')}
             </button>
             <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)', margin: '12px 0 0 0' }}>
               Items added to cart are reserved for 15 minutes.
