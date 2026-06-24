@@ -23,6 +23,11 @@ export async function PATCH(
       data: { status }
     });
 
+    await prisma.buyListItem.updateMany({
+      where: { submissionId: submissionId },
+      data: { status }
+    });
+
     return NextResponse.json({ success: true, submission });
   } catch (error: any) {
     console.error('Update BuyList error:', error);
