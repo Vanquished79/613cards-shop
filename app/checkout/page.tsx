@@ -390,6 +390,7 @@ export default function CheckoutPage() {
                     }}
                   />
                 </PayPalScriptProvider>
+                )}
               </div>
               {isProcessing && <p style={{ textAlign: 'center', color: 'var(--accent-color)', marginTop: '16px' }}>Processing order...</p>}
             </>
