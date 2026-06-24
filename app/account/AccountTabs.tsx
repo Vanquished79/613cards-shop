@@ -98,7 +98,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                 {sub.status === 'OFFER_MADE' && (
                   <div style={{ padding: '24px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid #3b82f6', borderRadius: '8px', marginBottom: '16px' }}>
                     <h3 style={{ margin: '0 0 16px 0', color: '#3b82f6' }}>You have an offer!</h3>
-                    <p style={{ margin: '0 0 16px 0' }}>The admin has reviewed your cards and made the following offers:</p>
+                    <p style={{ margin: '0 0 16px 0' }}>We have reviewed your cards and made the following offers:</p>
                     <div style={{ display: 'flex', gap: '24px', marginBottom: '24px' }}>
                       <div style={{ flex: 1, padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', textAlign: 'center' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '8px' }}>Cash Offer (PayPal)</div>

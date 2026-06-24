@@ -55,7 +55,7 @@ export default function AdminBuyListClient({ initialSubmissions }: { initialSubm
             </div>
           </div>
           
-          {sub.status === 'REVIEWING' && (
+          {(sub.status === 'PENDING' || sub.status === 'REVIEWING') && (
             <div style={{ padding: '16px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid #3b82f6', borderRadius: '8px', marginBottom: '24px', display: 'flex', gap: '16px', alignItems: 'flex-end' }}>
               <div style={{ flex: 1 }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-muted)' }}>Cash Offer ($)</label>
