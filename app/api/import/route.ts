@@ -111,27 +111,25 @@ export async function POST(request: Request) {
           }
         });
 
-        if (!productData.name || !productData.price) {
-          errors.push(`Row ${i + 2}: Missing required fields (name, price)`);
+        if (!productData.name || !productData.price || !productData.categoryName) {
+          errors.push(`Row ${i + 2}: Missing required fields (name, price, category)`);
           continue;
         }
 
         // Handle category
-        let categoryId = null;
-        if (productData.categoryName) {
-          let cat = await prisma.category.findFirst({
-            where: { name: { equals: productData.categoryName, mode: 'insensitive' } }
+        let categoryId: number;
+        let cat = await prisma.category.findFirst({
+          where: { name: { equals: productData.categoryName, mode: 'insensitive' } }
+        });
+        
+        if (!cat) {
+          cat = await prisma.category.create({
+            data: {
+              name: productData.categoryName
+            }
           });
-          
-          if (!cat) {
-            cat = await prisma.category.create({
-              data: {
-                name: productData.categoryName
-              }
-            });
-          }
-          categoryId = cat.id;
         }
+        categoryId = cat.id;
 
         // Create product
         await prisma.product.create({
