@@ -15,7 +15,7 @@ export default async function AccountPage() {
   }
 
   // Get user details
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: { email: session.user.email as string },
     include: {
       orders: {
@@ -25,11 +25,25 @@ export default async function AccountPage() {
     }
   });
 
+  if (!user && session.user.role === 'ADMIN') {
+    // Create the env admin in the database so they can use the account profile features
+    user = await prisma.user.create({
+      data: {
+        email: session.user.email as string,
+        name: session.user.name || 'Admin',
+        passwordHash: 'ENV_ADMIN_FALLBACK',
+        role: 'ADMIN',
+      },
+      include: {
+        orders: {
+          orderBy: { createdAt: 'desc' },
+          include: { items: { include: { product: true } } }
+        }
+      }
+    });
+  }
+
   if (!user) {
-    // Fallback for .env admin
-    if (session.user.role === 'ADMIN') {
-      redirect('/admin');
-    }
     return <div>User not found.</div>;
   }
 
