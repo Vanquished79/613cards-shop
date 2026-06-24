@@ -126,8 +126,7 @@ export async function POST(request: Request) {
           if (!cat) {
             cat = await prisma.category.create({
               data: {
-                name: productData.categoryName,
-                slug: productData.categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+                name: productData.categoryName
               }
             });
           }
