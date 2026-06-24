@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { paypalOrderId, customerName, email, address, city, state, zip, totalAmount, taxAmount, taxRate, items, userId, sessionId } = body;
+    const { paypalOrderId, customerName, email, address, city, state, zip, country, totalAmount, taxAmount, taxRate, items, userId, sessionId } = body;
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'No items in order' }, { status: 400 });
@@ -23,6 +23,7 @@ export async function POST(request: Request) {
           city: city || 'N/A',
           state: state || 'N/A',
           zip: zip || 'N/A',
+          country: country || 'CA',
           totalAmount,
           taxAmount: taxAmount || 0,
           taxRate: taxRate || 0,

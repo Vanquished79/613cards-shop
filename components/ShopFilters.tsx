@@ -22,11 +22,17 @@ function ShopFiltersInner({ categories }: { categories: any[] }) {
     const cat = formData.get('categoryId') as string;
     const cond = formData.get('condition') as string;
     const srt = formData.get('sort') as string;
+    const isRookie = formData.get('isRookie');
+    const isAuto = formData.get('isAutograph');
+    const isNum = formData.get('isNumbered');
 
     if (search) params.set('q', search);
     if (cat) params.set('categoryId', cat);
     if (cond) params.set('condition', cond);
     if (srt) params.set('sort', srt);
+    if (isRookie) params.set('isRookie', 'true');
+    if (isAuto) params.set('isAutograph', 'true');
+    if (isNum) params.set('isNumbered', 'true');
 
     router.push(`/?${params.toString()}`);
   }
@@ -72,11 +78,26 @@ function ShopFiltersInner({ categories }: { categories: any[] }) {
 
       <div style={{ display: 'flex', gap: '8px' }}>
         <button type="submit" className="btn-primary" style={{ padding: '10px 20px', borderRadius: '8px' }}>Apply</button>
-        {(q || categoryId || condition || sort) && (
+        {(q || categoryId || condition || sort || searchParams.get('isRookie') || searchParams.get('isAutograph') || searchParams.get('isNumbered')) && (
           <button type="button" onClick={handleClear} style={{ padding: '10px 20px', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', cursor: 'pointer' }}>
             Clear
           </button>
         )}
+      </div>
+
+      <div style={{ flexBasis: '100%', display: 'flex', gap: '16px', marginTop: '16px', flexWrap: 'wrap' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+          <input type="checkbox" name="isRookie" value="true" defaultChecked={searchParams.get('isRookie') === 'true'} />
+          Rookie Cards
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+          <input type="checkbox" name="isAutograph" value="true" defaultChecked={searchParams.get('isAutograph') === 'true'} />
+          Autographs
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+          <input type="checkbox" name="isNumbered" value="true" defaultChecked={searchParams.get('isNumbered') === 'true'} />
+          Numbered
+        </label>
       </div>
 
     </form>

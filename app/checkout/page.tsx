@@ -280,6 +280,7 @@ export default function CheckoutPage() {
                             city: details.purchase_units?.[0]?.shipping?.address?.admin_area_2,
                             state: details.purchase_units?.[0]?.shipping?.address?.admin_area_1,
                             zip: details.purchase_units?.[0]?.shipping?.address?.postal_code,
+                            country: country,
                             totalAmount: finalTotal,
                             taxAmount: taxInfo ? taxInfo.amount : 0,
                             taxRate: taxInfo ? taxInfo.rate : 0,

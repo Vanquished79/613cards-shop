@@ -43,7 +43,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
 
   let whereClause: any = {};
   if (q) {
-    whereClause.name = { contains: q, mode: 'insensitive' };
+    whereClause.OR = [
+      { name: { contains: q, mode: 'insensitive' } },
+      { cardSeries: { contains: q, mode: 'insensitive' } },
+      { description: { contains: q, mode: 'insensitive' } },
+    ];
   }
   if (categoryId) {
     const childCategories = await prisma.category.findMany({ where: { parentId: categoryId } });
@@ -57,6 +61,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
   if (condition) {
     whereClause.condition = condition;
   }
+  
+  if (resolvedParams.isRookie === 'true') whereClause.isRookie = true;
+  if (resolvedParams.isAutograph === 'true') whereClause.isAutograph = true;
+  if (resolvedParams.isNumbered === 'true') whereClause.isNumbered = true;
 
   const latestProducts = await prisma.product.findMany({ 
     where: whereClause,

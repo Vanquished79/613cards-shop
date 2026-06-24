@@ -118,18 +118,22 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
   };
 
   // --- CSV Export Logic ---
-  const exportToCSV = (filterTaxExempt: boolean = false) => {
+  const exportToCSV = (filterType: 'ALL' | 'TAX_EXEMPT_ALL' | 'TAX_EXEMPT_US') => {
     const headers = [
       'Order ID', 'Date', 'Customer Name', 'Status', 
       'Total Amount', 'Tax Amount', 'Tax Rate',
-      'Address', 'City', 'State/Province', 'ZIP/Postal Code',
+      'Address', 'City', 'State/Province', 'ZIP/Postal Code', 'Country',
       'PayPal Transaction ID'
     ];
     
-    // Filter orders if user wants only tax-exempt orders
-    const ordersToExport = filterTaxExempt 
-      ? initialOrders.filter(o => !o.taxAmount || o.taxAmount <= 0)
-      : initialOrders;
+    // Filter orders
+    let ordersToExport = initialOrders;
+    if (filterType === 'TAX_EXEMPT_ALL') {
+      ordersToExport = initialOrders.filter(o => !o.taxAmount || o.taxAmount <= 0);
+    } else if (filterType === 'TAX_EXEMPT_US') {
+      // @ts-ignore (we know country exists now even if types aren't regenerated yet)
+      ordersToExport = initialOrders.filter(o => (!o.taxAmount || o.taxAmount <= 0) && o.country === 'US');
+    }
 
     const rows = ordersToExport.map(order => [
       order.id,
@@ -146,6 +150,8 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
       `"${order.state?.replace(/"/g, '""') || 'N/A'}"`,
       `"${order.zip?.replace(/"/g, '""') || 'N/A'}"`,
       // @ts-ignore
+      `"${order.country || 'N/A'}"`,
+      // @ts-ignore
       `"${order.paypalOrderId || 'N/A'}"`
     ]);
     const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
@@ -154,7 +160,10 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    const filename = filterTaxExempt ? `613cards_tax_exempt_orders_${new Date().toISOString().split('T')[0]}.csv` : `613cards_orders_${new Date().toISOString().split('T')[0]}.csv`;
+    let filename = `613cards_orders_${new Date().toISOString().split('T')[0]}.csv`;
+    if (filterType === 'TAX_EXEMPT_US') filename = `613cards_US_tax_exempt_orders_${new Date().toISOString().split('T')[0]}.csv`;
+    if (filterType === 'TAX_EXEMPT_ALL') filename = `613cards_ALL_tax_exempt_orders_${new Date().toISOString().split('T')[0]}.csv`;
+    
     link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
@@ -185,15 +194,23 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
 
         <div style={{ display: 'flex', gap: '8px' }}>
           <button 
-            onClick={() => exportToCSV(true)}
-            style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
-            title="Export only orders that did not collect tax"
+            onClick={() => exportToCSV('TAX_EXEMPT_US')}
+            style={{ padding: '8px 16px', background: 'rgba(255,183,3,0.2)', color: '#ffb703', border: '1px solid rgba(255,183,3,0.3)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+            title="Export US orders that did not collect tax"
           >
-            Export Tax-Exempt
+            Export US Tax-Exempt
+          </button>
+
+          <button 
+            onClick={() => exportToCSV('TAX_EXEMPT_ALL')}
+            style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+            title="Export all orders that did not collect tax"
+          >
+            Export All Tax-Exempt
           </button>
           
           <button 
-            onClick={() => exportToCSV(false)}
+            onClick={() => exportToCSV('ALL')}
             style={{ padding: '8px 16px', background: 'var(--accent-color)', color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
           >
             Export All
