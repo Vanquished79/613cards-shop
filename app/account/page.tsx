@@ -3,7 +3,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import OrderHistoryTabs from './OrderHistoryTabs';
+import AccountTabs from './AccountTabs';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +21,10 @@ export default async function AccountPage() {
       orders: {
         orderBy: { createdAt: 'desc' },
         include: { items: { include: { product: true } } }
+      },
+      wishlistItems: {
+        orderBy: { createdAt: 'desc' },
+        include: { product: true }
       }
     }
   });
@@ -38,6 +42,10 @@ export default async function AccountPage() {
         orders: {
           orderBy: { createdAt: 'desc' },
           include: { items: { include: { product: true } } }
+        },
+        wishlistItems: {
+          orderBy: { createdAt: 'desc' },
+          include: { product: true }
         }
       }
     });
@@ -112,9 +120,9 @@ export default async function AccountPage() {
           </div>
         </div>
 
-        {/* Order History */}
+        {/* Account Tabs */}
         <div>
-          <OrderHistoryTabs orders={user.orders} />
+          <AccountTabs orders={user.orders} wishlistItems={user.wishlistItems} />
         </div>
 
       </div>

@@ -4,11 +4,15 @@ import { useCart } from '@/components/CartProvider';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useCurrency } from '@/components/CurrencyProvider';
+import { useWishlist } from '@/components/WishlistProvider';
 import { getNumberedColor } from '@/lib/utils';
 
 export function ProductClient({ product }: { product: any }) {
   const { addToCart } = useCart();
   const { formatPrice } = useCurrency();
+  const { wishlistIds, toggleWishlist } = useWishlist();
+  const isWishlisted = wishlistIds.has(product.id);
+
   const [isImageExpanded, setIsImageExpanded] = useState(false);
   const [isSuperZoomed, setIsSuperZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
@@ -56,6 +60,28 @@ export function ProductClient({ product }: { product: any }) {
                 SALE
               </div>
             )}
+
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleWishlist(product.id);
+              }}
+              style={{ 
+                position: 'absolute', top: '16px', right: product.compareAtPrice && product.compareAtPrice > product.price ? '100px' : '16px', 
+                background: 'rgba(0,0,0,0.5)', borderRadius: '50%', width: '40px', height: '40px', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10,
+                color: isWishlisted ? '#ff3366' : 'white', transition: 'transform 0.2s, color 0.2s',
+                transform: isWishlisted ? 'scale(1.1)' : 'scale(1)'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = isWishlisted ? 'scale(1.1)' : 'scale(1)'}
+              title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
           </div>
           
           {/* Thumbnails Gallery */}

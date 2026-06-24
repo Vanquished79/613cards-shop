@@ -2,12 +2,15 @@
 
 import { useState } from 'react';
 
-type Order = any; // We can type this strictly later if needed
+import { ProductCard } from '@/components/ProductCard';
+
+type Order = any; 
+type WishlistItem = any;
 
 const ORDER_STAGES = ['PAID', 'CONFIRMED', 'PACKING', 'SHIPPED', 'DELIVERED'];
 
-export default function OrderHistoryTabs({ orders }: { orders: Order[] }) {
-  const [activeTab, setActiveTab] = useState<'active' | 'archived'>('active');
+export default function AccountTabs({ orders, wishlistItems = [] }: { orders: Order[], wishlistItems?: WishlistItem[] }) {
+  const [activeTab, setActiveTab] = useState<'active' | 'archived' | 'wishlist'>('active');
 
   const activeOrders = orders.filter((o) => o.status !== 'DELIVERED');
   const archivedOrders = orders.filter((o) => o.status === 'DELIVERED');
@@ -15,28 +18,24 @@ export default function OrderHistoryTabs({ orders }: { orders: Order[] }) {
   const displayedOrders = activeTab === 'active' ? activeOrders : archivedOrders;
 
   const getStageIndex = (status: string) => {
-    // Treat PENDING as PAID for UI purposes
     const normalizedStatus = status === 'PENDING' ? 'PAID' : status;
     return ORDER_STAGES.indexOf(normalizedStatus);
   };
 
   return (
     <div className="glass-panel" style={{ padding: '32px' }}>
-      <h2 style={{ fontSize: '20px', marginBottom: '20px' }}>Order History</h2>
+      <h2 style={{ fontSize: '20px', marginBottom: '20px' }}>Account Information</h2>
       
       {/* Tabs */}
       <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--glass-border)' }}>
         <button 
           onClick={() => setActiveTab('active')}
           style={{ 
-            background: 'transparent', 
-            border: 'none', 
+            background: 'transparent', border: 'none', 
             color: activeTab === 'active' ? 'var(--accent-color)' : 'var(--text-muted)', 
-            padding: '8px 0',
-            fontWeight: activeTab === 'active' ? 'bold' : 'normal',
+            padding: '8px 0', fontWeight: activeTab === 'active' ? 'bold' : 'normal',
             borderBottom: activeTab === 'active' ? '2px solid var(--accent-color)' : '2px solid transparent',
-            cursor: 'pointer',
-            fontSize: '16px'
+            cursor: 'pointer', fontSize: '16px'
           }}
         >
           Active Orders ({activeOrders.length})
@@ -44,26 +43,46 @@ export default function OrderHistoryTabs({ orders }: { orders: Order[] }) {
         <button 
           onClick={() => setActiveTab('archived')}
           style={{ 
-            background: 'transparent', 
-            border: 'none', 
+            background: 'transparent', border: 'none', 
             color: activeTab === 'archived' ? 'var(--accent-color)' : 'var(--text-muted)', 
-            padding: '8px 0',
-            fontWeight: activeTab === 'archived' ? 'bold' : 'normal',
+            padding: '8px 0', fontWeight: activeTab === 'archived' ? 'bold' : 'normal',
             borderBottom: activeTab === 'archived' ? '2px solid var(--accent-color)' : '2px solid transparent',
-            cursor: 'pointer',
-            fontSize: '16px'
+            cursor: 'pointer', fontSize: '16px'
           }}
         >
           Archived ({archivedOrders.length})
         </button>
+        <button 
+          onClick={() => setActiveTab('wishlist')}
+          style={{ 
+            background: 'transparent', border: 'none', 
+            color: activeTab === 'wishlist' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            padding: '8px 0', fontWeight: activeTab === 'wishlist' ? 'bold' : 'normal',
+            borderBottom: activeTab === 'wishlist' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            cursor: 'pointer', fontSize: '16px'
+          }}
+        >
+          Wishlist ({wishlistItems.length})
+        </button>
       </div>
 
-      {orders.length === 0 ? (
-        <p style={{ color: 'var(--text-muted)' }}>You haven't placed any orders yet.</p>
-      ) : displayedOrders.length === 0 ? (
-        <p style={{ color: 'var(--text-muted)' }}>No {activeTab} orders found.</p>
+      {activeTab === 'wishlist' ? (
+        wishlistItems.length === 0 ? (
+          <p style={{ color: 'var(--text-muted)' }}>You haven't wishlisted any items yet.</p>
+        ) : (
+          <div className="product-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
+            {wishlistItems.map((item) => (
+              <ProductCard key={item.product.id} product={item.product} />
+            ))}
+          </div>
+        )
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        orders.length === 0 ? (
+          <p style={{ color: 'var(--text-muted)' }}>You haven't placed any orders yet.</p>
+        ) : displayedOrders.length === 0 ? (
+          <p style={{ color: 'var(--text-muted)' }}>No {activeTab} orders found.</p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {displayedOrders.map((order) => {
             const currentStageIndex = getStageIndex(order.status);
             
@@ -181,7 +200,8 @@ export default function OrderHistoryTabs({ orders }: { orders: Order[] }) {
               </div>
             );
           })}
-        </div>
+          </div>
+        )
       )}
     </div>
   );

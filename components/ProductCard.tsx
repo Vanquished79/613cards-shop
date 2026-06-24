@@ -3,11 +3,15 @@
 import Link from 'next/link';
 import { useCart } from './CartProvider';
 import { useCurrency } from './CurrencyProvider';
+import { useWishlist } from './WishlistProvider';
 import { getNumberedColor } from '@/lib/utils';
 
 export function ProductCard({ product }: { product: any }) {
   const { addToCart } = useCart();
   const { formatPrice } = useCurrency();
+  const { wishlistIds, toggleWishlist } = useWishlist();
+
+  const isWishlisted = wishlistIds.has(product.id);
 
   return (
     <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', position: 'relative' }}>
@@ -27,11 +31,39 @@ export function ProductCard({ product }: { product: any }) {
             </div>
           )}
           
+          {product.isPreorder && (
+            <div style={{ position: 'absolute', top: '12px', left: '12px', background: '#3b82f6', color: 'white', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '12px', boxShadow: '0 4px 10px rgba(59,130,246,0.4)' }}>
+              PRE-ORDER
+            </div>
+          )}
+          
           {product.compareAtPrice && product.compareAtPrice > product.price && (
             <div style={{ position: 'absolute', top: '12px', right: '12px', background: '#ff3366', color: 'white', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '12px', boxShadow: '0 4px 10px rgba(255,51,102,0.4)' }}>
               SALE
             </div>
           )}
+
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleWishlist(product.id);
+            }}
+            style={{ 
+              position: 'absolute', top: '12px', right: product.compareAtPrice && product.compareAtPrice > product.price ? '80px' : '12px', 
+              background: 'rgba(0,0,0,0.5)', borderRadius: '50%', width: '32px', height: '32px', 
+              display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10,
+              color: isWishlisted ? '#ff3366' : 'white', transition: 'transform 0.2s, color 0.2s',
+              transform: isWishlisted ? 'scale(1.1)' : 'scale(1)'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = isWishlisted ? 'scale(1.1)' : 'scale(1)'}
+            title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </div>
         </div>
       </Link>
       

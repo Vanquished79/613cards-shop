@@ -17,6 +17,21 @@ export async function GET() {
       ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "isGraded" BOOLEAN NOT NULL DEFAULT false;
       ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "gradingCompany" TEXT;
       ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "grade" TEXT;
+      
+      -- Phase 2 Expansions
+      CREATE TABLE IF NOT EXISTS "WishlistItem" (
+        "id" SERIAL NOT NULL,
+        "userId" INTEGER NOT NULL,
+        "productId" INTEGER NOT NULL,
+        "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "WishlistItem_pkey" PRIMARY KEY ("id")
+      );
+      
+      -- Add constraints manually if not exist. Doing it safely by checking if they exist is harder in raw postgres, 
+      -- but IF NOT EXISTS isn't supported for constraints. 
+      -- We will just try/catch the migration or ignore error if table already exists, but CREATE TABLE IF NOT EXISTS handles the table.
+      -- Let's create unique index:
+      CREATE UNIQUE INDEX IF NOT EXISTS "WishlistItem_userId_productId_key" ON "WishlistItem"("userId", "productId");
     `);
     
     // Add additionalImages to Product
