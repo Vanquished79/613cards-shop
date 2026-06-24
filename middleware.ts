@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Maintenance Mode (Coming Soon) Logic
-  const isMaintenanceMode = true; // process.env.MAINTENANCE_MODE === 'true';
+  const isMaintenanceMode = false; // process.env.MAINTENANCE_MODE === 'true';
   const isAdminUser = token?.role === 'ADMIN';
   
   const isExemptRoute = 
