@@ -75,14 +75,27 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
       whereClause.categoryId = categoryId;
     }
   }
+  let variationsSome: any = {};
+  let hasVariationsFilter = false;
+
   if (condition) {
-    whereClause.condition = condition;
+    variationsSome.condition = condition;
+    hasVariationsFilter = true;
+  }
+  if (isGraded) {
+    variationsSome.isGraded = true;
+    hasVariationsFilter = true;
+  }
+
+  if (hasVariationsFilter) {
+    whereClause.variations = {
+      some: variationsSome
+    };
   }
   
   if (isRookie) whereClause.isRookie = true;
   if (isAutograph) whereClause.isAutograph = true;
   if (isNumbered) whereClause.isNumbered = true;
-  if (isGraded) whereClause.isGraded = true;
   if (isPreorder) whereClause.isPreorder = true;
   if (isBreak) whereClause.type = 'BREAK';
 

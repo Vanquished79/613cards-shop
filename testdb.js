@@ -1,0 +1,1 @@
+const { PrismaClient } = require('@prisma/client'); const prisma = new PrismaClient({ datasources: { db: { url: 'postgresql://postgres:Patriots792001!!!9719@db.hxyynjhiecajczpkvljc.supabase.co:6543/postgres?pgbouncer=true' } } }); prisma.category.findMany().then(console.log).catch(console.error).finally(() = 
