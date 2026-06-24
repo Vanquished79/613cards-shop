@@ -109,6 +109,7 @@ model User {
   city         String?
   state        String?
   zip          String?
+  country      String?
   role               String               @default("CUSTOMER") // CUSTOMER, ADMIN
   storeCredit        Float                @default(0)
   orders             Order[]

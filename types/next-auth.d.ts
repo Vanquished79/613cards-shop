@@ -15,6 +15,7 @@ declare module "next-auth" {
       city?: string | null
       state?: string | null
       zip?: string | null
+      country?: string | null
     }
   }
 }

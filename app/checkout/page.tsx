@@ -29,6 +29,15 @@ export default function CheckoutPage() {
   const { data: session } = useSession();
 
   useEffect(() => {
+    if (session?.user && !country) {
+      if (session.user.country) setCountry(session.user.country);
+      if (session.user.state && session.user.country === 'CA') {
+        setProvince(session.user.state);
+      }
+    }
+  }, [session, country]);
+
+  useEffect(() => {
     fetch('/api/settings').then(r => r.json()).then(data => {
       if (data.taxEnabled !== undefined) setTaxEnabled(data.taxEnabled);
     }).catch(e => console.error(e));

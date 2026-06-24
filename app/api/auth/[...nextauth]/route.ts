@@ -40,7 +40,8 @@ export const authOptions = {
             address: user.address,
             city: user.city,
             state: user.state,
-            zip: user.zip
+            zip: user.zip,
+            country: user.country
           };
         }
 
@@ -57,6 +58,7 @@ export const authOptions = {
         token.city = user.city;
         token.state = user.state;
         token.zip = user.zip;
+        token.country = user.country;
       }
       return token;
     },
@@ -68,6 +70,7 @@ export const authOptions = {
         session.user.city = token.city;
         session.user.state = token.state;
         session.user.zip = token.zip;
+        session.user.country = token.country;
       }
       return session;
     }
