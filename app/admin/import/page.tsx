@@ -10,7 +10,7 @@ export default function BulkImportPage() {
   const router = useRouter();
 
   const handleDownloadSample = () => {
-    const headers = ['name', 'description', 'price', 'stock', 'category', 'isRookie', 'isAutograph', 'isNumbered', 'cardNumber', 'cardSeries', 'image'];
+    const headers = ['name', 'description', 'price', 'stock', 'category', 'isRookie', 'isAutograph', 'isNumbered', 'cardName', 'cardSeries', 'imageUrl'];
     const sampleRow = ['"Connor McDavid Young Guns"', '"Gem Mint Condition"', '1500.00', '1', 'Hockey Cards', 'true', 'false', 'false', '"#201"', '"Upper Deck Series 1"', '""'];
     const csvContent = [headers.join(','), sampleRow.join(',')].join('\n');
     

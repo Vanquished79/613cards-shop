@@ -101,11 +101,12 @@ export async function POST(request: Request) {
             case 'isnumbered':
               productData.isNumbered = val.toLowerCase() === 'true'; break;
             case 'cardnumber':
-              productData.cardNumber = val; break;
+              productData.cardName = val; break;
             case 'cardseries':
               productData.cardSeries = val; break;
             case 'image':
-              productData.image = val || null; break;
+            case 'imageurl':
+              productData.imageUrl = val || null; break;
             case 'category':
               productData.categoryName = val; break; // Temporary hold
           }
@@ -141,9 +142,9 @@ export async function POST(request: Request) {
             isRookie: productData.isRookie || false,
             isAutograph: productData.isAutograph || false,
             isNumbered: productData.isNumbered || false,
-            cardNumber: productData.cardNumber || null,
+            cardName: productData.cardName || null,
             cardSeries: productData.cardSeries || null,
-            image: productData.image || null,
+            imageUrl: productData.imageUrl || null,
             categoryId: categoryId
           }
         });
