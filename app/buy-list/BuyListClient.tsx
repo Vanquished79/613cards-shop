@@ -10,11 +10,11 @@ export default function BuyListClient() {
   const [notes, setNotes] = useState('');
   
   const [items, setItems] = useState([
-    { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '' }
+    { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFile: null as File | null }
   ]);
 
   const addItem = () => {
-    setItems([...items, { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '' }]);
+    setItems([...items, { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFile: null }]);
   };
 
   const removeItem = (id: number) => {
@@ -32,10 +32,21 @@ export default function BuyListClient() {
     setIsSubmitting(true);
 
     try {
+      const formData = new FormData();
+      formData.append('notes', notes);
+      
+      const cleanItems = items.map(item => ({ ...item, imageFile: undefined }));
+      formData.append('items', JSON.stringify(cleanItems));
+
+      items.forEach((item, index) => {
+        if (item.imageFile) {
+          formData.append(`image_${index}`, item.imageFile);
+        }
+      });
+
       const res = await fetch('/api/buy-list', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, notes })
+        body: formData
       });
 
       if (!res.ok) throw new Error('Submission failed');
@@ -96,12 +107,12 @@ export default function BuyListClient() {
               <div>
                 <label style={labelStyle}>Condition *</label>
                 <select required style={inputStyle} value={item.condition} onChange={e => updateItem(item.id, 'condition', e.target.value)}>
-                  <option value="Mint">Mint</option>
-                  <option value="Near Mint">Near Mint</option>
-                  <option value="Lightly Played">Lightly Played</option>
-                  <option value="Moderately Played">Moderately Played</option>
-                  <option value="Heavily Played">Heavily Played</option>
-                  <option value="Damaged">Damaged</option>
+                  <option value="Mint" style={{ background: '#1a1025' }}>Mint</option>
+                  <option value="Near Mint" style={{ background: '#1a1025' }}>Near Mint</option>
+                  <option value="Lightly Played" style={{ background: '#1a1025' }}>Lightly Played</option>
+                  <option value="Moderately Played" style={{ background: '#1a1025' }}>Moderately Played</option>
+                  <option value="Heavily Played" style={{ background: '#1a1025' }}>Heavily Played</option>
+                  <option value="Damaged" style={{ background: '#1a1025' }}>Damaged</option>
                 </select>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '24px' }}>
@@ -125,7 +136,7 @@ export default function BuyListClient() {
               </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
               <div>
                 <label style={labelStyle}>Quantity</label>
                 <input type="number" min="1" required style={inputStyle} value={item.quantity} onChange={e => updateItem(item.id, 'quantity', parseInt(e.target.value))} />
@@ -133,6 +144,14 @@ export default function BuyListClient() {
               <div>
                 <label style={labelStyle}>Expected Price (Optional)</label>
                 <input type="number" step="0.01" style={inputStyle} value={item.expectedPrice} onChange={e => updateItem(item.id, 'expectedPrice', e.target.value)} placeholder="What are you looking to get?" />
+              </div>
+              <div>
+                <label style={labelStyle}>Card Image (Optional)</label>
+                <input type="file" accept="image/*" style={{...inputStyle, padding: '7px 10px'}} onChange={e => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    updateItem(item.id, 'imageFile', e.target.files[0]);
+                  }
+                }} />
               </div>
             </div>
 

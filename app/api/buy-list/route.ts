@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/lib/prisma';
+import { uploadProductImage } from '@/lib/supabase';
 
 export async function POST(req: Request) {
   try {
@@ -15,10 +16,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 });
     }
 
-    const { items, notes } = await req.json();
-
-    if (!items || !Array.isArray(items) || items.length === 0) {
+    const formData = await req.formData();
+    const notes = formData.get('notes') as string || '';
+    const itemsString = formData.get('items') as string;
+    
+    if (!itemsString) {
       return NextResponse.json({ error: 'Items are required' }, { status: 400 });
+    }
+
+    const items = JSON.parse(itemsString);
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return NextResponse.json({ error: 'Items are required' }, { status: 400 });
+    }
+
+    // Process image uploads
+    for (let i = 0; i < items.length; i++) {
+      const file = formData.get(`image_${i}`) as File;
+      if (file && file.size > 0) {
+        const uploadedUrl = await uploadProductImage(file);
+        if (uploadedUrl) {
+          items[i].imageUrl = uploadedUrl;
+        }
+      }
     }
 
     const submission = await prisma.buyListSubmission.create({
@@ -35,6 +55,7 @@ export async function POST(req: Request) {
             grade: item.grade,
             quantity: item.quantity || 1,
             expectedPrice: item.expectedPrice ? parseFloat(item.expectedPrice) : null,
+            imageUrl: item.imageUrl || null,
           }))
         }
       }
