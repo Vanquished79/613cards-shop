@@ -4,11 +4,16 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export type CartItem = {
   id: number;
+  productVariationId: number;
   name: string;
   price: number;
   quantity: number;
   imageUrl?: string | null;
   description?: string | null;
+  condition?: string;
+  isGraded?: boolean;
+  gradingCompany?: string | null;
+  grade?: string | null;
 };
 
 type CartContextType = {
@@ -76,18 +81,39 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addToCart = async (product: any) => {
+    // We expect product.selectedVariation to be passed in, or product is the variation itself
+    // For backwards compatibility or direct calls, we try to grab the first variation if selectedVariation is missing
+    const variation = product.selectedVariation || (product.variations && product.variations[0]);
+    if (!variation) {
+      alert('Please select an option before adding to cart.');
+      return;
+    }
+
     let newItems = [...items];
-    const existing = newItems.find((i) => i.id === product.id);
+    const existing = newItems.find((i) => i.id === product.id && i.productVariationId === variation.id);
+    
     if (existing) {
       existing.quantity += 1;
     } else {
-      newItems.push({ id: product.id, name: product.name, price: product.price, quantity: 1, imageUrl: product.imageUrl, description: product.description });
+      newItems.push({ 
+        id: product.id, 
+        productVariationId: variation.id,
+        name: product.name, 
+        price: variation.price, 
+        quantity: 1, 
+        imageUrl: product.imageUrl, 
+        description: product.description,
+        condition: variation.condition,
+        isGraded: variation.isGraded,
+        gradingCompany: variation.gradingCompany,
+        grade: variation.grade
+      });
     }
     
     const syncedItems = await syncWithServer(newItems);
     
     // Check if the item was successfully added/increased
-    const syncedExisting = syncedItems.find((i: CartItem) => i.id === product.id);
+    const syncedExisting = syncedItems.find((i: CartItem) => i.id === product.id && i.productVariationId === variation.id);
     if (!syncedExisting || (existing && syncedExisting.quantity === existing.quantity - 1)) {
       alert('Sorry, that item is out of stock or currently in another user\'s cart.');
     } else {
@@ -95,15 +121,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const removeFromCart = async (id: number) => {
-    const newItems = items.filter((i) => i.id !== id);
+  const removeFromCart = async (productVariationId: number) => {
+    const newItems = items.filter((i) => i.productVariationId !== productVariationId);
     setItems(newItems); // Optimistic UI
     await syncWithServer(newItems);
   };
 
-  const updateQuantity = async (id: number, quantity: number) => {
-    if (quantity < 1) return removeFromCart(id);
-    const newItems = items.map((i) => (i.id === id ? { ...i, quantity } : i));
+  const updateQuantity = async (productVariationId: number, quantity: number) => {
+    if (quantity < 1) return removeFromCart(productVariationId);
+    const newItems = items.map((i) => (i.productVariationId === productVariationId ? { ...i, quantity } : i));
     // Optimistic UI update (sync might revert it if out of stock)
     setItems(newItems);
     await syncWithServer(newItems);

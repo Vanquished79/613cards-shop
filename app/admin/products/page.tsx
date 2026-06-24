@@ -10,7 +10,10 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const resolvedSearchParams = await searchParams;
   const errorMessage = resolvedSearchParams.error;
 
-  const products = await prisma.product.findMany({ include: { category: true }, orderBy: { createdAt: 'desc' } });
+  const products = await prisma.product.findMany({ 
+    include: { category: true, variations: true }, 
+    orderBy: { createdAt: 'desc' } 
+  });
   const categories = await prisma.category.findMany();
 
   async function createProduct(formData: FormData) {
@@ -60,8 +63,15 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       
       await prisma.product.create({
         data: { 
-          name, description, price, compareAtPrice, stock, categoryId, imageUrl: finalImageUrl, additionalImages, isFeatured, condition,
-          type, cardName, cardSeries, cardBrand, isRookie, isAutograph, isNumbered, serialNumber, isParallel 
+          name, description, compareAtPrice, categoryId, imageUrl: finalImageUrl, additionalImages, isFeatured,
+          type, cardName, cardSeries, isRookie, isAutograph, isNumbered, serialNumber, isParallel,
+          variations: {
+            create: {
+              price,
+              stock: isNaN(stock) ? 0 : stock,
+              condition: condition || 'N/A'
+            }
+          }
         }
       });
       
@@ -96,7 +106,19 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         {products.length === 0 ? (
           <p style={{ color: 'var(--text-muted)' }}>No products found.</p>
         ) : (
-          products.map((p: any) => (
+          products.map((p: any) => {
+            const variations = p.variations || [];
+            const totalStock = variations.reduce((acc: number, v: any) => acc + v.stock, 0);
+            const prices = variations.map((v: any) => v.price);
+            const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+            const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+            const priceDisplay = prices.length === 0 
+              ? '$0.00' 
+              : minPrice === maxPrice 
+                ? `$${minPrice.toFixed(2)}` 
+                : `$${minPrice.toFixed(2)} - $${maxPrice.toFixed(2)}`;
+
+            return (
             <div key={p.id} style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                 {p.imageUrl ? (
@@ -108,11 +130,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                   <h3 style={{ margin: 0 }}>
                     {p.name} {p.isFeatured && <span style={{ fontSize: '12px', background: 'rgba(255, 183, 3, 0.2)', color: '#ffb703', padding: '2px 6px', borderRadius: '4px', marginLeft: '8px', verticalAlign: 'middle' }}>Featured</span>}
                   </h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '4px 0 0 0' }}>{p.category.name} • Stock: {p.stock}</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '4px 0 0 0' }}>{p.category.name} • Stock: {totalStock} • Variations: {variations.length}</p>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>${p.price.toFixed(2)}</span>
+                <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>{priceDisplay}</span>
                 <Link href={`/admin/products/${p.id}`} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.1)', color: 'white', textDecoration: 'none', borderRadius: '4px', fontSize: '13px' }}>Edit</Link>
                 <form action={deleteProduct}>
                   <input type="hidden" name="id" value={p.id} />
@@ -120,7 +142,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                 </form>
               </div>
             </div>
-          ))
+          )})
         )}
       </div>
     </div>

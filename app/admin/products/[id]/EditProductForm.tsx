@@ -35,43 +35,19 @@ export default function EditProductForm({ product, categories, updateProductActi
         <input name="name" defaultValue={product.name} required style={inputStyle} />
       </div>
       
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
         <div>
           <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Category</label>
           <select name="categoryId" defaultValue={product.categoryId} required style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
             {categories.map((c: any) => <option key={c.id} value={c.id} style={{ background: '#1a0b2e', color: 'white' }}>{c.name}</option>)}
           </select>
         </div>
-        
-        <div>
-          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Condition</label>
-          <select name="condition" defaultValue={product.condition || ''} style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
-            <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Any Condition</option>
-            <option value="Mint" style={{ background: '#1a0b2e', color: 'white' }}>Mint</option>
-            <option value="Near Mint" style={{ background: '#1a0b2e', color: 'white' }}>Near Mint</option>
-            <option value="Lightly Played" style={{ background: '#1a0b2e', color: 'white' }}>Lightly Played</option>
-            <option value="Moderately Played" style={{ background: '#1a0b2e', color: 'white' }}>Moderately Played</option>
-            <option value="Heavily Played" style={{ background: '#1a0b2e', color: 'white' }}>Heavily Played</option>
-            <option value="Damaged" style={{ background: '#1a0b2e', color: 'white' }}>Damaged</option>
-            <option value="N/A" style={{ background: '#1a0b2e', color: 'white' }}>N/A (Sealed)</option>
-          </select>
-        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
-        <div>
-          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Price</label>
-          <input name="price" type="number" step="0.01" defaultValue={product.price} required style={inputStyle} />
-        </div>
-        
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
         <div>
           <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Compare At Price</label>
           <input name="compareAtPrice" type="number" step="0.01" defaultValue={product.compareAtPrice || ''} placeholder="Optional Sale Price" style={inputStyle} />
-        </div>
-
-        <div>
-          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Stock Quantity</label>
-          <input name="stock" type="number" defaultValue={product.stock} required style={inputStyle} />
         </div>
       </div>
       
@@ -144,11 +120,6 @@ export default function EditProductForm({ product, categories, updateProductActi
           <div>
             <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Series (e.g. 2023 Prizm)</label>
             <input name="cardSeries" defaultValue={product.cardSeries || ''} style={inputStyle} />
-          </div>
-
-          <div>
-            <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Brand (e.g. Panini)</label>
-            <input name="cardBrand" defaultValue={product.cardBrand || ''} style={inputStyle} />
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center' }}>

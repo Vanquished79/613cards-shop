@@ -73,7 +73,7 @@ export default function CheckoutPage() {
           <h2 style={{ fontSize: '20px', marginBottom: '20px' }}>Order Summary</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {items.map(item => (
-              <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid var(--glass-border)' }}>
+              <div key={`${item.id}-${item.productVariationId}`} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid var(--glass-border)' }}>
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                   <div style={{ width: '48px', height: '48px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {item.imageUrl ? (
@@ -84,18 +84,21 @@ export default function CheckoutPage() {
                   </div>
                   <div>
                     <h4 style={{ margin: '0 0 4px 0' }}>{item.name}</h4>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                      {item.condition} {item.isGraded ? `(${item.gradingCompany} ${item.grade})` : ''}
+                    </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.productVariationId, item.quantity - 1)}
                         style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer' }}
                       >-</button>
                       <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{item.quantity}</span>
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.productVariationId, item.quantity + 1)}
                         style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer' }}
                       >+</button>
                       <button 
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item.productVariationId)}
                         style={{ background: 'transparent', border: 'none', color: '#f87171', fontSize: '12px', cursor: 'pointer', marginLeft: '8px', textDecoration: 'underline' }}
                       >Remove</button>
                     </div>

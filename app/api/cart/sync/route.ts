@@ -15,41 +15,42 @@ export async function POST(request: Request) {
     // We use a transaction to ensure atomic inventory check and lock
     const finalizedItems = await prisma.$transaction(async (tx) => {
       // 1. Delete all existing reservations for this session (so we can re-reserve without double counting)
-      await tx.cartReservation.deleteMany({
+      await tx.stockReservation.deleteMany({
         where: { sessionId }
       });
 
       const syncedItems = [];
 
       for (const item of items) {
-        // Find the product
-        const product = await tx.product.findUnique({
-          where: { id: item.id }
+        // Find the product variation and the parent product
+        const variation = await tx.productVariation.findUnique({
+          where: { id: item.productVariationId },
+          include: { product: true }
         });
 
-        if (!product) continue;
+        if (!variation) continue;
 
         // Calculate active reservations from OTHER sessions
-        const activeReservations = await tx.cartReservation.aggregate({
+        const activeReservations = await tx.stockReservation.aggregate({
           where: {
-            productId: item.id,
+            productVariationId: item.productVariationId,
             expiresAt: { gt: now }
           },
           _sum: { quantity: true }
         });
 
         const otherReservedQuantity = activeReservations._sum.quantity || 0;
-        const availableStock = Math.max(0, product.stock - otherReservedQuantity);
+        const availableStock = Math.max(0, variation.stock - otherReservedQuantity);
 
         // Can we satisfy the requested quantity?
         const allowedQuantity = Math.min(item.quantity, availableStock);
 
         if (allowedQuantity > 0) {
           // Create the new reservation
-          await tx.cartReservation.create({
+          await tx.stockReservation.create({
             data: {
               sessionId,
-              productId: item.id,
+              productVariationId: item.productVariationId,
               quantity: allowedQuantity,
               expiresAt
             }
@@ -58,9 +59,13 @@ export async function POST(request: Request) {
           syncedItems.push({
             ...item,
             quantity: allowedQuantity,
-            price: product.price, // ensure price is up-to-date
-            name: product.name,
-            imageUrl: product.imageUrl
+            price: variation.price, // ensure price is up-to-date
+            name: variation.product.name,
+            imageUrl: variation.product.imageUrl,
+            condition: variation.condition,
+            isGraded: variation.isGraded,
+            gradingCompany: variation.gradingCompany,
+            grade: variation.grade
           });
         }
       }

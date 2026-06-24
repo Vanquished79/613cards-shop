@@ -23,6 +23,8 @@ export function Footer() {
         <div>
           <h3 style={{ color: 'white', marginBottom: '16px', fontSize: '16px' }}>Customer Service</h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <li><Link href="/faq" style={{ color: 'inherit', textDecoration: 'none', fontSize: '14px' }}>FAQ</Link></li>
+            <li><Link href="/shipping-policy" style={{ color: 'inherit', textDecoration: 'none', fontSize: '14px' }}>Shipping Policy</Link></li>
             <li><Link href="/contact" style={{ color: 'inherit', textDecoration: 'none', fontSize: '14px' }}>Contact Us</Link></li>
             <li><Link href="/condition-guide" style={{ color: 'inherit', textDecoration: 'none', fontSize: '14px' }}>Card Condition Guide</Link></li>
             <li><Link href="/return-policy" style={{ color: 'inherit', textDecoration: 'none', fontSize: '14px' }}>Return Policy</Link></li>

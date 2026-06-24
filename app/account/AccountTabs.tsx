@@ -180,7 +180,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
                   {order.items.map((item: any) => (
                     <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-                      <span>{item.quantity}x {item.product.name}</span>
+                      <span>{item.quantity}x {item.productVariation.product.name} - {item.productVariation.condition}</span>
                       <span style={{ color: 'var(--text-muted)' }}>${(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                   ))}

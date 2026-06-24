@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   const productId = parseInt(resolvedParams.id);
+  const now = new Date();
   
   if (isNaN(productId)) {
     notFound();
@@ -16,8 +17,12 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     where: { id: productId },
     include: {
       category: true,
-      reservations: {
-        where: { expiresAt: { gt: new Date() } }
+      variations: {
+        include: {
+          reservations: {
+            where: { expiresAt: { gt: now } }
+          }
+        }
       }
     }
   });
@@ -26,12 +31,20 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     notFound();
   }
 
-  const reservedCount = product.reservations.reduce((sum: number, r: any) => sum + r.quantity, 0);
-  const availableStock = Math.max(0, product.stock - reservedCount);
+  const variationsWithStock = product.variations.map((v: any) => {
+    const reservedCount = v.reservations.reduce((sum: number, r: any) => sum + r.quantity, 0);
+    return {
+      ...v,
+      availableStock: Math.max(0, v.stock - reservedCount)
+    };
+  });
+
+  const totalAvailableStock = variationsWithStock.reduce((sum: number, v: any) => sum + v.availableStock, 0);
 
   const productData = {
     ...product,
-    availableStock
+    variations: variationsWithStock,
+    availableStock: totalAvailableStock
   };
 
   return <ProductClient product={productData} />;

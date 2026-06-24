@@ -30,7 +30,7 @@ export async function POST(request: Request) {
           status: 'PAID',
           items: {
             create: items.map((item: any) => ({
-              productId: item.id,
+              productVariationId: item.productVariationId,
               quantity: item.quantity,
               price: item.price
             }))
@@ -38,10 +38,10 @@ export async function POST(request: Request) {
         }
       });
 
-      // 2. Reduce stock for each product
+      // 2. Reduce stock for each product variation
       for (const item of items) {
-        await tx.product.update({
-          where: { id: item.id },
+        await tx.productVariation.update({
+          where: { id: item.productVariationId },
           data: {
             stock: {
               decrement: item.quantity
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
 
       // 3. Clear reservations for this session since they bought it
       if (sessionId) {
-        await tx.cartReservation.deleteMany({
+        await tx.stockReservation.deleteMany({
           where: { sessionId }
         });
       }

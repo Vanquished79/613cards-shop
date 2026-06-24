@@ -17,6 +17,7 @@ export function ProductClient({ product }: { product: any }) {
   const [isSuperZoomed, setIsSuperZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
   const [selectedImage, setSelectedImage] = useState(product.imageUrl);
+  const [selectedVariation, setSelectedVariation] = useState<any>(null);
 
   const allImages = [product.imageUrl, ...(product.additionalImages || [])].filter(Boolean);
 
@@ -245,16 +246,6 @@ export function ProductClient({ product }: { product: any }) {
                   </div>
                 )}
                 <div style={{ padding: '12px 16px', background: '#1a0b2e', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-                    {product.condition && product.condition !== 'N/A' && !product.isGraded && (
-                      <span style={{ background: 'rgba(255,255,255,0.1)', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(255,255,255,0.2)' }}>
-                        {product.condition}
-                      </span>
-                    )}
-                    {product.isGraded && product.gradingCompany && product.grade && (
-                      <span style={{ background: 'rgba(234, 179, 8, 0.2)', color: '#facc15', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 'bold' }}>
-                        {product.gradingCompany} {product.grade}
-                      </span>
-                    )}
                     {product.type === 'BREAK' && (
                       <span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', fontWeight: 'bold' }}>
                         BREAK SPOT
@@ -279,6 +270,49 @@ export function ProductClient({ product }: { product: any }) {
             </div>
           )}
 
+          {/* Variations Selector */}
+          {product.variations && product.variations.length > 0 && (
+            <div style={{ marginBottom: '32px' }}>
+              <h3 style={{ fontSize: '16px', color: 'var(--text-muted)', marginBottom: '12px' }}>Select Option</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {product.variations.map((v: any) => {
+                  const isSelected = selectedVariation?.id === v.id;
+                  const isOutOfStock = v.availableStock <= 0;
+                  
+                  return (
+                    <div 
+                      key={v.id}
+                      onClick={() => {
+                        if (!isOutOfStock) setSelectedVariation(v);
+                      }}
+                      style={{ 
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
+                        padding: '16px', background: isSelected ? 'rgba(var(--accent-color-rgb), 0.1)' : 'rgba(255,255,255,0.03)', 
+                        borderRadius: '8px', border: isSelected ? '2px solid var(--accent-color)' : '1px solid var(--glass-border)',
+                        cursor: isOutOfStock ? 'not-allowed' : 'pointer',
+                        opacity: isOutOfStock ? 0.5 : 1,
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ fontWeight: 'bold' }}>{v.condition}</span>
+                          {v.isGraded && <span style={{ background: 'rgba(74, 222, 128, 0.2)', color: '#4ade80', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>{v.gradingCompany} {v.grade}</span>}
+                        </div>
+                        <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                          {isOutOfStock ? 'Out of Stock' : `${v.availableStock} available`}
+                        </span>
+                      </div>
+                      <span style={{ fontWeight: 'bold', fontSize: '16px', color: 'var(--accent-color)' }}>
+                        {formatPrice(v.price)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           <div style={{ marginTop: 'auto', padding: '24px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
             <button 
               className="btn-primary" 
@@ -286,15 +320,17 @@ export function ProductClient({ product }: { product: any }) {
                 width: '100%',
                 padding: '16px', 
                 fontSize: '18px',
-                opacity: product.availableStock === 0 ? 0.5 : 1,
-                cursor: product.availableStock === 0 ? 'not-allowed' : 'pointer'
+                opacity: !selectedVariation || selectedVariation.availableStock === 0 ? 0.5 : 1,
+                cursor: !selectedVariation || selectedVariation.availableStock === 0 ? 'not-allowed' : 'pointer'
               }}
-              disabled={product.availableStock === 0}
-              onClick={() => addToCart(product)}
+              disabled={!selectedVariation || selectedVariation.availableStock === 0}
+              onClick={() => addToCart({ ...product, selectedVariation })}
             >
-              {product.availableStock === 0 
-                ? (product.stock > 0 ? 'In Another User\'s Cart' : 'Out of Stock') 
-                : (product.isPreorder ? 'Pre-order Now' : product.type === 'BREAK' ? 'Buy Spot' : 'Add to Cart')}
+              {!selectedVariation 
+                ? 'Select an Option'
+                : selectedVariation.availableStock === 0 
+                  ? 'Out of Stock' 
+                  : 'Add to Cart'}
             </button>
             <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)', margin: '12px 0 0 0' }}>
               Items added to cart are reserved for 15 minutes.

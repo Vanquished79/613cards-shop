@@ -15,22 +15,26 @@ export default async function AccountPage() {
   }
 
   // Get user details
-  let user = await prisma.user.findUnique({
-    where: { email: session.user.email as string },
+  const userQuery = {
     include: {
       orders: {
-        orderBy: { createdAt: 'desc' },
-        include: { items: { include: { product: true } } }
+        orderBy: { createdAt: 'desc' as const },
+        include: { items: { include: { productVariation: { include: { product: true } } } } }
       },
       wishlistItems: {
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: 'desc' as const },
         include: { product: true }
       },
       buyListSubmissions: {
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: 'desc' as const },
         include: { items: true }
       }
     }
+  };
+
+  let user = await prisma.user.findUnique({
+    where: { email: session.user.email as string },
+    ...userQuery
   });
 
   if (!user && session.user.role === 'ADMIN') {
@@ -42,20 +46,7 @@ export default async function AccountPage() {
         passwordHash: 'ENV_ADMIN_FALLBACK',
         role: 'ADMIN',
       },
-      include: {
-        orders: {
-          orderBy: { createdAt: 'desc' },
-          include: { items: { include: { product: true } } }
-        },
-        wishlistItems: {
-          orderBy: { createdAt: 'desc' },
-          include: { product: true }
-        },
-        buyListSubmissions: {
-          orderBy: { createdAt: 'desc' },
-          include: { items: true }
-        }
-      }
+      ...userQuery
     });
   }
 
@@ -84,7 +75,8 @@ export default async function AccountPage() {
 
   return (
     <div style={{ maxWidth: '1000px', margin: '40px auto', padding: '0 20px' }}>
-      <h1 style={{ marginBottom: '32px' }}>My Account</h1>
+      <h1 style={{ marginBottom: '8px' }}>Customer Dashboard</h1>
+      <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Manage your profile, shipping information, and order history.</p>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
         

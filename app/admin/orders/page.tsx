@@ -13,7 +13,11 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
     orderBy: { createdAt: 'desc' },
     include: {
       items: {
-        include: { product: true }
+        include: {
+          productVariation: {
+            include: { product: true }
+          }
+        }
       }
     }
   });
@@ -191,7 +195,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {order.items.map((item: any) => (
                       <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', background: 'rgba(0,0,0,0.2)', padding: '8px 12px', borderRadius: '8px' }}>
-                        <span>{item.quantity}x {item.product.name}</span>
+                        <span>{item.quantity}x {item.productVariation.product.name} ({item.productVariation.condition})</span>
                         <span>${(item.price * item.quantity).toFixed(2)}</span>
                       </div>
                     ))}

@@ -36,7 +36,7 @@ export function CartSlideOut() {
             <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '40px' }}>Your cart is empty.</p>
           ) : (
             items.map(item => (
-              <div key={item.id} style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '12px' }}>
+              <div key={`${item.id}-${item.productVariationId}`} style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '12px' }}>
                 <div style={{ width: '60px', height: '60px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {item.imageUrl ? (
                     <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -46,17 +46,20 @@ export function CartSlideOut() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <h4 style={{ margin: '0 0 4px 0', fontSize: '15px' }}>{item.name}</h4>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                    {item.condition} {item.isGraded ? `(${item.gradingCompany} ${item.grade})` : ''}
+                  </div>
                   <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>${item.price.toFixed(2)}</span>
                   
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
-                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <button onClick={() => updateQuantity(item.productVariationId, item.quantity - 1)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Minus size={14} />
                     </button>
                     <span style={{ fontSize: '14px' }}>{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <button onClick={() => updateQuantity(item.productVariationId, item.quantity + 1)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Plus size={14} />
                     </button>
-                    <button onClick={() => removeFromCart(item.id)} style={{ background: 'none', border: 'none', color: '#ff6b6b', marginLeft: 'auto', cursor: 'pointer', fontSize: '13px' }}>Remove</button>
+                    <button onClick={() => removeFromCart(item.productVariationId)} style={{ background: 'none', border: 'none', color: '#ff6b6b', marginLeft: 'auto', cursor: 'pointer', fontSize: '13px' }}>Remove</button>
                   </div>
                 </div>
               </div>

@@ -137,15 +137,20 @@ export async function POST(request: Request) {
           data: {
             name: productData.name,
             description: productData.description || '',
-            price: productData.price,
-            stock: productData.stock || 0,
             isRookie: productData.isRookie || false,
             isAutograph: productData.isAutograph || false,
             isNumbered: productData.isNumbered || false,
             cardName: productData.cardName || null,
             cardSeries: productData.cardSeries || null,
             imageUrl: productData.imageUrl || null,
-            categoryId: categoryId
+            categoryId: categoryId,
+            variations: {
+              create: {
+                condition: 'NM',
+                price: productData.price,
+                stock: productData.stock || 0,
+              }
+            }
           }
         });
 

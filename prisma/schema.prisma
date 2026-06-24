@@ -22,57 +22,82 @@ model Category {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?
-  price          Float
-  compareAtPrice Float?
-  stock          Int      @default(0)
-  imageUrl    String?
-  additionalImages String[] @default([])
-  condition   String?
-  isFeatured  Boolean  @default(false)
-  categoryId  Int
-  category    Category @relation(fields: [categoryId], references: [id])
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String   @db.Text
+  type           String   @default("CARD")
   
-  type        String   @default("CARD") // CARD, BOX, or SUPPLY
+  // Base details
+  compareAtPrice Float?
+  imageUrl       String?
+  additionalImages String[] @default([])
+  
+  // Categorization
+  categoryId     Int?
+  category       Category? @relation(fields: [categoryId], references: [id])
+  
+  // Card-specific details
+  cardName       String?
+  cardSeries     String?
+  isRookie       Boolean  @default(false)
+  isAutograph    Boolean  @default(false)
+  isNumbered     Boolean  @default(false)
+  serialNumber   String?  // e.g. "10/99"
+  isParallel     Boolean  @default(false)
+  
+  // Other flags
+  isPreorder     Boolean  @default(false)
+  isFeatured     Boolean  @default(false)
 
-  // Card-specific fields
-  cardName    String?
-  cardSeries  String?
-  cardBrand   String?
-  isRookie    Boolean  @default(false)
-  isAutograph Boolean  @default(false)
-  isNumbered  Boolean  @default(false)
-  serialNumber String? // e.g. "245/499"
-  isParallel  Boolean  @default(false)
-
-  // Expansion Phase 1 fields
-  isPreorder  Boolean  @default(false)
-  releaseDate DateTime?
-  isGraded    Boolean  @default(false)
-  gradingCompany String?
-  grade       String?
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  orderItems  OrderItem[]
-  reservations CartReservation[]
-  wishlistItems WishlistItem[]
+  variations     ProductVariation[]
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  wishlistItems  WishlistItem[]
 }
 
-model CartReservation {
-  id        Int      @id @default(autoincrement())
-  sessionId String
-  productId Int
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  quantity  Int
-  expiresAt DateTime
-  createdAt DateTime @default(now())
+model ProductVariation {
+  id             Int      @id @default(autoincrement())
+  productId      Int
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  condition      String   @default("N/A")
+  isGraded       Boolean  @default(false)
+  gradingCompany String?
+  grade          String?
+  
+  price          Float
+  stock          Int      @default(0)
 
-  @@index([sessionId])
-  @@index([productId])
-  @@index([expiresAt])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  cartItems      CartItem[]
+  orderItems     OrderItem[]
+  reservations   StockReservation[]
+}
+
+model CartItem {
+  id                 Int      @id @default(autoincrement())
+  userId             Int
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productVariationId Int
+  productVariation   ProductVariation @relation(fields: [productVariationId], references: [id], onDelete: Cascade)
+  quantity           Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model StockReservation {
+  id                 Int      @id @default(autoincrement())
+  productVariationId Int
+  productVariation   ProductVariation @relation(fields: [productVariationId], references: [id], onDelete: Cascade)
+  quantity           Int
+  expiresAt          DateTime
+  userId             Int?     // If tied to a logged-in user
+  sessionId          String?  // If tied to an anonymous user session
+  createdAt          DateTime @default(now())
 }
 
 model User {
@@ -88,6 +113,7 @@ model User {
   orders       Order[]
   wishlistItems WishlistItem[]
   buyListSubmissions BuyListSubmission[]
+  cartItems    CartItem[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -116,13 +142,13 @@ model Order {
 }
 
 model OrderItem {
-  id        Int      @id @default(autoincrement())
-  orderId   Int
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId Int
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
-  quantity  Int
-  price     Float    // Price at the time of purchase
+  id                 Int      @id @default(autoincrement())
+  orderId            Int
+  order              Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productVariationId Int
+  productVariation   ProductVariation @relation(fields: [productVariationId], references: [id], onDelete: Restrict)
+  quantity           Int
+  price              Float    // Price at the time of purchase
 }
 
 model ContactMessage {
