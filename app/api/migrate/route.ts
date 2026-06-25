@@ -91,47 +91,47 @@ export async function GET() {
         END IF;
       END $$;`,
       
-      // Migrate product fields to variations table
+      // Migrate product fields to variations table (uses EXECUTE to avoid compilation failure if columns are already dropped)
       `DO $$ BEGIN
-        IF NOT EXISTS (SELECT 1 FROM "ProductVariation") THEN
-          INSERT INTO "ProductVariation" ("productId", "condition", "isGraded", "gradingCompany", "grade", "price", "stock", "createdAt", "updatedAt")
-          SELECT id, COALESCE("condition", 'N/A'), "isGraded", "gradingCompany", "grade", "price", "stock", "createdAt", "updatedAt" FROM "Product";
+        IF NOT EXISTS (SELECT 1 FROM "ProductVariation") AND EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Product' AND column_name = 'condition') THEN
+          EXECUTE 'INSERT INTO "ProductVariation" ("productId", "condition", "isGraded", "gradingCompany", "grade", "price", "stock", "createdAt", "updatedAt")
+          SELECT id, COALESCE("condition", ''N/A''), "isGraded", "gradingCompany", "grade", "price", "stock", "createdAt", "updatedAt" FROM "Product"';
         END IF;
       END $$;`,
       
-      // Update CartItem to reference ProductVariation
+      // Update CartItem to reference ProductVariation (uses EXECUTE to avoid compilation failure if productId is already dropped)
       `DO $$ BEGIN
         IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'CartItem' AND column_name = 'productVariationId') THEN
-          ALTER TABLE "CartItem" ADD COLUMN "productVariationId" INTEGER;
-          UPDATE "CartItem" SET "productVariationId" = (SELECT id FROM "ProductVariation" WHERE "productId" = "CartItem"."productId" LIMIT 1);
-          ALTER TABLE "CartItem" ALTER COLUMN "productVariationId" SET NOT NULL;
-          ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_productVariationId_fkey" FOREIGN KEY ("productVariationId") REFERENCES "ProductVariation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-          ALTER TABLE "CartItem" DROP CONSTRAINT IF EXISTS "CartItem_productId_fkey";
-          ALTER TABLE "CartItem" DROP COLUMN "productId";
+          EXECUTE 'ALTER TABLE "CartItem" ADD COLUMN "productVariationId" INTEGER';
+          EXECUTE 'UPDATE "CartItem" SET "productVariationId" = (SELECT id FROM "ProductVariation" WHERE "productId" = "CartItem"."productId" LIMIT 1)';
+          EXECUTE 'ALTER TABLE "CartItem" ALTER COLUMN "productVariationId" SET NOT NULL';
+          EXECUTE 'ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_productVariationId_fkey" FOREIGN KEY ("productVariationId") REFERENCES "ProductVariation"("id") ON DELETE CASCADE ON UPDATE CASCADE';
+          EXECUTE 'ALTER TABLE "CartItem" DROP CONSTRAINT IF EXISTS "CartItem_productId_fkey"';
+          EXECUTE 'ALTER TABLE "CartItem" DROP COLUMN "productId"';
         END IF;
       END $$;`,
       
-      // Update OrderItem to reference ProductVariation
+      // Update OrderItem to reference ProductVariation (uses EXECUTE to avoid compilation failure if productId is already dropped)
       `DO $$ BEGIN
         IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'OrderItem' AND column_name = 'productVariationId') THEN
-          ALTER TABLE "OrderItem" ADD COLUMN "productVariationId" INTEGER;
-          UPDATE "OrderItem" SET "productVariationId" = (SELECT id FROM "ProductVariation" WHERE "productId" = "OrderItem"."productId" LIMIT 1);
-          ALTER TABLE "OrderItem" ALTER COLUMN "productVariationId" SET NOT NULL;
-          ALTER TABLE "OrderItem" ADD CONSTRAINT "OrderItem_productVariationId_fkey" FOREIGN KEY ("productVariationId") REFERENCES "ProductVariation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-          ALTER TABLE "OrderItem" DROP CONSTRAINT IF EXISTS "OrderItem_productId_fkey";
-          ALTER TABLE "OrderItem" DROP COLUMN "productId";
+          EXECUTE 'ALTER TABLE "OrderItem" ADD COLUMN "productVariationId" INTEGER';
+          EXECUTE 'UPDATE "OrderItem" SET "productVariationId" = (SELECT id FROM "ProductVariation" WHERE "productId" = "OrderItem"."productId" LIMIT 1)';
+          EXECUTE 'ALTER TABLE "OrderItem" ALTER COLUMN "productVariationId" SET NOT NULL';
+          EXECUTE 'ALTER TABLE "OrderItem" ADD CONSTRAINT "OrderItem_productVariationId_fkey" FOREIGN KEY ("productVariationId") REFERENCES "ProductVariation"("id") ON DELETE RESTRICT ON UPDATE CASCADE';
+          EXECUTE 'ALTER TABLE "OrderItem" DROP CONSTRAINT IF EXISTS "OrderItem_productId_fkey"';
+          EXECUTE 'ALTER TABLE "OrderItem" DROP COLUMN "productId"';
         END IF;
       END $$;`,
       
-      // Update StockReservation to reference ProductVariation
+      // Update StockReservation to reference ProductVariation (uses EXECUTE to avoid compilation failure if productId is already dropped)
       `DO $$ BEGIN
         IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'StockReservation' AND column_name = 'productVariationId') THEN
-          ALTER TABLE "StockReservation" ADD COLUMN "productVariationId" INTEGER;
-          UPDATE "StockReservation" SET "productVariationId" = (SELECT id FROM "ProductVariation" WHERE "productId" = "StockReservation"."productId" LIMIT 1);
-          ALTER TABLE "StockReservation" ALTER COLUMN "productVariationId" SET NOT NULL;
-          ALTER TABLE "StockReservation" ADD CONSTRAINT "StockReservation_productVariationId_fkey" FOREIGN KEY ("productVariationId") REFERENCES "ProductVariation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-          ALTER TABLE "StockReservation" DROP CONSTRAINT IF EXISTS "StockReservation_productId_fkey";
-          ALTER TABLE "StockReservation" DROP COLUMN "productId";
+          EXECUTE 'ALTER TABLE "StockReservation" ADD COLUMN "productVariationId" INTEGER';
+          EXECUTE 'UPDATE "StockReservation" SET "productVariationId" = (SELECT id FROM "ProductVariation" WHERE "productId" = "StockReservation"."productId" LIMIT 1)';
+          EXECUTE 'ALTER TABLE "StockReservation" ALTER COLUMN "productVariationId" SET NOT NULL';
+          EXECUTE 'ALTER TABLE "StockReservation" ADD CONSTRAINT "StockReservation_productVariationId_fkey" FOREIGN KEY ("productVariationId") REFERENCES "ProductVariation"("id") ON DELETE CASCADE ON UPDATE CASCADE';
+          EXECUTE 'ALTER TABLE "StockReservation" DROP CONSTRAINT IF EXISTS "StockReservation_productId_fkey"';
+          EXECUTE 'ALTER TABLE "StockReservation" DROP COLUMN "productId"';
         END IF;
       END $$;`,
       
