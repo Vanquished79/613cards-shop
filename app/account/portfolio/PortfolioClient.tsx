@@ -15,6 +15,60 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
   const [newItem, setNewItem] = useState({ cardName: '', cardSeries: '', condition: 'NM', purchasePrice: 0, currentValue: 0, imageUrl: '' });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setImageFile(file);
+    
+    if (!file) return;
+
+    setIsAnalyzing(true);
+    try {
+      // 1. Send to AI Vision API
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const aiRes = await fetch('/api/ai-vision', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!aiRes.ok) throw new Error('AI Vision failed');
+      
+      const aiData = await aiRes.json();
+      const extractedName = aiData.data.cardName;
+      const extractedSeries = aiData.data.cardSeries;
+      
+      // Update UI with extracted data instantly
+      setNewItem(prev => ({
+        ...prev,
+        cardName: extractedName,
+        cardSeries: extractedSeries
+      }));
+      
+      toast.success(`AI Extracted: ${extractedName}`);
+
+      // 2. Fetch Comps
+      const compsRes = await fetch(`/api/comps?q=${encodeURIComponent(extractedName)}`);
+      if (compsRes.ok) {
+        const compsData = await compsRes.json();
+        if (compsData.averagePrice) {
+          setNewItem(prev => ({
+            ...prev,
+            currentValue: compsData.averagePrice
+          }));
+          toast.success(`Market Comp found: $${compsData.averagePrice.toFixed(2)}`);
+        }
+      }
+      
+    } catch (err) {
+      console.error(err);
+      toast.error('Could not auto-analyze image, please enter details manually.');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -283,7 +337,21 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
               </div>
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Image Upload (Optional)</label>
-                <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files ? e.target.files[0] : null)} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    disabled={isAnalyzing}
+                    onChange={handleImageSelect} 
+                    style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', opacity: isAnalyzing ? 0.5 : 1 }} 
+                  />
+                  {isAnalyzing && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-color)', fontSize: '13px', fontWeight: 'bold' }}>
+                      <span className="spinner" style={{ width: '16px', height: '16px', border: '2px solid var(--accent-color)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></span>
+                      Analyzing AI Vision & Market Comps...
+                    </div>
+                  )}
+                </div>
               </div>
               <div style={{ display: 'flex', gap: '16px' }}>
                 <div style={{ flex: 1 }}>
