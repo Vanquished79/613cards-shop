@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
     // Convert File to Base64
     const arrayBuffer = await image.arrayBuffer();
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     const imagePart = {
       inlineData: {
         data: base64Image,
-        mimeType: image.type
+        mimeType: image.type || "image/jpeg"
       }
     };
 
