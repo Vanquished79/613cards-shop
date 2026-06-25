@@ -15,28 +15,33 @@ export async function POST(req: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-2.5-flash",
+      generationConfig: {
+        responseMimeType: "application/json",
+        temperature: 0.1, // Low temperature for factual OCR extraction
+      }
+    });
 
     // Convert File to Base64
     const arrayBuffer = await image.arrayBuffer();
     const base64Image = Buffer.from(arrayBuffer).toString('base64');
     
     const prompt = `You are a highly precise trading card expert and OCR system. Examine the image of the trading card very carefully.
-1. Identify the EXACT Player/Character Name or Card Name.
-2. Identify the Set, Series, Year, and Brand (e.g., '1999 Pokemon Base Set', '2023 Panini Prizm').
-3. Estimate the physical condition based strictly on visible wear (e.g., 'NM', 'LP', 'MP', 'HP').
-4. Determine if the card is autographed (look for ink signatures).
+1. Identify the EXACT Player/Character Name or Card Name. If illegible or completely missing, output "Unknown Card".
+2. Identify the Set, Series, Year, and Brand (e.g., '1999 Pokemon Base Set', '2023 Panini Prizm'). If illegible, output "Unknown Series".
+3. Estimate the physical condition based strictly on visible wear (e.g., 'NM', 'LP', 'MP', 'HP'). Default to 'NM' if no major flaws are visible.
+4. Determine if the card is autographed (look for physical ink signatures over the card art).
 5. Determine if the card is a numbered parallel (look for stamped serial numbers like '10/99' or '1/1').
-Do not guess or hallucinate. Use ONLY the text and symbols visibly printed on the card.
-Respond strictly in JSON format matching exactly:
+IMPORTANT: Do not guess, assume, or hallucinate data that is not visibly printed on the card.
+Return a valid JSON object matching this schema exactly:
 {
   "cardName": "Exact Name",
   "cardSeries": "Year Brand Set",
   "condition": "Estimated condition",
   "isAutographed": true or false,
   "serialNumber": "10/99" or null
-}
-Do not wrap the JSON in markdown code blocks, just return the raw JSON object.`;
+}`;
     
     const imagePart = {
       inlineData: {
