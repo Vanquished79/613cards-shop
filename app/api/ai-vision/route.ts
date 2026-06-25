@@ -1,4 +1,9 @@
 import { NextResponse } from 'next/server';
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || '',
+});
 
 export async function POST(req: Request) {
   try {
@@ -9,33 +14,52 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Image is required' }, { status: 400 });
     }
 
-    // Simulate AI Vision processing latency
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json({ error: 'OpenAI API Key is missing' }, { status: 500 });
+    }
 
-    // Mock AI data extraction (In reality, this sends the image to OpenAI GPT-4o Vision)
-    // We'll generate a random high-value card for the demo
-    const mockCards = [
-      { name: "1999 Base Set Charizard Holographic", series: "Pokemon Base Set" },
-      { name: "2002 Blue Eyes White Dragon 1st Edition", series: "Yu-Gi-Oh LOB" },
-      { name: "LeBron James Topps Chrome Rookie", series: "2003 Topps Chrome" },
-      { name: "Michael Jordan Fleer Rookie", series: "1986 Fleer" },
-      { name: "1993 Magic The Gathering Black Lotus", series: "MTG Alpha" }
-    ];
-    
-    const extractedCard = mockCards[Math.floor(Math.random() * mockCards.length)];
+    // Convert File to Base64
+    const arrayBuffer = await image.arrayBuffer();
+    const base64Image = Buffer.from(arrayBuffer).toString('base64');
+    const dataUri = `data:${image.type};base64,${base64Image}`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert trading card appraiser. You extract card details from images. Respond strictly in JSON format matching exactly: { \"cardName\": \"Name of card\", \"cardSeries\": \"Series or Set\", \"condition\": \"Estimated condition\" }."
+        },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: "Identify this trading card." },
+            { type: "image_url", image_url: { url: dataUri } }
+          ]
+        }
+      ]
+    });
+
+    const content = response.choices[0].message.content;
+    const extractedData = content ? JSON.parse(content) : null;
+
+    if (!extractedData || !extractedData.cardName) {
+      return NextResponse.json({ error: 'Failed to extract card details' }, { status: 500 });
+    }
 
     return NextResponse.json({
       success: true,
       data: {
-        cardName: extractedCard.name,
-        cardSeries: extractedCard.series,
-        condition: 'NM',
+        cardName: extractedData.cardName,
+        cardSeries: extractedData.cardSeries || 'Unknown Series',
+        condition: extractedData.condition || 'NM',
         isGraded: false
       }
     });
 
   } catch (error) {
-    console.error(error);
+    console.error('OpenAI Vision Error:', error);
     return NextResponse.json({ error: 'Internal AI Vision error' }, { status: 500 });
   }
 }
