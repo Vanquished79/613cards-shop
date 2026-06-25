@@ -13,25 +13,48 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
   const [isSelling, setIsSelling] = useState<number | null>(null);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [newItem, setNewItem] = useState({ cardName: '', cardSeries: '', condition: 'NM', purchasePrice: 0, currentValue: 0, imageUrl: '' });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newItem.cardName) return toast.error('Card Name is required');
+    setIsSubmitting(true);
     try {
-      const res = await fetch('/api/user/portfolio', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newItem)
-      });
+      let res;
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('cardName', newItem.cardName);
+        formData.append('cardSeries', newItem.cardSeries);
+        formData.append('condition', newItem.condition);
+        formData.append('purchasePrice', newItem.purchasePrice.toString());
+        formData.append('currentValue', newItem.currentValue.toString());
+        formData.append('imageFile', imageFile);
+        
+        res = await fetch('/api/user/portfolio', {
+          method: 'POST',
+          body: formData
+        });
+      } else {
+        res = await fetch('/api/user/portfolio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newItem)
+        });
+      }
+      
       if (res.ok) {
         const data = await res.json();
         setItems([data, ...items]);
         setIsAdding(false);
         setNewItem({ cardName: '', cardSeries: '', condition: 'NM', purchasePrice: 0, currentValue: 0, imageUrl: '' });
+        setImageFile(null);
         toast.success('Card added to portfolio');
       }
     } catch (err) {
       toast.error('Error adding card');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -259,8 +282,8 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                 <input required type="text" value={newItem.cardName} onChange={(e) => setNewItem({...newItem, cardName: e.target.value})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} placeholder="e.g., Charizard Holographic" />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Image URL (Optional)</label>
-                <input type="url" value={newItem.imageUrl} onChange={(e) => setNewItem({...newItem, imageUrl: e.target.value})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} placeholder="https://example.com/image.jpg" />
+                <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Image Upload (Optional)</label>
+                <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files ? e.target.files[0] : null)} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} />
               </div>
               <div style={{ display: 'flex', gap: '16px' }}>
                 <div style={{ flex: 1 }}>

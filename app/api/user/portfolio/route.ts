@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/lib/prisma';
 
+import { uploadProductImage } from '@/lib/supabase';
+
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,8 +18,32 @@ export async function POST(req: Request) {
 
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
-    const body = await req.json();
-    const { cardName, cardSeries, isGraded, gradingCompany, grade, purchasePrice, currentValue, imageUrl, isVaulted, vaultStatus } = body;
+    const contentType = req.headers.get('content-type') || '';
+    
+    let cardName, cardSeries, isGraded, gradingCompany, grade, purchasePrice, currentValue, imageUrl, isVaulted, vaultStatus;
+
+    if (contentType.includes('multipart/form-data')) {
+      const formData = await req.formData();
+      cardName = formData.get('cardName') as string;
+      cardSeries = formData.get('cardSeries') as string;
+      isGraded = formData.get('isGraded') === 'true';
+      gradingCompany = formData.get('gradingCompany') as string;
+      grade = formData.get('grade') as string;
+      purchasePrice = formData.get('purchasePrice') as string;
+      currentValue = formData.get('currentValue') as string;
+      isVaulted = formData.get('isVaulted') === 'true';
+      vaultStatus = formData.get('vaultStatus') as string;
+      
+      const imageFile = formData.get('imageFile') as File;
+      if (imageFile && imageFile.size > 0) {
+        imageUrl = await uploadProductImage(imageFile);
+      } else {
+        imageUrl = formData.get('imageUrl') as string;
+      }
+    } else {
+      const body = await req.json();
+      ({ cardName, cardSeries, isGraded, gradingCompany, grade, purchasePrice, currentValue, imageUrl, isVaulted, vaultStatus } = body);
+    }
 
     if (!cardName) return NextResponse.json({ error: 'Card name is required' }, { status: 400 });
 
@@ -29,8 +55,8 @@ export async function POST(req: Request) {
         isGraded: isGraded || false,
         gradingCompany,
         grade,
-        purchasePrice: purchasePrice ? parseFloat(purchasePrice) : null,
-        currentValue: currentValue ? parseFloat(currentValue) : null,
+        purchasePrice: purchasePrice ? parseFloat(purchasePrice as string) : null,
+        currentValue: currentValue ? parseFloat(currentValue as string) : null,
         imageUrl,
         isVaulted: isVaulted || false,
         vaultStatus
