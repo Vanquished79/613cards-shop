@@ -58,8 +58,8 @@ export async function POST(req: Request) {
       }
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('OpenAI Vision Error:', error);
-    return NextResponse.json({ error: 'Internal AI Vision error' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Internal AI Vision error' }, { status: 500 });
   }
 }
