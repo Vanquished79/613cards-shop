@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Maintenance Mode (Coming Soon) Logic
-  const isMaintenanceMode = false; // process.env.MAINTENANCE_MODE === 'true';
+  const isMaintenanceMode = true;
   const isAdminUser = token?.role === 'ADMIN';
   
   const isExemptRoute = 
@@ -30,6 +30,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/_next') || 
     pathname === '/logo.png' || 
     pathname === '/logo-transparent.png' || 
+    pathname === '/shield-logo-transparent.png' || 
     pathname === '/favicon.ico';
 
   if (isMaintenanceMode && !isAdminUser && !isExemptRoute) {

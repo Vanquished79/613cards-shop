@@ -1,9 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
 import { submitWaitlist } from './actions';
-import logoImg from '../../public/brand-icon.png';
 
 export default function ComingSoon() {
   const [email, setEmail] = useState('');
@@ -38,46 +36,48 @@ export default function ComingSoon() {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'radial-gradient(circle at 50% 0%, #302048, var(--bg-color-end) 80%)',
+      background: 'linear-gradient(135deg, #fff7ed 0%, #fef3c7 30%, #e0f2fe 70%, #f0fdf4 100%)',
       padding: '20px',
-      textAlign: 'center'
+      textAlign: 'center',
+      fontFamily: "'Fredoka', sans-serif"
     }}>
-      <div className="glass-panel" style={{
-        padding: '40px',
+      <div style={{
+        padding: '50px 40px',
         maxWidth: '700px',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '16px'
+        gap: '20px',
+        background: '#ffffff',
+        border: '3px solid #1e293b',
+        borderRadius: '24px',
+        boxShadow: '8px 8px 0px #1e293b'
       }}>
-        {/* Much larger logo per user request, with negative margins to remove built-in image padding */}
-        <div style={{ background: 'transparent', marginTop: '-30px', marginBottom: '-40px', display: 'flex', justifyContent: 'center' }}>
-          <Image 
-            src={logoImg} 
-            alt="613cards.online Logo" 
-            width={400} 
-            height={400} 
-            style={{ objectFit: 'contain', backgroundColor: 'transparent', maxWidth: '100%', height: 'auto' }} 
-            priority 
+        {/* Shield Logo */}
+        <div style={{ marginBottom: '10px' }}>
+          <img
+            src="/shield-logo-transparent.png"
+            alt="613cards Logo"
+            style={{ width: '220px', height: 'auto', objectFit: 'contain' }}
           />
         </div>
         
-        <h1 style={{ fontSize: '42px', margin: 0, fontWeight: 800 }}>
-          <span style={{ color: 'var(--text-main)' }}>Coming</span> <span style={{ color: 'var(--accent-color)' }}>Soon</span>
+        <h1 style={{ fontSize: '52px', margin: 0, fontWeight: 800, color: '#0f172a' }}>
+          Coming <span style={{ color: '#c2410c' }}>Soon!</span>
         </h1>
         
-        <p style={{ fontSize: '18px', color: 'var(--text-muted)', lineHeight: '1.6', margin: 0 }}>
-          The premier destination for trading cards and supplies is almost ready. We are working hard to build the ultimate collection for you.
+        <p style={{ fontSize: '18px', color: '#475569', lineHeight: '1.6', margin: 0, maxWidth: '500px' }}>
+          The premier destination for trading cards and supplies is almost ready. We&apos;re working hard to build the ultimate collection for you!
         </p>
 
-        <div style={{ marginTop: '32px', width: '100%', height: '1px', background: 'var(--glass-border)' }} />
+        <div style={{ marginTop: '10px', width: '80%', height: '3px', background: '#1e293b', borderRadius: '2px' }} />
         
-        <p style={{ fontSize: '16px', color: 'white', margin: 0, fontWeight: 'bold' }}>
-          Be the first to know when we launch!
+        <p style={{ fontSize: '16px', color: '#0f172a', margin: 0, fontWeight: 700 }}>
+          Be the first to know when we launch! 🚀
         </p>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', width: '100%', maxWidth: '400px', gap: '12px', marginTop: '12px', flexDirection: 'column' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', width: '100%', maxWidth: '420px', gap: '12px', marginTop: '8px', flexDirection: 'column' }}>
           <div style={{ display: 'flex', gap: '8px' }}>
             <input
               type="email"
@@ -88,33 +88,55 @@ export default function ComingSoon() {
               disabled={status === 'loading' || status === 'success'}
               style={{
                 flex: 1,
-                padding: '12px 16px',
-                borderRadius: '8px',
-                border: '1px solid var(--glass-border)',
-                background: 'rgba(0,0,0,0.2)',
-                color: 'white',
-                outline: 'none'
+                padding: '14px 18px',
+                borderRadius: '12px',
+                border: '3px solid #1e293b',
+                background: '#ffffff',
+                color: '#0f172a',
+                outline: 'none',
+                fontSize: '15px',
+                fontFamily: "'Fredoka', sans-serif",
+                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)'
               }}
             />
             <button 
               type="submit" 
-              className="btn-primary" 
               disabled={status === 'loading' || status === 'success'}
-              style={{ padding: '12px 24px', borderRadius: '8px' }}
+              style={{
+                padding: '14px 24px',
+                borderRadius: '12px',
+                border: '3px solid #1e293b',
+                background: '#ffb703',
+                color: '#0f172a',
+                fontWeight: 800,
+                fontSize: '15px',
+                cursor: 'pointer',
+                boxShadow: '4px 4px 0px #1e293b',
+                fontFamily: "'Fredoka', sans-serif",
+                transition: 'transform 0.1s, box-shadow 0.1s'
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.transform = 'translate(2px, 2px)';
+                e.currentTarget.style.boxShadow = '2px 2px 0px #1e293b';
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.transform = 'translate(0, 0)';
+                e.currentTarget.style.boxShadow = '4px 4px 0px #1e293b';
+              }}
             >
               {status === 'loading' ? 'Saving...' : 'Notify Me'}
             </button>
           </div>
           
           {status === 'success' && (
-            <div style={{ color: '#4ade80', fontSize: '14px', marginTop: '8px' }}>
-              Thanks! You've been added to the waitlist.
+            <div style={{ color: '#15803d', fontSize: '14px', marginTop: '8px', fontWeight: 600 }}>
+              ✅ Thanks! You&apos;ve been added to the waitlist.
             </div>
           )}
           
           {status === 'error' && (
-            <div style={{ color: '#ff8080', fontSize: '14px', marginTop: '8px' }}>
-              {errorMessage}
+            <div style={{ color: '#b91c1c', fontSize: '14px', marginTop: '8px', fontWeight: 600 }}>
+              ❌ {errorMessage}
             </div>
           )}
         </form>
