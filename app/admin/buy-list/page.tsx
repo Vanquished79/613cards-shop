@@ -21,11 +21,15 @@ export default async function AdminBuyListPage() {
     }
   });
 
+  const wantedItems = await prisma.buyListWantedItem.findMany({
+    orderBy: { createdAt: 'desc' }
+  });
+
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px' }}>
-      <h1 style={{ marginBottom: '24px' }}>Buy-List Submissions</h1>
+      <h1 style={{ marginBottom: '24px' }}>Buy-List Management</h1>
       
-      <AdminBuyListClient initialSubmissions={submissions} />
+      <AdminBuyListClient initialSubmissions={submissions} initialWantedItems={wantedItems} />
     </div>
   );
 }

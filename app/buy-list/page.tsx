@@ -21,14 +21,19 @@ export default async function BuyListPage() {
     redirect('/');
   }
 
+  const wantedItems = await prisma.buyListWantedItem.findMany({
+    where: { isActive: true },
+    orderBy: { createdAt: 'desc' }
+  });
+
   return (
     <div style={{ maxWidth: '1000px', margin: '40px auto', padding: '0 20px' }}>
       <h1 style={{ marginBottom: '16px' }}>Sell Us Your Cards</h1>
       <p style={{ color: 'var(--text-muted)', marginBottom: '32px', fontSize: '18px', lineHeight: '1.6' }}>
-        Looking to turn your collection into cash or store credit? Submit a buy-list below and our team will review it and get back to you with an offer!
+        Looking to turn your collection into cash or store credit? Browse the list of cards we are looking for or submit a sell list below!
       </p>
 
-      <BuyListClient />
+      <BuyListClient initialWantedItems={wantedItems} />
     </div>
   );
 }

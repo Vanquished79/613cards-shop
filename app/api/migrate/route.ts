@@ -165,6 +165,29 @@ export async function GET() {
 
     console.log("Migration 4.1 successful.");
 
+    console.log("Starting Wanted Catalog Migration: Creating BuyListWantedItem table...");
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "BuyListWantedItem" (
+        "id" SERIAL NOT NULL,
+        "name" TEXT NOT NULL,
+        "series" TEXT,
+        "imageUrl" TEXT,
+        "price" DOUBLE PRECISION,
+        "isRC" BOOLEAN NOT NULL DEFAULT false,
+        "isGraded" BOOLEAN NOT NULL DEFAULT false,
+        "gradingCompany" TEXT,
+        "grade" TEXT,
+        "isNumbered" BOOLEAN NOT NULL DEFAULT false,
+        "numberedTo" TEXT,
+        "parallel" TEXT,
+        "isActive" BOOLEAN NOT NULL DEFAULT true,
+        "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "BuyListWantedItem_pkey" PRIMARY KEY ("id")
+      );
+    `);
+    console.log("Wanted Catalog Migration successful.");
+
     return NextResponse.json({ success: true, message: 'Migrations completed successfully' });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message });

@@ -228,3 +228,21 @@ model BuyListItem {
   status         String            @default("PENDING") // PENDING, ACCEPTED, REJECTED
   imageUrl       String?           // Image uploaded by user
 }
+
+model BuyListWantedItem {
+  id             Int      @id @default(autoincrement())
+  name           String
+  series         String?
+  imageUrl       String?
+  price          Float?
+  isRC           Boolean  @default(false)
+  isGraded       Boolean  @default(false)
+  gradingCompany String?
+  grade          String?
+  isNumbered     Boolean  @default(false)
+  numberedTo     String?
+  parallel       String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
