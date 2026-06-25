@@ -180,9 +180,10 @@ model WaitlistSubscriber {
 }
 
 model StoreSettings {
-  id           Int      @id @default(1)
-  taxEnabled   Boolean  @default(false)
-  updatedAt    DateTime @updatedAt
+  id             Int      @id @default(1)
+  taxEnabled     Boolean  @default(false)
+  buyListEnabled Boolean  @default(true)
+  updatedAt      DateTime @updatedAt
 }
 
 model WishlistItem {

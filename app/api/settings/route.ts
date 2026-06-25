@@ -3,29 +3,41 @@ import prisma from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
-    const { taxEnabled } = await request.json();
+    const { taxEnabled, buyListEnabled } = await request.json();
     
-    // Create or update
-    const settings = await prisma.$executeRawUnsafe(`
-      INSERT INTO "StoreSettings" ("id", "taxEnabled", "updatedAt")
-      VALUES (1, $1, CURRENT_TIMESTAMP)
-      ON CONFLICT ("id") DO UPDATE SET "taxEnabled" = $1, "updatedAt" = CURRENT_TIMESTAMP;
-    `, taxEnabled);
+    const updateData: any = {};
+    if (taxEnabled !== undefined) updateData.taxEnabled = taxEnabled;
+    if (buyListEnabled !== undefined) updateData.buyListEnabled = buyListEnabled;
+
+    await prisma.storeSettings.upsert({
+      where: { id: 1 },
+      update: updateData,
+      create: {
+        id: 1,
+        taxEnabled: taxEnabled !== undefined ? taxEnabled : false,
+        buyListEnabled: buyListEnabled !== undefined ? buyListEnabled : true
+      }
+    });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Failed to update settings:', error);
     return NextResponse.json({ error: 'Failed to update settings' }, { status: 500 });
   }
 }
 
 export async function GET() {
   try {
-    const settings: any = await prisma.$queryRawUnsafe(`SELECT "taxEnabled" FROM "StoreSettings" WHERE id = 1 LIMIT 1`);
-    if (settings && settings.length > 0) {
-      return NextResponse.json({ taxEnabled: settings[0].taxEnabled });
-    }
-    return NextResponse.json({ taxEnabled: false });
-  } catch (error) {
+    const settings = await prisma.storeSettings.findUnique({
+      where: { id: 1 }
+    });
+
+    return NextResponse.json({
+      taxEnabled: settings?.taxEnabled ?? false,
+      buyListEnabled: settings?.buyListEnabled ?? true
+    });
+  } catch (error: any) {
+    console.error('Failed to get settings:', error);
     return NextResponse.json({ error: 'Failed to get settings' }, { status: 500 });
   }
 }

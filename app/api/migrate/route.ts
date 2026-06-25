@@ -166,7 +166,10 @@ export async function GET() {
       );`,
       
       // BuyListItem multiple images addition
-      `ALTER TABLE "BuyListItem" ADD COLUMN IF NOT EXISTS "imageUrls" TEXT[] DEFAULT ARRAY[]::TEXT[];`
+      `ALTER TABLE "BuyListItem" ADD COLUMN IF NOT EXISTS "imageUrls" TEXT[] DEFAULT ARRAY[]::TEXT[];`,
+      
+      // StoreSettings buyListEnabled addition
+      `ALTER TABLE "StoreSettings" ADD COLUMN IF NOT EXISTS "buyListEnabled" BOOLEAN NOT NULL DEFAULT true;`
     ];
 
     console.log("Executing migration queries...");

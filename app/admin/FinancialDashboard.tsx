@@ -16,15 +16,20 @@ type Order = {
   zip?: string;
 };
 
+import { toast } from 'react-hot-toast';
+
 export default function FinancialDashboard({ initialOrders }: { initialOrders: Order[] }) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
   const [taxEnabled, setTaxEnabled] = useState(false);
   const [isUpdatingTax, setIsUpdatingTax] = useState(false);
+  const [buyListEnabled, setBuyListEnabled] = useState(true);
+  const [isUpdatingBuyList, setIsUpdatingBuyList] = useState(false);
 
   useEffect(() => {
     fetch('/api/settings').then(r => r.json()).then(data => {
       if (data.taxEnabled !== undefined) setTaxEnabled(data.taxEnabled);
+      if (data.buyListEnabled !== undefined) setBuyListEnabled(data.buyListEnabled);
     }).catch(e => console.error(e));
   }, []);
 
@@ -38,10 +43,30 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
         body: JSON.stringify({ taxEnabled: newValue })
       });
       setTaxEnabled(newValue);
+      toast.success(newValue ? 'Taxes enabled' : 'Taxes disabled');
     } catch (e) {
       console.error(e);
+      toast.error('Failed to update tax setting');
     }
     setIsUpdatingTax(false);
+  };
+
+  const toggleBuyList = async () => {
+    setIsUpdatingBuyList(true);
+    const newValue = !buyListEnabled;
+    try {
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ buyListEnabled: newValue })
+      });
+      setBuyListEnabled(newValue);
+      toast.success(newValue ? 'Buy-list enabled' : 'Buy-list disabled');
+    } catch (e) {
+      console.error(e);
+      toast.error('Failed to update buy-list setting');
+    }
+    setIsUpdatingBuyList(false);
   };
 
   // Compute metrics
@@ -173,7 +198,25 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px', gap: '16px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ color: 'var(--text-muted)' }}>Accept Buy-List:</span>
+          <button 
+            onClick={toggleBuyList}
+            disabled={isUpdatingBuyList}
+            style={{ 
+              width: '44px', height: '24px', borderRadius: '12px', border: 'none', cursor: 'pointer', position: 'relative',
+              background: buyListEnabled ? '#4ade80' : 'rgba(255,255,255,0.2)',
+              transition: 'background 0.3s'
+            }}
+          >
+            <div style={{
+              width: '20px', height: '20px', borderRadius: '50%', background: 'white', position: 'absolute', top: '2px',
+              left: buyListEnabled ? '22px' : '2px', transition: 'left 0.3s', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }} />
+          </button>
+        </div>
+
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{ color: 'var(--text-muted)' }}>Charge Taxes:</span>
           <button 
