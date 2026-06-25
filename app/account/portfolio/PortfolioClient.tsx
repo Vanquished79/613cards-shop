@@ -185,16 +185,16 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginBottom: '40px' }}>
         <div className="glass-panel" style={{ padding: '24px', textAlign: 'center', background: 'linear-gradient(145deg, rgba(30,30,40,0.4) 0%, rgba(20,20,30,0.6) 100%)' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Value</div>
-          <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${totalValue.toFixed(2)}</div>
+          <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
         </div>
         <div className="glass-panel" style={{ padding: '24px', textAlign: 'center' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Cost</div>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>${totalCost.toFixed(2)}</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>${totalCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
         </div>
         <div className="glass-panel" style={{ padding: '24px', textAlign: 'center' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Net Return</div>
           <div style={{ fontSize: '24px', fontWeight: 'bold', color: netProfit >= 0 ? '#22c55e' : '#ef4444' }}>
-            {netProfit >= 0 ? '+' : '-'}${Math.abs(netProfit).toFixed(2)} <span style={{ fontSize: '16px', opacity: 0.8 }}>({roi}%)</span>
+            {netProfit >= 0 ? '+' : '-'}${Math.abs(netProfit).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span style={{ fontSize: '16px', opacity: 0.8 }}>({roi}%)</span>
           </div>
         </div>
       </div>
@@ -264,11 +264,11 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                   <div style={{ marginTop: 'auto', paddingTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                     <div>
                       <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Cost</div>
-                      <div style={{ fontSize: '14px' }}>${item.purchasePrice?.toFixed(2) || '0.00'}</div>
+                      <div style={{ fontSize: '14px' }}>${item.purchasePrice ? item.purchasePrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '0.00'}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
                       <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Est. Value</div>
-                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${item.currentValue?.toFixed(2) || '0.00'}</div>
+                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${item.currentValue ? item.currentValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '0.00'}</div>
                     </div>
                   </div>
                 </div>
