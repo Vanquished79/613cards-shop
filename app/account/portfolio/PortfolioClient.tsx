@@ -133,7 +133,8 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                     <img 
                       src={item.imageUrl} 
                       alt={item.cardName} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer' }} 
+                      title="Click to expand"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'zoom-in' }} 
                       onClick={() => setExpandedImage(item.imageUrl)}
                     />
                   ) : (
