@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/ModalProvider';
 import { toast } from 'react-hot-toast';
 
-export default function PortfolioClient({ initialItems }: { initialItems: any[] }) {
+export default function PortfolioClient({ initialItems, buyListEnabled = true }: { initialItems: any[], buyListEnabled?: boolean }) {
   const router = useRouter();
   const { confirm, prompt } = useModal();
   const [items, setItems] = useState(initialItems);
   const [isAdding, setIsAdding] = useState(false);
   const [isSelling, setIsSelling] = useState<number | null>(null);
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
   // Calculate totals
   const totalValue = items.reduce((sum, item) => sum + (item.currentValue || 0), 0);
@@ -69,6 +70,14 @@ export default function PortfolioClient({ initialItems }: { initialItems: any[] 
 
   return (
     <div>
+      {expandedImage && (
+        <div 
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+          onClick={() => setExpandedImage(null)}
+        >
+          <img src={expandedImage} alt="Expanded" style={{ maxHeight: '90vh', maxWidth: '90vw', objectFit: 'contain', borderRadius: '12px' }} />
+        </div>
+      )}
       {/* Portfolio Stats Header */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginBottom: '40px' }}>
         <div className="glass-panel" style={{ padding: '24px', textAlign: 'center', background: 'linear-gradient(145deg, rgba(30,30,40,0.4) 0%, rgba(20,20,30,0.6) 100%)' }}>
@@ -129,7 +138,12 @@ export default function PortfolioClient({ initialItems }: { initialItems: any[] 
               <div style={{ display: 'flex', gap: '16px' }}>
                 <div style={{ width: '80px', height: '112px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', overflow: 'hidden', flexShrink: 0, border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {item.imageUrl ? (
-                    <img src={item.imageUrl} alt={item.cardName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.cardName} 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer' }} 
+                      onClick={() => setExpandedImage(item.imageUrl)}
+                    />
                   ) : (
                     <span style={{ fontSize: '24px' }}>🃏</span>
                   )}
@@ -160,16 +174,18 @@ export default function PortfolioClient({ initialItems }: { initialItems: any[] 
               </div>
 
               <div style={{ display: 'flex', gap: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
-                <button 
-                  onClick={() => handleSellToStore(item)}
-                  disabled={isSelling === item.id}
-                  style={{ flex: 1, padding: '8px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}
-                >
-                  {isSelling === item.id ? 'Submitting...' : 'Sell to Store'}
-                </button>
+                {buyListEnabled && (
+                  <button 
+                    onClick={() => handleSellToStore(item)}
+                    disabled={isSelling === item.id}
+                    style={{ flex: 1, padding: '8px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}
+                  >
+                    {isSelling === item.id ? 'Submitting...' : 'Sell to Store'}
+                  </button>
+                )}
                 <button 
                   onClick={() => handleDelete(item.id)}
-                  style={{ padding: '8px 12px', background: 'transparent', color: '#ef4444', border: '1px solid #ef4444', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}
+                  style={{ padding: '8px 12px', flex: buyListEnabled ? 'none' : 1, background: 'transparent', color: '#ef4444', border: '1px solid #ef4444', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}
                   title="Remove from Portfolio"
                 >
                   Delete

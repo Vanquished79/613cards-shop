@@ -26,6 +26,8 @@ export default async function PortfolioPage() {
     return <div>User not found.</div>;
   }
 
+  const settings = await prisma.storeSettings.findFirst() || { buyListEnabled: true };
+
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
@@ -38,7 +40,7 @@ export default async function PortfolioPage() {
         </div>
       </div>
 
-      <PortfolioClient initialItems={user.portfolioItems} />
+      <PortfolioClient initialItems={user.portfolioItems} buyListEnabled={settings.buyListEnabled} />
     </div>
   );
 }
