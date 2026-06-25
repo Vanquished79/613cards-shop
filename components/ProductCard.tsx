@@ -80,7 +80,7 @@ export function ProductCard({ product }: { product: any }) {
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
         <Link href={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', transition: 'color 0.2s' }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-color)'}
+              onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-accent)'}
               onMouseOut={(e) => e.currentTarget.style.color = 'inherit'}>
             {product.name}
           </h3>
@@ -91,22 +91,22 @@ export function ProductCard({ product }: { product: any }) {
             <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{product.category?.name || 'Uncategorized'}</span>
             {product.cardSeries && <span style={{ fontSize: '13px', color: 'var(--text-muted)', opacity: 0.8 }}>{product.cardSeries}</span>}
           </div>
-          <span style={{ fontSize: '14px', color: availableStock > 0 ? '#4ade80' : '#ff8080', fontWeight: 'bold' }}>
+          <span style={{ fontSize: '14px', color: availableStock > 0 ? 'var(--text-success)' : 'var(--text-error)', fontWeight: 'bold' }}>
             {availableStock > 0 ? `${availableStock} in stock` : 'Out of Stock'}
           </span>
         </div>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '12px' }}>
           {product.type === 'BREAK' && (
-            <span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', padding: '2px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', fontWeight: 'bold' }}>
+            <span style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#b91c1c', padding: '2px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', fontWeight: 'bold' }}>
               BREAK SPOT
             </span>
           )}
 
           {product.type === 'CARD' && (
             <>
-              {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>RC</span>}
-              {product.isAutograph && <span style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(168, 85, 247, 0.3)', fontWeight: 'bold' }}>Auto</span>}
+              {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#1d4ed8', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>RC</span>}
+              {product.isAutograph && <span style={{ background: 'rgba(168, 85, 247, 0.1)', color: '#7e22ce', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(168, 85, 247, 0.3)', fontWeight: 'bold' }}>Auto</span>}
               {product.isNumbered && (() => {
                 const colors = getNumberedColor(product.serialNumber);
                 return (
@@ -115,7 +115,7 @@ export function ProductCard({ product }: { product: any }) {
                   </span>
                 );
               })()}
-              {product.isParallel && <span style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#f472b6', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 'bold' }}>Parallel</span>}
+              {product.isParallel && <span style={{ background: 'rgba(236, 72, 153, 0.1)', color: '#be185d', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 'bold' }}>Parallel</span>}
             </>
           )}
         </div>
@@ -128,7 +128,7 @@ export function ProductCard({ product }: { product: any }) {
                 {formatPrice(product.compareAtPrice)}
               </span>
             )}
-            <span style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '20px' }}>{priceDisplay}</span>
+            <span style={{ color: 'var(--text-accent)', fontWeight: 'bold', fontSize: '20px' }}>{priceDisplay}</span>
           </div>
           <Link 
             href={`/product/${product.id}`}

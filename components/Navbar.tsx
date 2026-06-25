@@ -67,7 +67,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
               onFocus={(e) => { e.target.style.boxShadow = 'var(--glass-glow)'; }}
               onBlur={(e) => { e.target.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.05)'; }}
             />
-            <Search size={20} style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent-color)' }} />
+            <Search size={20} style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-accent)' }} />
             <button type="submit" style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'var(--accent-color)', color: '#1a1025', border: 'none', borderRadius: '20px', padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>
               Search
             </button>
@@ -162,16 +162,16 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
 
           {session ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-              <Link href="/buy-list" style={{ color: 'var(--accent-color)', textDecoration: 'none', fontWeight: 800, fontSize: '14px', transition: 'color 0.2s' }}>
+              <Link href="/buy-list" style={{ color: 'var(--text-accent)', textDecoration: 'none', fontWeight: 800, fontSize: '14px', transition: 'color 0.2s' }}>
                 Buy-List
               </Link>
               <Link href="/account" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 800, fontSize: '14px', transition: 'color 0.2s' }}
-                    onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-color)'}
+                    onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-accent)'}
                     onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-main)'}>
                 Account
               </Link>
               <button onClick={() => signOut({ callbackUrl: '/' })} style={{ background: 'none', border: 'none', color: 'var(--text-main)', cursor: 'pointer', fontSize: '14px', fontWeight: 800, transition: 'color 0.2s' }}
-                      onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-color)'}
+                      onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-accent)'}
                       onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-main)'}>
                 Logout
               </button>
@@ -207,13 +207,13 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
         
         {/* Left Links */}
         <Link href="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-color)'}
+              onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-accent)'}
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-main)'}>
           Home
         </Link>
-        <Link href="/buy-list" style={{ color: 'var(--accent-color)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
+        <Link href="/buy-list" style={{ color: 'var(--text-accent)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
               onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-main)'}
-              onMouseOut={(e) => e.currentTarget.style.color = 'var(--accent-color)'}>
+              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-accent)'}>
           Sell to Us
         </Link>
         {session?.user?.role === 'ADMIN' && (
