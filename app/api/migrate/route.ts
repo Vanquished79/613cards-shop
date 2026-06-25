@@ -163,7 +163,10 @@ export async function GET() {
         "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT "BuyListWantedItem_pkey" PRIMARY KEY ("id")
-      );`
+      );`,
+      
+      // BuyListItem multiple images addition
+      `ALTER TABLE "BuyListItem" ADD COLUMN IF NOT EXISTS "imageUrls" TEXT[] DEFAULT ARRAY[]::TEXT[];`
     ];
 
     console.log("Executing migration queries...");

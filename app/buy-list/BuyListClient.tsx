@@ -18,7 +18,7 @@ export default function BuyListClient({
   
   // Submit Form Items state
   const [items, setItems] = useState([
-    { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFile: null as File | null }
+    { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFiles: [] as File[] }
   ]);
 
   // Wanted Catalog state
@@ -26,7 +26,7 @@ export default function BuyListClient({
   const [attributeFilter, setAttributeFilter] = useState<'all' | 'rc' | 'graded' | 'numbered'>('all');
 
   const addItem = () => {
-    setItems([...items, { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFile: null }]);
+    setItems([...items, { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFiles: [] }]);
   };
 
   const removeItem = (id: number) => {
@@ -51,7 +51,7 @@ export default function BuyListClient({
       grade: wantedCard.grade || '',
       quantity: 1,
       expectedPrice: wantedCard.price ? wantedCard.price.toString() : '',
-      imageFile: null as File | null
+      imageFiles: [] as File[]
     };
 
     // If there is only one item and it's completely blank, replace it
@@ -73,12 +73,14 @@ export default function BuyListClient({
       const formData = new FormData();
       formData.append('notes', notes);
       
-      const cleanItems = items.map(item => ({ ...item, imageFile: undefined }));
+      const cleanItems = items.map(item => ({ ...item, imageFiles: undefined }));
       formData.append('items', JSON.stringify(cleanItems));
 
-      items.forEach((item, index) => {
-        if (item.imageFile) {
-          formData.append(`image_${index}`, item.imageFile);
+      items.forEach((item, itemIndex) => {
+        if (item.imageFiles && item.imageFiles.length > 0) {
+          item.imageFiles.forEach((file, imgIndex) => {
+            formData.append(`images_${itemIndex}_${imgIndex}`, file);
+          });
         }
       });
 
@@ -411,7 +413,7 @@ export default function BuyListClient({
                   </div>
                 )}
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                   <div>
                     <label style={labelStyle}>Quantity</label>
                     <input type="number" min="1" required style={inputStyle} value={item.quantity} onChange={e => updateItem(item.id, 'quantity', parseInt(e.target.value))} />
@@ -420,13 +422,73 @@ export default function BuyListClient({
                     <label style={labelStyle}>Expected Price (Optional)</label>
                     <input type="number" step="0.01" style={inputStyle} value={item.expectedPrice} onChange={e => updateItem(item.id, 'expectedPrice', e.target.value)} placeholder="What are you looking to get?" />
                   </div>
-                  <div>
-                    <label style={labelStyle}>Card Image (Optional)</label>
-                    <input type="file" accept="image/*" style={{...inputStyle, padding: '7px 10px'}} onChange={e => {
-                      if (e.target.files && e.target.files.length > 0) {
-                        updateItem(item.id, 'imageFile', e.target.files[0]);
-                      }
-                    }} />
+                </div>
+
+                <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px' }}>
+                  <label style={{ ...labelStyle, fontSize: '14px', fontWeight: 'bold', color: 'white', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    📸 Card Photos (Multiple Photos Requested)
+                  </label>
+                  
+                  <p style={{ color: 'var(--text-muted)', fontSize: '12px', margin: '4px 0 12px 0', lineHeight: '1.4' }}>
+                    <strong>Please upload multiple clear photos of your card.</strong> To help us value it accurately, please take close-up photos of **each of the card's 4 corners (front and back)**, as well as full-card front and back views.
+                  </p>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {/* Image Previews */}
+                    {item.imageFiles && item.imageFiles.length > 0 && (
+                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        {item.imageFiles.map((file, imgIdx) => {
+                          const url = URL.createObjectURL(file);
+                          return (
+                            <div key={imgIdx} style={{ position: 'relative', width: '80px', height: '110px', borderRadius: '6px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.2)' }}>
+                              <img src={url} alt={`Preview ${imgIdx}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              <button 
+                                type="button"
+                                onClick={() => {
+                                  const updatedFiles = item.imageFiles.filter((_, idx) => idx !== imgIdx);
+                                  updateItem(item.id, 'imageFiles', updatedFiles);
+                                }}
+                                style={{
+                                  position: 'absolute',
+                                  top: '2px',
+                                  right: '2px',
+                                  background: 'rgba(0,0,0,0.7)',
+                                  color: '#ff3366',
+                                  border: 'none',
+                                  borderRadius: '50%',
+                                  width: '18px',
+                                  height: '18px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  fontSize: '11px',
+                                  cursor: 'pointer',
+                                  fontWeight: 'bold'
+                                }}
+                              >
+                                &times;
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {/* File input */}
+                    <div style={{ position: 'relative' }}>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        multiple 
+                        style={{ ...inputStyle, padding: '8px 12px' }} 
+                        onChange={e => {
+                          if (e.target.files && e.target.files.length > 0) {
+                            const newFiles = Array.from(e.target.files);
+                            updateItem(item.id, 'imageFiles', [...(item.imageFiles || []), ...newFiles]);
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
 

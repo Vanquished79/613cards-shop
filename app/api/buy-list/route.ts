@@ -30,15 +30,35 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Items are required' }, { status: 400 });
     }
 
-    // Process image uploads
+    // Process multiple image uploads per item
     for (let i = 0; i < items.length; i++) {
-      const file = formData.get(`image_${i}`) as File;
-      if (file && file.size > 0) {
-        const uploadedUrl = await uploadProductImage(file);
+      const imageUrls: string[] = [];
+      
+      // Look for multiple images sent as images_i_j
+      let j = 0;
+      while (true) {
+        const file = formData.get(`images_${i}_${j}`) as File;
+        if (!file) break;
+        if (file.size > 0) {
+          const uploadedUrl = await uploadProductImage(file);
+          if (uploadedUrl) {
+            imageUrls.push(uploadedUrl);
+          }
+        }
+        j++;
+      }
+
+      // Backward compatibility check for single image_i
+      const singleFile = formData.get(`image_${i}`) as File;
+      if (singleFile && singleFile.size > 0 && imageUrls.length === 0) {
+        const uploadedUrl = await uploadProductImage(singleFile);
         if (uploadedUrl) {
-          items[i].imageUrl = uploadedUrl;
+          imageUrls.push(uploadedUrl);
         }
       }
+
+      items[i].imageUrls = imageUrls;
+      items[i].imageUrl = imageUrls[0] || null; // Primary image
     }
 
     const submission = await prisma.buyListSubmission.create({
@@ -56,6 +76,7 @@ export async function POST(req: Request) {
             quantity: item.quantity || 1,
             expectedPrice: item.expectedPrice ? parseFloat(item.expectedPrice) : null,
             imageUrl: item.imageUrl || null,
+            imageUrls: item.imageUrls || [],
           }))
         }
       }

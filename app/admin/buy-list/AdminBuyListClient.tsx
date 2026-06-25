@@ -389,11 +389,19 @@ export default function AdminBuyListClient({
                       <tr key={item.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                         <td style={{ padding: '12px 4px', fontWeight: 'bold' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            {item.imageUrl && (
+                            {item.imageUrls && item.imageUrls.length > 0 ? (
+                              <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                                {item.imageUrls.map((url: string, idx: number) => (
+                                  <a key={idx} href={url} target="_blank" rel="noreferrer" title={`Click to view full image ${idx + 1}`}>
+                                    <img src={url} alt={`${item.cardName} ${idx + 1}`} style={{ width: '40px', height: '56px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+                                  </a>
+                                ))}
+                              </div>
+                            ) : item.imageUrl ? (
                               <a href={item.imageUrl} target="_blank" rel="noreferrer">
                                 <img src={item.imageUrl} alt={item.cardName} style={{ width: '40px', height: '56px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
                               </a>
-                            )}
+                            ) : null}
                             <span>{item.cardName}</span>
                           </div>
                         </td>

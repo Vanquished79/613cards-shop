@@ -227,6 +227,7 @@ model BuyListItem {
   offeredPrice   Float?            // What the admin offers
   status         String            @default("PENDING") // PENDING, ACCEPTED, REJECTED
   imageUrl       String?           // Image uploaded by user
+  imageUrls      String[]
 }
 
 model BuyListWantedItem {
