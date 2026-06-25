@@ -12,6 +12,7 @@ export default function BuyListClient({
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'wanted' | 'submit'>('wanted');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [notes, setNotes] = useState('');
   
@@ -267,7 +268,13 @@ export default function BuyListClient({
                     {/* Card Image */}
                     <div style={{ width: '84px', height: '118px', flexShrink: 0, background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                       {item.imageUrl ? (
-                        <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img 
+                          src={item.imageUrl} 
+                          alt={item.name} 
+                          title="Click to expand"
+                          onClick={() => setExpandedImage(item.imageUrl)}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'zoom-in' }} 
+                        />
                       ) : (
                         <span style={{ fontSize: '28px', color: 'var(--text-muted)' }}>🃏</span>
                       )}
@@ -450,6 +457,57 @@ export default function BuyListClient({
           </div>
 
         </form>
+      )}
+
+      {/* Expanded Image Modal Overlay */}
+      {expandedImage && (
+        <div 
+          onClick={() => setExpandedImage(null)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.85)',
+            backdropFilter: 'blur(10px)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1001,
+            cursor: 'zoom-out'
+          }}
+        >
+          <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={(e) => e.stopPropagation()}>
+            <img 
+              src={expandedImage} 
+              alt="Card Preview" 
+              style={{ 
+                maxWidth: '100%', 
+                maxHeight: '85vh', 
+                objectFit: 'contain', 
+                borderRadius: '12px',
+                border: '1px solid rgba(255,255,255,0.2)',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.8)'
+              }} 
+            />
+            <button 
+              onClick={() => setExpandedImage(null)}
+              style={{
+                position: 'absolute',
+                top: '-40px',
+                right: '0',
+                background: 'transparent',
+                border: 'none',
+                color: 'white',
+                fontSize: '28px',
+                cursor: 'pointer'
+              }}
+            >
+              &times;
+            </button>
+          </div>
+        </div>
       )}
 
     </div>
