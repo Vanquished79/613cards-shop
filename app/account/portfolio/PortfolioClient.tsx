@@ -186,6 +186,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
             </div>
           ))}
         </div>
+      )}
       {/* Expanded Image Modal Overlay */}
       {expandedImage && (
         <div 
