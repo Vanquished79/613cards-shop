@@ -1,16 +1,17 @@
-/* Custom CSS Variables for Glassmorphism Theme */
+/* Custom CSS Variables for Cartoony Theme */
 :root {
-  --bg-color-start: #1c152a;
-  --bg-color-end: #0a0614;
-  --text-main: #f0f0f5;
-  --text-muted: #a09eb5;
+  --bg-color-start: #f8fafc;
+  --bg-color-end: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #475569;
   --accent-color: #ffb703;
-  --accent-hover: #e09f00;
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-glow: 0 4px 30px rgba(0, 0, 0, 0.5);
-  --card-radius: 16px;
-  --font-primary: 'Inter', system-ui, sans-serif;
+  --accent-hover: #fb923c;
+  --glass-bg: #ffffff;
+  --glass-border: #1e293b;
+  --glass-glow: 6px 6px 0px #1e293b;
+  --card-radius: 24px;
+  --font-primary: 'Fredoka', system-ui, sans-serif;
+  --border-width: 3px;
 }
 
 * {
@@ -21,27 +22,29 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  background: var(--bg-color-start);
+  border-left: var(--border-width) solid var(--glass-border);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 183, 3, 0.4);
-  border-radius: 4px;
+  background: var(--accent-color);
+  border: var(--border-width) solid var(--glass-border);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 183, 3, 0.7);
+  background: var(--accent-hover);
 }
 
 body {
-  background: radial-gradient(circle at 50% 0%, #302048, var(--bg-color-end) 80%);
-  background-color: var(--bg-color-end);
+  background-color: var(--bg-color-start);
+  background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
+  background-size: 30px 30px;
   background-attachment: fixed;
   color: var(--text-main);
   font-family: var(--font-primary);
@@ -49,31 +52,44 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Reusable Glassmorphism Utilities */
+/* Repurposed Cartoony Panels (keeping the class name .glass-panel for backwards compatibility) */
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
+  border: var(--border-width) solid var(--glass-border);
   border-radius: var(--card-radius);
   box-shadow: var(--glass-glow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-panel:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px var(--glass-border);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #ffb703, #ff8c00);
-  color: #1a1025;
-  border: none;
-  border-radius: 24px;
-  padding: 12px 24px;
-  font-weight: 600;
+  background: var(--accent-color);
+  color: #0f172a;
+  border: var(--border-width) solid var(--glass-border);
+  border-radius: 30px;
+  padding: 12px 28px;
+  font-weight: 700;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 15px rgba(255, 183, 3, 0.3);
+  transition: all 0.1s ease;
+  box-shadow: 4px 4px 0px var(--glass-border);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 183, 3, 0.4);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--glass-border);
+  background: var(--accent-hover);
+}
+
+.btn-primary:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px var(--glass-border);
 }
 
 .container {

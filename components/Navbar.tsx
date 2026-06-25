@@ -34,7 +34,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
   };
 
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 30, width: '100%', borderBottom: '1px solid var(--glass-border)', background: 'rgba(26, 11, 46, 0.95)', backdropFilter: 'blur(12px)' }}>
+    <header style={{ position: 'sticky', top: 0, zIndex: 30, width: '100%', borderBottom: 'var(--border-width) solid var(--glass-border)', background: 'var(--glass-bg)' }}>
       {/* Top Main Row */}
       <div className="navbar-top-row">
         
@@ -56,15 +56,16 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
                 width: '100%', 
                 padding: '12px 24px 12px 48px', 
                 borderRadius: '30px', 
-                border: '2px solid rgba(255,183,3,0.3)', 
-                background: 'rgba(0,0,0,0.3)', 
-                color: 'white', 
+                border: 'var(--border-width) solid var(--glass-border)', 
+                background: 'var(--bg-color-start)', 
+                color: 'var(--text-main)', 
                 outline: 'none',
                 fontSize: '15px',
-                transition: 'border-color 0.2s',
+                transition: 'box-shadow 0.2s',
+                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)'
               }} 
-              onFocus={(e) => e.target.style.borderColor = 'var(--accent-color)'}
-              onBlur={(e) => e.target.style.borderColor = 'rgba(255,183,3,0.3)'}
+              onFocus={(e) => { e.target.style.boxShadow = 'var(--glass-glow)'; }}
+              onBlur={(e) => { e.target.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.05)'; }}
             />
             <Search size={20} style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent-color)' }} />
             <button type="submit" style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'var(--accent-color)', color: '#1a1025', border: 'none', borderRadius: '20px', padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>
@@ -84,18 +85,18 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
               display: 'flex', 
               alignItems: 'center', 
               gap: '6px', 
-              color: 'var(--text-muted)', 
+              color: 'var(--text-main)', 
               fontSize: '14px', 
-              fontWeight: 600, 
+              fontWeight: 700, 
               cursor: 'pointer',
               padding: '6px 12px',
               borderRadius: '20px',
-              border: '1px solid rgba(255,255,255,0.1)',
-              background: 'rgba(255,255,255,0.05)',
+              border: 'var(--border-width) solid var(--glass-border)',
+              background: 'var(--bg-color-start)',
               transition: 'all 0.2s'
             }}
-            onMouseOver={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-            onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+            onMouseOver={(e) => { e.currentTarget.style.boxShadow = '2px 2px 0px var(--glass-border)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
             >
               <span>{currency}</span>
               <span style={{ fontSize: '10px' }}>▼</span>
@@ -161,24 +162,24 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
 
           {session ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-              <Link href="/buy-list" style={{ color: 'var(--accent-color)', textDecoration: 'none', fontWeight: 600, fontSize: '14px', transition: 'color 0.2s' }}>
+              <Link href="/buy-list" style={{ color: 'var(--accent-color)', textDecoration: 'none', fontWeight: 800, fontSize: '14px', transition: 'color 0.2s' }}>
                 Buy-List
               </Link>
-              <Link href="/account" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, fontSize: '14px', transition: 'color 0.2s' }}
-                    onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                    onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+              <Link href="/account" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 800, fontSize: '14px', transition: 'color 0.2s' }}
+                    onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-color)'}
+                    onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-main)'}>
                 Account
               </Link>
-              <button onClick={() => signOut({ callbackUrl: '/' })} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '14px', fontWeight: 600, transition: 'color 0.2s' }}
-                      onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                      onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+              <button onClick={() => signOut({ callbackUrl: '/' })} style={{ background: 'none', border: 'none', color: 'var(--text-main)', cursor: 'pointer', fontSize: '14px', fontWeight: 800, transition: 'color 0.2s' }}
+                      onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-color)'}
+                      onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-main)'}>
                 Logout
               </button>
             </div>
           ) : (
-            <Link href="/login" style={{ color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '14px', padding: '8px 24px', background: 'rgba(255,255,255,0.1)', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.2)', transition: 'background 0.2s' }}
-                  onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
-                  onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}>
+            <Link href="/login" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 800, fontSize: '14px', padding: '8px 24px', background: 'var(--bg-color-start)', borderRadius: '24px', border: 'var(--border-width) solid var(--glass-border)', boxShadow: '2px 2px 0px var(--glass-border)', transition: 'all 0.2s' }}
+                  onMouseOver={(e) => e.currentTarget.style.transform = 'translate(-2px, -2px)'}
+                  onMouseOut={(e) => e.currentTarget.style.transform = 'translate(0px, 0px)'}>
               Login
             </Link>
           )}
@@ -186,7 +187,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
           <button 
             onClick={() => setIsCartOpen(true)}
             style={{ 
-              background: 'none', border: 'none', color: 'white', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s'
+              background: 'var(--glass-bg)', border: 'var(--border-width) solid var(--glass-border)', color: 'var(--text-main)', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s', padding: '6px', borderRadius: '50%', boxShadow: '2px 2px 0px var(--glass-border)'
             }}
             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -202,16 +203,16 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
       </div>
 
       {/* Bottom Sub-Nav Row: Categories */}
-      <div style={{ background: 'rgba(10, 6, 20, 0.4)', padding: '10px 40px', display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'center', justifyContent: 'center', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <div style={{ background: 'var(--bg-color-end)', padding: '10px 40px', display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'center', justifyContent: 'center', borderTop: 'var(--border-width) solid var(--glass-border)' }}>
         
         {/* Left Links */}
-        <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+        <Link href="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
+              onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-color)'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-main)'}>
           Home
         </Link>
         <Link href="/buy-list" style={{ color: 'var(--accent-color)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+              onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-main)'}
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--accent-color)'}>
           Sell to Us
         </Link>
@@ -221,7 +222,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
 
         <div style={{ width: '1px', height: '16px', background: 'var(--glass-border)', margin: '0 8px' }} />
 
-        <Link href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold' }}>All Categories</Link>
+        <Link href="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold' }}>All Categories</Link>
         {topLevelCategories.map((c: any) => {
           const children = categories.filter((sub: any) => sub.parentId === c.id);
           
@@ -234,15 +235,15 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
                 onMouseLeave={() => setHoveredCategory(null)}
               >
                 <Link href={`/?categoryId=${c.id}`} style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s', padding: '8px 0' }}
-                      onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+                      onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-main)'}
                       onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
                   {c.name} ▾
                 </Link>
                 {hoveredCategory === c.id && (
-                  <div style={{ position: 'absolute', top: '100%', left: 0, background: 'rgba(26, 11, 46, 0.98)', backdropFilter: 'blur(16px)', border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '8px 0', minWidth: '180px', display: 'flex', flexDirection: 'column', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', zIndex: 50 }}>
+                  <div style={{ position: 'absolute', top: '100%', left: 0, background: 'var(--glass-bg)', border: 'var(--border-width) solid var(--glass-border)', borderRadius: '8px', padding: '8px 0', minWidth: '180px', display: 'flex', flexDirection: 'column', boxShadow: 'var(--glass-glow)', zIndex: 50 }}>
                     {children.map((sub: any) => (
                       <Link key={sub.id} href={`/?categoryId=${sub.id}`} style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', padding: '8px 16px', transition: 'background 0.2s, color 0.2s' }}
-                            onMouseOver={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
+                            onMouseOver={(e) => { e.currentTarget.style.color = 'var(--text-main)'; e.currentTarget.style.background = 'var(--bg-color-start)' }}
                             onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'transparent' }}>
                         {sub.name}
                       </Link>
@@ -256,7 +257,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
           return (
             <div key={c.id}>
               <Link href={`/?categoryId=${c.id}`} style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s' }}
-                    onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+                    onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-main)'}
                     onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
                 {c.name}
               </Link>
@@ -267,7 +268,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
         {/* Right Links */}
         <div style={{ width: '1px', height: '16px', background: 'var(--glass-border)', margin: '0 8px' }} />
         <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+              onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-main)'}
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
           Contact
         </Link>
