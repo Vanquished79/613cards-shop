@@ -65,6 +65,22 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
     console.error('Gemini Vision Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal AI Vision error' }, { status: 500 });
+    
+    // Attempt to list available models to help debug the 404 error
+    let availableModels = '';
+    try {
+      if (process.env.GEMINI_API_KEY) {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${process.env.GEMINI_API_KEY}`);
+        if (res.ok) {
+          const data = await res.json();
+          const models = data.models.map((m: any) => m.name.replace('models/', ''));
+          availableModels = ` Available models for your key: ${models.join(', ')}`;
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch model list:', e);
+    }
+
+    return NextResponse.json({ error: (error.message || 'Internal AI Vision error') + availableModels }, { status: 500 });
   }
 }
