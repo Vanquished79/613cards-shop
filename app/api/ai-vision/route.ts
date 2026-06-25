@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export async function POST(req: Request) {
   try {
@@ -10,39 +10,44 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Image is required' }, { status: 400 });
     }
 
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json({ error: 'OpenAI API Key is missing' }, { status: 500 });
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json({ error: 'Gemini API Key is missing' }, { status: 500 });
     }
 
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // Convert File to Base64
     const arrayBuffer = await image.arrayBuffer();
     const base64Image = Buffer.from(arrayBuffer).toString('base64');
-    const dataUri = `data:${image.type};base64,${base64Image}`;
+    
+    const prompt = "You are an expert trading card appraiser. You extract card details from images. Respond strictly in JSON format matching exactly: { \"cardName\": \"Name of card\", \"cardSeries\": \"Series or Set\", \"condition\": \"Estimated condition\" }. Do not wrap the JSON in markdown code blocks, just return the raw JSON object.";
+    
+    const imagePart = {
+      inlineData: {
+        data: base64Image,
+        mimeType: image.type
+      }
+    };
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert trading card appraiser. You extract card details from images. Respond strictly in JSON format matching exactly: { \"cardName\": \"Name of card\", \"cardSeries\": \"Series or Set\", \"condition\": \"Estimated condition\" }."
-        },
-        {
-          role: "user",
-          content: [
-            { type: "text", text: "Identify this trading card." },
-            { type: "image_url", image_url: { url: dataUri } }
-          ]
-        }
-      ]
-    });
+    const result = await model.generateContent([prompt, imagePart]);
+    const responseText = result.response.text();
+    
+    // Attempt to parse the JSON response. Sometimes models wrap it in ```json blocks
+    let content = responseText.trim();
+    if (content.startsWith('```json')) {
+      content = content.replace(/^```json\n/, '').replace(/\n```$/, '');
+    } else if (content.startsWith('```')) {
+      content = content.replace(/^```\n/, '').replace(/\n```$/, '');
+    }
 
-    const content = response.choices[0].message.content;
-    const extractedData = content ? JSON.parse(content) : null;
+    let extractedData = null;
+    try {
+      extractedData = JSON.parse(content);
+    } catch (e) {
+      console.error('Failed to parse Gemini JSON:', content);
+      throw new Error('AI returned malformed JSON');
+    }
 
     if (!extractedData || !extractedData.cardName) {
       return NextResponse.json({ error: 'Failed to extract card details' }, { status: 500 });
@@ -59,7 +64,7 @@ export async function POST(req: Request) {
     });
 
   } catch (error: any) {
-    console.error('OpenAI Vision Error:', error);
+    console.error('Gemini Vision Error:', error);
     return NextResponse.json({ error: error.message || 'Internal AI Vision error' }, { status: 500 });
   }
 }
