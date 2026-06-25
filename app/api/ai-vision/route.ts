@@ -15,13 +15,24 @@ export async function POST(req: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
     // Convert File to Base64
     const arrayBuffer = await image.arrayBuffer();
     const base64Image = Buffer.from(arrayBuffer).toString('base64');
     
-    const prompt = "You are an expert trading card appraiser. You extract card details from images. Respond strictly in JSON format matching exactly: { \"cardName\": \"Name of card\", \"cardSeries\": \"Series or Set\", \"condition\": \"Estimated condition\" }. Do not wrap the JSON in markdown code blocks, just return the raw JSON object.";
+    const prompt = `You are a highly precise trading card expert and OCR system. Examine the image of the trading card very carefully.
+1. Identify the EXACT Player/Character Name or Card Name.
+2. Identify the Set, Series, Year, and Brand (e.g., '1999 Pokemon Base Set', '2023 Panini Prizm').
+3. Estimate the physical condition based strictly on visible wear (e.g., 'NM', 'LP', 'MP', 'HP').
+Do not guess or hallucinate. Use ONLY the text and symbols visibly printed on the card.
+Respond strictly in JSON format matching exactly:
+{
+  "cardName": "Exact Name",
+  "cardSeries": "Year Brand Set",
+  "condition": "Estimated condition"
+}
+Do not wrap the JSON in markdown code blocks, just return the raw JSON object.`;
     
     const imagePart = {
       inlineData: {
