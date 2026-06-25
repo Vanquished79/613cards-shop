@@ -75,8 +75,18 @@ export default async function AccountPage() {
 
   return (
     <div style={{ maxWidth: '1000px', margin: '40px auto', padding: '0 20px' }}>
-      <h1 style={{ marginBottom: '8px' }}>Customer Dashboard</h1>
-      <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Manage your profile, shipping information, and order history.</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '32px' }}>
+        <div>
+          <h1 style={{ marginBottom: '8px', fontSize: '28px' }}>Customer Dashboard</h1>
+          <p style={{ color: 'var(--text-muted)', margin: 0 }}>Manage your profile, shipping information, and order history.</p>
+        </div>
+        {user.storeCredit > 0 && (
+          <div className="glass-panel" style={{ padding: '12px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(34, 197, 94, 0.1)', border: '1px solid #22c55e', borderRadius: '12px', minWidth: '180px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Store Credit</span>
+            <span style={{ fontSize: '22px', fontWeight: 'bold', color: '#22c55e' }}>${user.storeCredit.toFixed(2)}</span>
+          </div>
+        )}
+      </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
         

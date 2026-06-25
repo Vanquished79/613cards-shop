@@ -187,6 +187,22 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     </p>
                   </div>
                 )}
+
+                {sub.status === 'COMPLETED' && (
+                  <div style={{ padding: '16px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', marginBottom: '16px' }}>
+                    <h3 style={{ margin: '0 0 8px 0', color: '#22c55e' }}>Order Payout Completed!</h3>
+                    <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}>
+                      We have processed your payout for this submission:
+                    </p>
+                    <div style={{ fontSize: '15px', fontWeight: 'bold', color: 'white', marginTop: '6px' }}>
+                      {sub.payoutMethod === 'PAYPAL' ? (
+                        <span>PayPal Payout: <span style={{ color: 'var(--accent-color)' }}>${sub.cashOffer?.toFixed(2)}</span> sent to <span style={{ color: 'var(--text-muted)' }}>{sub.paypalEmail}</span></span>
+                      ) : (
+                        <span>Store Credit: <span style={{ color: '#22c55e' }}>+${sub.creditOffer?.toFixed(2)}</span> added to your account</span>
+                      )}
+                    </div>
+                  </div>
+                )}
                 
                 <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
                   <h4 style={{ margin: '0 0 12px 0', fontSize: '14px' }}>Cards ({sub.items.length})</h4>
