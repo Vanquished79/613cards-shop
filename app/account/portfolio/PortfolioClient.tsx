@@ -70,14 +70,6 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
 
   return (
     <div>
-      {expandedImage && (
-        <div 
-          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-          onClick={() => setExpandedImage(null)}
-        >
-          <img src={expandedImage} alt="Expanded" style={{ maxHeight: '90vh', maxWidth: '90vw', objectFit: 'contain', borderRadius: '12px' }} />
-        </div>
-      )}
       {/* Portfolio Stats Header */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginBottom: '40px' }}>
         <div className="glass-panel" style={{ padding: '24px', textAlign: 'center', background: 'linear-gradient(145deg, rgba(30,30,40,0.4) 0%, rgba(20,20,30,0.6) 100%)' }}>
@@ -193,6 +185,55 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
               </div>
             </div>
           ))}
+        </div>
+      {/* Expanded Image Modal Overlay */}
+      {expandedImage && (
+        <div 
+          onClick={() => setExpandedImage(null)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.85)',
+            backdropFilter: 'blur(10px)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1001,
+            cursor: 'zoom-out'
+          }}
+        >
+          <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={(e) => e.stopPropagation()}>
+            <img 
+              src={expandedImage} 
+              alt="Card Preview" 
+              style={{ 
+                maxWidth: '100%', 
+                maxHeight: '85vh', 
+                objectFit: 'contain', 
+                borderRadius: '12px',
+                border: '1px solid rgba(255,255,255,0.2)',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.8)'
+              }} 
+            />
+            <button 
+              onClick={() => setExpandedImage(null)}
+              style={{
+                position: 'absolute',
+                top: '-40px',
+                right: '0',
+                background: 'transparent',
+                border: 'none',
+                color: 'white',
+                fontSize: '28px',
+                cursor: 'pointer'
+              }}
+            >
+              &times;
+            </button>
+          </div>
         </div>
       )}
     </div>
