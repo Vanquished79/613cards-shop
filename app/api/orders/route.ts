@@ -65,7 +65,7 @@ export async function POST(request: Request) {
                 grade: variation.grade,
                 purchasePrice: item.price,
                 currentValue: item.price, // Start at purchase price
-                imageUrl: variation.imageUrl || variation.product.imageUrl,
+                imageUrl: variation.product.imageUrl || null,
                 isVaulted: true,
                 vaultStatus: 'VAULTED'
               }
