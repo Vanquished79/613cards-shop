@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useCart } from './CartProvider';
 import { ShoppingCart } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
-import logoImg from '../public/brand-icon.png';
+import logoImg from '../public/logo.png';
 
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
