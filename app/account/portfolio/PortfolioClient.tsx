@@ -90,8 +90,12 @@ export default function PortfolioClient({ initialItems }: { initialItems: any[] 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h2 style={{ fontSize: '20px', margin: 0 }}>Collection Items ({items.length})</h2>
         <button 
-          onClick={() => {
-            const name = window.prompt("Enter Card Name (Simple Add):");
+          onClick={async () => {
+            const name = await prompt({
+              title: "Add Portfolio Item",
+              message: "Enter the name of the card you want to add manually:",
+              placeholder: "e.g., 1999 Base Set Charizard Holographic"
+            });
             if (name) {
               fetch('/api/user/portfolio', {
                 method: 'POST',
