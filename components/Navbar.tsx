@@ -39,9 +39,9 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
       <div className="navbar-top-row">
         
         {/* Left: Logo */}
-        <div className="navbar-logo-container" style={{ width: '220px', height: '100px' }}>
-          <Link href="/" className="navbar-logo-link" style={{ position: 'static', textDecoration: 'none' }}>
-            <img src="/shield-logo.png" alt="613cards Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', transform: 'scale(1.3)', transformOrigin: 'left center' }} />
+        <div className="navbar-logo-container" style={{ width: '240px', height: '120px', display: 'flex', alignItems: 'center' }}>
+          <Link href="/" className="navbar-logo-link" style={{ position: 'static', textDecoration: 'none', width: '100%', height: '100%' }}>
+            <img src="/shield-logo-transparent.png" alt="613cards Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </Link>
         </div>
 
