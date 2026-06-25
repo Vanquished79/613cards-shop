@@ -59,7 +59,7 @@ export async function POST(request: Request) {
               data: {
                 userId: userId,
                 cardName: variation.product.name,
-                cardSeries: variation.product.series || null,
+                cardSeries: variation.product.cardSeries || null,
                 isGraded: variation.isGraded,
                 gradingCompany: variation.gradingCompany,
                 grade: variation.grade,
