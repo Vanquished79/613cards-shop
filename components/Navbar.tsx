@@ -39,20 +39,9 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
       <div className="navbar-top-row">
         
         {/* Left: Logo */}
-        <div className="navbar-logo-container" style={{ width: 'auto', height: 'auto' }}>
+        <div className="navbar-logo-container" style={{ width: '220px', height: '100px' }}>
           <Link href="/" className="navbar-logo-link" style={{ position: 'static', textDecoration: 'none' }}>
-            <div style={{
-              fontSize: '32px',
-              fontWeight: 900,
-              color: '#ffffff',
-              WebkitTextStroke: '2px #1e293b',
-              textShadow: '4px 4px 0px #1e293b',
-              letterSpacing: '1px',
-              transform: 'rotate(-2deg)',
-              display: 'inline-block'
-            }}>
-              <span style={{ color: 'var(--accent-color)' }}>613</span>Cards
-            </div>
+            <img src="/logo-transparent.png" alt="613cards Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', transform: 'scale(1.3)', transformOrigin: 'left center' }} />
           </Link>
         </div>
 
