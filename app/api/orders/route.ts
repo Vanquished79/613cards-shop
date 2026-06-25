@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { paypalOrderId, customerName, email, address, city, state, zip, country, totalAmount, taxAmount, taxRate, items, userId, sessionId } = body;
+    const { paypalOrderId, customerName, email, address, city, state, zip, country, totalAmount, taxAmount, taxRate, items, userId, sessionId, shippingMethod } = body;
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'No items in order' }, { status: 400 });
@@ -27,7 +27,8 @@ export async function POST(request: Request) {
           totalAmount,
           taxAmount: taxAmount || 0,
           taxRate: taxRate || 0,
-          status: 'PAID',
+          status: shippingMethod === 'VAULT' ? 'DELIVERED' : 'PAID',
+          shippingMethod: shippingMethod || 'SHIPPING',
           items: {
             create: items.map((item: any) => ({
               productVariationId: item.productVariationId,
@@ -39,15 +40,38 @@ export async function POST(request: Request) {
       });
 
       // 2. Reduce stock for each product variation
+      // 2.5 Vault items if requested
       for (const item of items) {
-        await tx.productVariation.update({
+        // Find product variation for portfolio population if vaulted
+        const variation = await tx.productVariation.update({
           where: { id: item.productVariationId },
           data: {
             stock: {
               decrement: item.quantity
             }
-          }
+          },
+          include: { product: true }
         });
+
+        if (shippingMethod === 'VAULT' && userId) {
+          for (let i = 0; i < item.quantity; i++) {
+            await tx.portfolioItem.create({
+              data: {
+                userId: userId,
+                cardName: variation.product.name,
+                cardSeries: variation.product.series || null,
+                isGraded: variation.isGraded,
+                gradingCompany: variation.gradingCompany,
+                grade: variation.grade,
+                purchasePrice: item.price,
+                currentValue: item.price, // Start at purchase price
+                imageUrl: variation.imageUrl || variation.product.imageUrl,
+                isVaulted: true,
+                vaultStatus: 'VAULTED'
+              }
+            });
+          }
+        }
       }
 
       // 3. Clear reservations for this session since they bought it

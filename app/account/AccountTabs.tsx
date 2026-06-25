@@ -12,13 +12,18 @@ type WishlistItem = any;
 const ORDER_STAGES = ['PAID', 'CONFIRMED', 'PACKING', 'SHIPPED', 'DELIVERED'];
 
 export default function AccountTabs({ orders, wishlistItems = [], buyListSubmissions = [] }: { orders: Order[], wishlistItems?: WishlistItem[], buyListSubmissions?: any[] }) {
-  const [activeTab, setActiveTab] = useState<'active' | 'archived' | 'wishlist' | 'buylist'>('active');
+  const [activeTab, setActiveTab] = useState<'active' | 'archived' | 'wishlist' | 'buylist' | 'archived_buylist'>('active');
   const { confirm, prompt } = useModal();
 
   const activeOrders = orders.filter((o) => o.status !== 'DELIVERED');
   const archivedOrders = orders.filter((o) => o.status === 'DELIVERED');
 
   const displayedOrders = activeTab === 'active' ? activeOrders : archivedOrders;
+
+  const activeBuyList = buyListSubmissions.filter((sub: any) => sub.status !== 'COMPLETED' && sub.status !== 'REJECTED');
+  const archivedBuyList = buyListSubmissions.filter((sub: any) => sub.status === 'COMPLETED' || sub.status === 'REJECTED');
+  
+  const displayedBuyList = activeTab === 'buylist' ? activeBuyList : archivedBuyList;
 
   const getStageIndex = (status: string) => {
     const normalizedStatus = status === 'PENDING' ? 'PAID' : status;
@@ -30,7 +35,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
       <h2 style={{ fontSize: '20px', marginBottom: '20px' }}>Account Information</h2>
       
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--glass-border)' }}>
+      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--glass-border)', flexWrap: 'wrap' }}>
         <button 
           onClick={() => setActiveTab('active')}
           style={{ 
@@ -38,10 +43,10 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
             color: activeTab === 'active' ? 'var(--accent-color)' : 'var(--text-muted)', 
             padding: '8px 0', fontWeight: activeTab === 'active' ? 'bold' : 'normal',
             borderBottom: activeTab === 'active' ? '2px solid var(--accent-color)' : '2px solid transparent',
-            cursor: 'pointer', fontSize: '16px'
+            cursor: 'pointer', fontSize: '15px'
           }}
         >
-          Active Orders ({activeOrders.length})
+          Orders ({activeOrders.length})
         </button>
         <button 
           onClick={() => setActiveTab('archived')}
@@ -50,10 +55,10 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
             color: activeTab === 'archived' ? 'var(--accent-color)' : 'var(--text-muted)', 
             padding: '8px 0', fontWeight: activeTab === 'archived' ? 'bold' : 'normal',
             borderBottom: activeTab === 'archived' ? '2px solid var(--accent-color)' : '2px solid transparent',
-            cursor: 'pointer', fontSize: '16px'
+            cursor: 'pointer', fontSize: '15px'
           }}
         >
-          Archived ({archivedOrders.length})
+          Archive ({archivedOrders.length})
         </button>
         <button 
           onClick={() => setActiveTab('wishlist')}
@@ -62,7 +67,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
             color: activeTab === 'wishlist' ? 'var(--accent-color)' : 'var(--text-muted)', 
             padding: '8px 0', fontWeight: activeTab === 'wishlist' ? 'bold' : 'normal',
             borderBottom: activeTab === 'wishlist' ? '2px solid var(--accent-color)' : '2px solid transparent',
-            cursor: 'pointer', fontSize: '16px'
+            cursor: 'pointer', fontSize: '15px'
           }}
         >
           Wishlist ({wishlistItems.length})
@@ -74,19 +79,31 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
             color: activeTab === 'buylist' ? 'var(--accent-color)' : 'var(--text-muted)', 
             padding: '8px 0', fontWeight: activeTab === 'buylist' ? 'bold' : 'normal',
             borderBottom: activeTab === 'buylist' ? '2px solid var(--accent-color)' : '2px solid transparent',
-            cursor: 'pointer', fontSize: '16px'
+            cursor: 'pointer', fontSize: '15px'
           }}
         >
-          Sell Orders ({buyListSubmissions.length})
+          Sells ({activeBuyList.length})
+        </button>
+        <button 
+          onClick={() => setActiveTab('archived_buylist')}
+          style={{ 
+            background: 'transparent', border: 'none', 
+            color: activeTab === 'archived_buylist' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            padding: '8px 0', fontWeight: activeTab === 'archived_buylist' ? 'bold' : 'normal',
+            borderBottom: activeTab === 'archived_buylist' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            cursor: 'pointer', fontSize: '15px'
+          }}
+        >
+          Archived Sells ({archivedBuyList.length})
         </button>
       </div>
 
-      {activeTab === 'buylist' ? (
-        buyListSubmissions.length === 0 ? (
-          <p style={{ color: 'var(--text-muted)' }}>You haven't submitted any sell orders yet.</p>
+      {activeTab === 'buylist' || activeTab === 'archived_buylist' ? (
+        displayedBuyList.length === 0 ? (
+          <p style={{ color: 'var(--text-muted)' }}>No sell orders found in this category.</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {buyListSubmissions.map((sub: any) => (
+            {displayedBuyList.map((sub: any) => (
               <div key={sub.id} className="glass-panel" style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
                   <div>

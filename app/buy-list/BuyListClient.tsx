@@ -18,7 +18,7 @@ export default function BuyListClient({
   
   // Submit Form Items state
   const [items, setItems] = useState([
-    { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFiles: [] as File[] }
+    { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFiles: [] as File[], aiGradingResult: null as any, isGrading: false }
   ]);
 
   // Wanted Catalog state
@@ -26,7 +26,7 @@ export default function BuyListClient({
   const [attributeFilter, setAttributeFilter] = useState<'all' | 'rc' | 'graded' | 'numbered'>('all');
 
   const addItem = () => {
-    setItems([...items, { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFiles: [] }]);
+    setItems([...items, { id: Date.now(), cardName: '', cardSeries: '', condition: 'Near Mint', isGraded: false, gradingCompany: '', grade: '', quantity: 1, expectedPrice: '', imageFiles: [], aiGradingResult: null, isGrading: false }]);
   };
 
   const removeItem = (id: number) => {
@@ -51,7 +51,9 @@ export default function BuyListClient({
       grade: wantedCard.grade || '',
       quantity: 1,
       expectedPrice: wantedCard.price ? wantedCard.price.toString() : '',
-      imageFiles: [] as File[]
+      imageFiles: [] as File[],
+      aiGradingResult: null,
+      isGrading: false
     };
 
     // If there is only one item and it's completely blank, replace it
@@ -99,6 +101,34 @@ export default function BuyListClient({
       toast.error(err.message || "There was an error submitting your buy-list. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleAIGrade = async (id: number) => {
+    updateItem(id, 'isGrading', true);
+    try {
+      const item = items.find(i => i.id === id);
+      if (!item?.imageFiles || item.imageFiles.length === 0) {
+        toast.error("Please upload at least one image to use AI Pre-Grading.");
+        updateItem(id, 'isGrading', false);
+        return;
+      }
+      const res = await fetch('/api/ai-grading', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ images: item.imageFiles.map(f => f.name) })
+      });
+      const data = await res.json();
+      if (data.success) {
+        updateItem(id, 'aiGradingResult', data.data);
+        toast.success('AI Pre-Grading complete!');
+      } else {
+        toast.error('AI Grading failed.');
+      }
+    } catch (err) {
+      toast.error('AI Grading failed.');
+    } finally {
+      updateItem(id, 'isGrading', false);
     }
   };
 
@@ -474,21 +504,88 @@ export default function BuyListClient({
                       </div>
                     )}
 
-                    {/* File input */}
-                    <div style={{ position: 'relative' }}>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        multiple 
-                        style={{ ...inputStyle, padding: '8px 12px' }} 
-                        onChange={e => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            const newFiles = Array.from(e.target.files);
-                            updateItem(item.id, 'imageFiles', [...(item.imageFiles || []), ...newFiles]);
-                          }
-                        }}
-                      />
+                    {/* File input and AI Grade Button */}
+                    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <div style={{ flex: 1, minWidth: '200px' }}>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          multiple 
+                          style={{ ...inputStyle, padding: '8px 12px' }} 
+                          onChange={e => {
+                            if (e.target.files && e.target.files.length > 0) {
+                              const newFiles = Array.from(e.target.files);
+                              updateItem(item.id, 'imageFiles', [...(item.imageFiles || []), ...newFiles]);
+                            }
+                          }}
+                        />
+                      </div>
+                      
+                      {item.imageFiles && item.imageFiles.length > 0 && !item.aiGradingResult && (
+                        <button 
+                          type="button" 
+                          onClick={() => handleAIGrade(item.id)}
+                          disabled={item.isGrading}
+                          style={{ 
+                            padding: '8px 16px', 
+                            background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)', 
+                            color: 'white', 
+                            border: 'none', 
+                            borderRadius: '8px', 
+                            cursor: item.isGrading ? 'not-allowed' : 'pointer',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            opacity: item.isGrading ? 0.7 : 1
+                          }}
+                        >
+                          {item.isGrading ? (
+                            <>
+                              <span style={{ animation: 'spin 1s linear infinite' }}>↻</span> Scanning...
+                            </>
+                          ) : (
+                            <>✨ Get AI Pre-Grade</>
+                          )}
+                        </button>
+                      )}
                     </div>
+
+                    {/* AI Grading Result Display */}
+                    {item.aiGradingResult && (
+                      <div style={{ marginTop: '16px', padding: '16px', background: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.4)', borderRadius: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                          <span style={{ fontSize: '20px' }}>✨</span>
+                          <h4 style={{ margin: 0, color: '#e9d5ff', fontSize: '16px' }}>AI Pre-Grading Result</h4>
+                        </div>
+                        
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '16px', marginBottom: '12px' }}>
+                          <div>
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>Est. Grade</div>
+                            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#a855f7' }}>{item.aiGradingResult.aiGradeEstimate}</div>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>Centering</div>
+                            <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{item.aiGradingResult.aiCentering}</div>
+                          </div>
+                          <div style={{ gridColumn: '1 / -1' }}>
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>Sub-Grades</div>
+                            <div style={{ display: 'flex', gap: '12px', fontSize: '13px', flexWrap: 'wrap' }}>
+                              <span style={{ background: 'rgba(0,0,0,0.3)', padding: '2px 8px', borderRadius: '4px' }}>Corners: {item.aiGradingResult.metrics.corners}</span>
+                              <span style={{ background: 'rgba(0,0,0,0.3)', padding: '2px 8px', borderRadius: '4px' }}>Edges: {item.aiGradingResult.metrics.edges}</span>
+                              <span style={{ background: 'rgba(0,0,0,0.3)', padding: '2px 8px', borderRadius: '4px' }}>Surface: {item.aiGradingResult.metrics.surface}</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div style={{ fontSize: '13px', color: '#e9d5ff', fontStyle: 'italic', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '4px' }}>
+                          "{item.aiGradingResult.notes}"
+                        </div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>
+                          Note: This is an AI estimate and does not guarantee the final offer or official grade.
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 

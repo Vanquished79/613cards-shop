@@ -112,10 +112,13 @@ model User {
   country      String?
   role               String               @default("CUSTOMER") // CUSTOMER, ADMIN
   storeCredit        Float                @default(0)
+  vipTier            String               @default("MEMBER")   // MEMBER, SILVER, GOLD, OBSIDIAN
+  lifetimeSpend      Float                @default(0)
   orders             Order[]
   wishlistItems WishlistItem[]
   buyListSubmissions BuyListSubmission[]
   cartItems    CartItem[]
+  portfolioItems     PortfolioItem[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -138,6 +141,7 @@ model Order {
   paypalOrderId String?
   trackingNumber String?
   shippingCarrier String?
+  shippingMethod  String?     // e.g. "SHIPPING", "VAULT"
   items         OrderItem[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
@@ -229,6 +233,8 @@ model BuyListItem {
   status         String            @default("PENDING") // PENDING, ACCEPTED, REJECTED
   imageUrl       String?           // Image uploaded by user
   imageUrls      String[]
+  aiGradeEstimate String?
+  aiCentering     String?
 }
 
 model BuyListWantedItem {
@@ -245,6 +251,28 @@ model BuyListWantedItem {
   numberedTo     String?
   parallel       String?
   isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model PortfolioItem {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  cardName       String
+  cardSeries     String?
+  isGraded       Boolean  @default(false)
+  gradingCompany String?
+  grade          String?
+  
+  purchasePrice  Float?
+  currentValue   Float?
+  imageUrl       String?
+  
+  isVaulted      Boolean  @default(false)
+  vaultStatus    String?  // e.g., PENDING_INTAKE, VAULTED, RETURN_REQUESTED
+  
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

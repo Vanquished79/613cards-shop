@@ -88,10 +88,73 @@ export default async function AccountPage() {
         )}
       </div>
 
+      {/* VIP Tier Gamification Block */}
+      <div className="glass-panel" style={{ padding: '24px', marginBottom: '32px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'linear-gradient(145deg, rgba(30,30,40,0.4) 0%, rgba(20,20,30,0.6) 100%)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h2 style={{ fontSize: '20px', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ 
+                color: user.vipTier === 'OBSIDIAN' ? '#a855f7' : user.vipTier === 'GOLD' ? '#eab308' : user.vipTier === 'SILVER' ? '#94a3b8' : 'white'
+              }}>
+                {user.vipTier} TIER
+              </span>
+            </h2>
+            <p style={{ margin: '4px 0 0 0', color: 'var(--text-muted)', fontSize: '14px' }}>
+              Lifetime Spend: ${user.lifetimeSpend.toFixed(2)}
+            </p>
+          </div>
+          <div style={{ textAlign: 'right', fontSize: '14px', color: 'var(--text-muted)' }}>
+            {user.vipTier === 'MEMBER' && <span>Spend ${(500 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#94a3b8'}}>SILVER</strong></span>}
+            {user.vipTier === 'SILVER' && <span>Spend ${(2000 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#eab308'}}>GOLD</strong></span>}
+            {user.vipTier === 'GOLD' && <span>Spend ${(5000 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#a855f7'}}>OBSIDIAN</strong></span>}
+            {user.vipTier === 'OBSIDIAN' && <span style={{ color: '#a855f7' }}>Highest Tier Reached!</span>}
+          </div>
+        </div>
+
+        {user.vipTier !== 'OBSIDIAN' && (() => {
+          const thresholds = { MEMBER: 0, SILVER: 500, GOLD: 2000, OBSIDIAN: 5000 };
+          const currentFloor = thresholds[user.vipTier as keyof typeof thresholds];
+          let nextCeil = 500;
+          if (user.vipTier === 'SILVER') nextCeil = 2000;
+          if (user.vipTier === 'GOLD') nextCeil = 5000;
+          
+          const progress = Math.min(100, Math.max(0, ((user.lifetimeSpend - currentFloor) / (nextCeil - currentFloor)) * 100));
+
+          return (
+            <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+              <div style={{ 
+                height: '100%', 
+                width: `${progress}%`, 
+                background: user.vipTier === 'MEMBER' ? '#94a3b8' : user.vipTier === 'SILVER' ? '#eab308' : '#a855f7',
+                transition: 'width 1s ease-in-out'
+              }} />
+            </div>
+          );
+        })()}
+
+        <div style={{ fontSize: '14px', color: 'var(--text-muted)', display: 'flex', gap: '24px', marginTop: '8px' }}>
+          <span><strong>Benefits:</strong></span>
+          {user.vipTier === 'MEMBER' && <span>Standard access to Store.</span>}
+          {user.vipTier === 'SILVER' && <span>+2% bonus on all Store Credit trade-ins.</span>}
+          {user.vipTier === 'GOLD' && <span>+5% bonus on Store Credit trade-ins.</span>}
+          {user.vipTier === 'OBSIDIAN' && <span>+10% bonus on Store Credit trade-ins & priority shipping.</span>}
+        </div>
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
         
-        {/* Profile Details */}
-        <div>
+        {/* Profile Details & Navigation */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <a href="/account/portfolio" style={{ display: 'block', textDecoration: 'none' }}>
+            <div className="glass-panel hover-scale" style={{ padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid #3b82f6', cursor: 'pointer' }}>
+              <div>
+                <h2 style={{ margin: '0 0 4px 0', color: '#3b82f6', fontSize: '20px' }}>My Portfolio & Vault</h2>
+                <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '14px' }}>View your collection value and vaulted items.</p>
+              </div>
+              <div style={{ fontSize: '24px', color: '#3b82f6' }}>&rarr;</div>
+            </div>
+          </a>
+
           <div className="glass-panel" style={{ padding: '32px' }}>
             <h2 style={{ fontSize: '20px', marginBottom: '24px' }}>Profile & Shipping</h2>
             <ProfileForm user={user} />

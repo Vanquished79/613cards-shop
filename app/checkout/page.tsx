@@ -20,6 +20,7 @@ export default function CheckoutPage() {
   const [country, setCountry] = useState('');
   const [province, setProvince] = useState('');
   const [taxEnabled, setTaxEnabled] = useState(true);
+  const [shippingMethod, setShippingMethod] = useState<'SHIPPING' | 'VAULT'>('SHIPPING');
 
   // Store Credit
   const [storeCredit, setStoreCredit] = useState(0);
@@ -48,10 +49,10 @@ export default function CheckoutPage() {
   }, [session]);
 
   // Calculations
-  const shippingCost = calculateShipping(totalAmount);
+  const shippingCost = shippingMethod === 'VAULT' ? 0 : calculateShipping(totalAmount);
   const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalAmount);
   
-  const isStep1Complete = country && (country !== 'CA' || province);
+  const isStep1Complete = shippingMethod === 'VAULT' || (country && (country !== 'CA' || province));
   
   const taxInfo = useMemo(() => {
     if (!isStep1Complete || !taxEnabled) return null;
@@ -84,7 +85,8 @@ export default function CheckoutPage() {
           items: items,
           userId: session?.user?.id ? parseInt(session.user.id as string) : null,
           sessionId: sessionId,
-          storeCreditUsed: storeCreditUsed
+          storeCreditUsed: storeCreditUsed,
+          shippingMethod: shippingMethod
         })
       });
       
@@ -204,31 +206,55 @@ export default function CheckoutPage() {
       <div>
         <div className="glass-panel" style={{ padding: '24px', position: 'sticky', top: '100px' }}>
           
-          <h3 style={{ marginBottom: '20px' }}>1. Shipping Destination</h3>
+          <h3 style={{ marginBottom: '20px' }}>1. Delivery Method</h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '16px' }}>
-            Please select your location to calculate applicable taxes.
+            Choose whether to have your cards shipped to you, or securely vaulted in your digital portfolio.
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-            <select 
-              value={country} 
-              onChange={(e) => {
-                setCountry(e.target.value);
-                setProvince('');
-              }}
-              style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', outline: 'none' }}
-            >
-              <option value="" style={{ background: '#1a1025', color: 'white' }}>Select Country</option>
-              <option value="CA" style={{ background: '#1a1025', color: 'white' }}>Canada</option>
-              <option value="US" style={{ background: '#1a1025', color: 'white' }}>United States</option>
-              <option value="AU" style={{ background: '#1a1025', color: 'white' }}>Australia</option>
-              <optgroup label="Europe" style={{ background: '#1a1025', color: 'var(--text-muted)' }}>
-                {EUROPEAN_COUNTRIES.map(c => (
-                  <option key={c.code} value={c.code} style={{ background: '#1a1025', color: 'white' }}>{c.name}</option>
-                ))}
-              </optgroup>
-              <option value="OTHER" style={{ background: '#1a1025', color: 'white' }}>Other</option>
-            </select>
+          <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+            <label style={{ flex: 1, padding: '16px', border: shippingMethod === 'SHIPPING' ? '2px solid var(--accent-color)' : '1px solid var(--glass-border)', background: shippingMethod === 'SHIPPING' ? 'rgba(255, 183, 3, 0.1)' : 'rgba(0,0,0,0.2)', borderRadius: '8px', cursor: 'pointer', textAlign: 'center' }}>
+              <input 
+                type="radio" 
+                checked={shippingMethod === 'SHIPPING'} 
+                onChange={() => setShippingMethod('SHIPPING')} 
+                style={{ display: 'none' }}
+              />
+              <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Mail to Me</div>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Standard shipping rates apply</div>
+            </label>
+            <label style={{ flex: 1, padding: '16px', border: shippingMethod === 'VAULT' ? '2px solid #3b82f6' : '1px solid var(--glass-border)', background: shippingMethod === 'VAULT' ? 'rgba(59, 130, 246, 0.1)' : 'rgba(0,0,0,0.2)', borderRadius: '8px', cursor: 'pointer', textAlign: 'center' }}>
+              <input 
+                type="radio" 
+                checked={shippingMethod === 'VAULT'} 
+                onChange={() => setShippingMethod('VAULT')} 
+                style={{ display: 'none' }}
+              />
+              <div style={{ fontWeight: 'bold', marginBottom: '4px', color: '#3b82f6' }}>Send to Vault</div>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Free! Instantly added to your portfolio</div>
+            </label>
+          </div>
+
+          {shippingMethod === 'SHIPPING' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+              <select 
+                value={country} 
+                onChange={(e) => {
+                  setCountry(e.target.value);
+                  setProvince('');
+                }}
+                style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', outline: 'none' }}
+              >
+                <option value="" style={{ background: '#1a1025', color: 'white' }}>Select Country</option>
+                <option value="CA" style={{ background: '#1a1025', color: 'white' }}>Canada</option>
+                <option value="US" style={{ background: '#1a1025', color: 'white' }}>United States</option>
+                <option value="AU" style={{ background: '#1a1025', color: 'white' }}>Australia</option>
+                <optgroup label="Europe" style={{ background: '#1a1025', color: 'var(--text-muted)' }}>
+                  {EUROPEAN_COUNTRIES.map(c => (
+                    <option key={c.code} value={c.code} style={{ background: '#1a1025', color: 'white' }}>{c.name}</option>
+                  ))}
+                </optgroup>
+                <option value="OTHER" style={{ background: '#1a1025', color: 'white' }}>Other</option>
+              </select>
 
             {country === 'CA' && (
               <select 
@@ -242,7 +268,8 @@ export default function CheckoutPage() {
                 ))}
               </select>
             )}
-          </div>
+            </div>
+          )}
 
           <h3 style={{ marginBottom: '20px', color: isStep1Complete ? 'white' : 'var(--text-muted)' }}>2. Payment Details</h3>
           
@@ -378,7 +405,8 @@ export default function CheckoutPage() {
                             items: items,
                             userId: session?.user?.id ? parseInt(session.user.id as string) : null,
                             sessionId: sessionId,
-                            storeCreditUsed: storeCreditUsed
+                            storeCreditUsed: storeCreditUsed,
+                            shippingMethod: shippingMethod
                           })
                         });
                         

@@ -199,6 +199,61 @@ export default function AdminBuyListClient({
     color: 'var(--text-muted)' 
   };
 
+  const CompsViewer = ({ query }: { query: string }) => {
+    const [comps, setComps] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+
+    if (!query) return null;
+
+    if (!comps && !loading) {
+      return (
+        <button 
+          onClick={async () => {
+            setLoading(true);
+            try {
+              const res = await fetch(`/api/comps?q=${encodeURIComponent(query)}`);
+              const data = await res.json();
+              setComps(data);
+            } catch (err) {
+              console.error(err);
+            } finally {
+              setLoading(false);
+            }
+          }}
+          style={{ padding: '4px 8px', background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.5)', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '8px' }}
+        >
+          🔍 Load Market Comps (eBay)
+        </button>
+      );
+    }
+
+    if (loading) {
+      return <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}><span style={{ animation: 'spin 1s linear infinite' }}>↻</span> Loading comps...</div>;
+    }
+
+    if (comps && comps.recentSales) {
+      return (
+        <div style={{ marginTop: '8px', padding: '12px', background: 'rgba(0,0,0,0.4)', borderRadius: '6px', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '12px' }}>
+            <span style={{ color: '#60a5fa', fontWeight: 'bold' }}>Live Market Data</span>
+            <span style={{ color: 'var(--text-muted)' }}>Avg: <strong style={{ color: 'white' }}>${comps.averagePrice}</strong> | Range: ${comps.lowPrice} - ${comps.highPrice}</span>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+            {comps.recentSales.slice(0,3).map((sale: any) => (
+              <div key={sale.id} style={{ background: 'rgba(255,255,255,0.05)', padding: '6px 8px', borderRadius: '4px', minWidth: '120px', fontSize: '11px' }}>
+                <div style={{ color: '#4ade80', fontWeight: 'bold', marginBottom: '2px' }}>${sale.price.toFixed(2)}</div>
+                <div style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={sale.title}>{sale.title}</div>
+                <div style={{ color: 'var(--text-muted)', fontSize: '10px', marginTop: '2px' }}>{sale.soldDate}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   const inputStyle = { 
     width: '100%', 
     padding: '10px 14px', 
@@ -220,7 +275,17 @@ export default function AdminBuyListClient({
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '16px' }}>
                 <div>
                   <h3 style={{ margin: '0 0 8px 0' }}>Submission #{sub.id}</h3>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>From: {sub.user.name} ({sub.user.email})</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    From: {sub.user.name} ({sub.user.email})
+                    <span style={{ 
+                      fontSize: '11px', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold',
+                      background: sub.user.vipTier === 'OBSIDIAN' ? 'rgba(168, 85, 247, 0.2)' : sub.user.vipTier === 'GOLD' ? 'rgba(234, 179, 8, 0.2)' : sub.user.vipTier === 'SILVER' ? 'rgba(148, 163, 184, 0.2)' : 'rgba(255,255,255,0.1)',
+                      color: sub.user.vipTier === 'OBSIDIAN' ? '#d8b4fe' : sub.user.vipTier === 'GOLD' ? '#fef08a' : sub.user.vipTier === 'SILVER' ? '#cbd5e1' : 'white',
+                      border: `1px solid ${sub.user.vipTier === 'OBSIDIAN' ? '#a855f7' : sub.user.vipTier === 'GOLD' ? '#eab308' : sub.user.vipTier === 'SILVER' ? '#94a3b8' : 'rgba(255,255,255,0.2)'}`
+                    }}>
+                      {sub.user.vipTier || 'MEMBER'}
+                    </span>
+                  </div>
                   <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Date: {new Date(sub.createdAt).toLocaleDateString()}</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
@@ -255,7 +320,12 @@ export default function AdminBuyListClient({
                     />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-muted)' }}>Store Credit Offer ($)</label>
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-muted)' }}>
+                      Store Credit Offer ($)
+                      {sub.user.vipTier === 'SILVER' && <span style={{ color: '#94a3b8', marginLeft: '8px', fontSize: '12px' }}>(Suggest +2% Bonus)</span>}
+                      {sub.user.vipTier === 'GOLD' && <span style={{ color: '#eab308', marginLeft: '8px', fontSize: '12px' }}>(Suggest +5% Bonus)</span>}
+                      {sub.user.vipTier === 'OBSIDIAN' && <span style={{ color: '#a855f7', marginLeft: '8px', fontSize: '12px' }}>(Suggest +10% Bonus)</span>}
+                    </label>
                     <input 
                       type="number" 
                       step="0.01" 
@@ -366,7 +436,17 @@ export default function AdminBuyListClient({
                               <img src={item.imageUrl} alt={item.cardName} style={{ width: '40px', height: '56px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
                             </a>
                           ) : null}
-                          <span>{item.cardName}</span>
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span>{item.cardName}</span>
+                            {item.aiGradeEstimate && (
+                              <div style={{ fontSize: '11px', color: '#e9d5ff', marginTop: '4px', background: 'rgba(168, 85, 247, 0.2)', padding: '2px 6px', borderRadius: '4px', width: 'fit-content', border: '1px solid rgba(168, 85, 247, 0.4)' }}>
+                                ✨ AI Est: {item.aiGradeEstimate} ({item.aiCentering})
+                              </div>
+                            )}
+                            {(sub.status === 'PENDING' || sub.status === 'REVIEWING') && (
+                              <CompsViewer query={`${item.cardName} ${item.cardSeries || ''}`} />
+                            )}
+                          </div>
                         </div>
                       </td>
                       <td style={{ padding: '12px 4px', color: 'var(--text-muted)' }}>{item.cardSeries || '-'}</td>

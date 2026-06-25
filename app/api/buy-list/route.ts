@@ -77,6 +77,8 @@ export async function POST(req: Request) {
             expectedPrice: item.expectedPrice ? parseFloat(item.expectedPrice) : null,
             imageUrl: item.imageUrl || null,
             imageUrls: item.imageUrls || [],
+            aiGradeEstimate: item.aiGradingResult ? parseFloat(item.aiGradingResult.aiGradeEstimate) : null,
+            aiCentering: item.aiGradingResult ? item.aiGradingResult.aiCentering : null,
           }))
         }
       }
