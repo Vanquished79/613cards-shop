@@ -34,7 +34,10 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
         body: formData
       });
       
-      if (!aiRes.ok) throw new Error('AI Vision failed');
+      if (!aiRes.ok) {
+        const errData = await aiRes.json().catch(()=>({}));
+        throw new Error(errData.error || 'AI Vision failed');
+      }
       
       const aiData = await aiRes.json();
       const extractedName = aiData.data.cardName;
@@ -60,11 +63,14 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
           }));
           toast.success(`Market Comp found: $${compsData.averagePrice.toFixed(2)}`);
         }
+      } else {
+        const errData = await compsRes.json().catch(()=>({}));
+        toast.error(`Comps Error: ${errData.error || 'Failed to fetch market data'}`);
       }
       
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      toast.error('Could not auto-analyze image, please enter details manually.');
+      toast.error(`Error: ${err.message || 'Could not auto-analyze image'}`);
     } finally {
       setIsAnalyzing(false);
     }
