@@ -29,7 +29,7 @@ export default async function PortfolioPage() {
   const settings = await prisma.storeSettings.findFirst() || { buyListEnabled: true };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px' }}>
+    <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px', textAlign: 'center' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
         <div>
           <h1 style={{ marginBottom: '8px', fontSize: '28px' }}>My Portfolio</h1>
@@ -40,7 +40,13 @@ export default async function PortfolioPage() {
         </div>
       </div>
 
-      <PortfolioClient initialItems={user.portfolioItems} buyListEnabled={settings.buyListEnabled} />
+      <div className="glass-panel" style={{ padding: '80px 40px', marginTop: '40px' }}>
+        <div style={{ fontSize: '64px', marginBottom: '24px' }}>🚧</div>
+        <h2 style={{ fontSize: '32px', marginBottom: '16px', color: 'var(--accent-color)' }}>COMING SOON!</h2>
+        <p style={{ fontSize: '18px', color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
+          We are currently training our AI Vision engine to be incredibly accurate with sports cards, holographics, and autographs. The Portfolio feature will be unlocked very soon!
+        </p>
+      </div>
     </div>
   );
 }
