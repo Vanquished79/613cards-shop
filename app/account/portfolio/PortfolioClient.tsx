@@ -12,6 +12,28 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
   const [isAdding, setIsAdding] = useState(false);
   const [isSelling, setIsSelling] = useState<number | null>(null);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
+  const [newItem, setNewItem] = useState({ cardName: '', cardSeries: '', condition: 'NM', purchasePrice: 0, currentValue: 0, imageUrl: '' });
+
+  const handleAddSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newItem.cardName) return toast.error('Card Name is required');
+    try {
+      const res = await fetch('/api/user/portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newItem)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setItems([data, ...items]);
+        setIsAdding(false);
+        setNewItem({ cardName: '', cardSeries: '', condition: 'NM', purchasePrice: 0, currentValue: 0, imageUrl: '' });
+        toast.success('Card added to portfolio');
+      }
+    } catch (err) {
+      toast.error('Error adding card');
+    }
+  };
 
   // Calculate totals
   const totalValue = items.reduce((sum, item) => sum + (item.currentValue || 0), 0);
@@ -91,20 +113,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h2 style={{ fontSize: '20px', margin: 0 }}>Collection Items ({items.length})</h2>
         <button 
-          onClick={async () => {
-            const name = await prompt({
-              title: "Add Portfolio Item",
-              message: "Enter the name of the card you want to add manually:",
-              placeholder: "e.g., 1999 Base Set Charizard Holographic"
-            });
-            if (name) {
-              fetch('/api/user/portfolio', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cardName: name, purchasePrice: 0, currentValue: 0 })
-              }).then(r => r.json()).then(data => setItems([data, ...items]));
-            }
-          }}
+          onClick={() => setIsAdding(true)}
           className="btn-primary" 
           style={{ padding: '8px 16px', borderRadius: '8px' }}
         >
@@ -235,6 +244,39 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
             >
               &times;
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Add Item Modal */}
+      {isAdding && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+          <div className="glass-panel" style={{ padding: '32px', width: '100%', maxWidth: '500px', borderRadius: '16px' }}>
+            <h3 style={{ margin: '0 0 24px 0', fontSize: '24px' }}>Add Portfolio Item</h3>
+            <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Card Name *</label>
+                <input required type="text" value={newItem.cardName} onChange={(e) => setNewItem({...newItem, cardName: e.target.value})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} placeholder="e.g., Charizard Holographic" />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Image URL (Optional)</label>
+                <input type="url" value={newItem.imageUrl} onChange={(e) => setNewItem({...newItem, imageUrl: e.target.value})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} placeholder="https://example.com/image.jpg" />
+              </div>
+              <div style={{ display: 'flex', gap: '16px' }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Purchase Price</label>
+                  <input type="number" step="0.01" value={newItem.purchasePrice} onChange={(e) => setNewItem({...newItem, purchasePrice: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Est. Value</label>
+                  <input type="number" step="0.01" value={newItem.currentValue} onChange={(e) => setNewItem({...newItem, currentValue: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} />
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
+                <button type="button" onClick={() => setIsAdding(false)} style={{ flex: 1, padding: '12px', background: 'transparent', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" className="btn-primary" style={{ flex: 1, padding: '12px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>Add Card</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
