@@ -74,11 +74,14 @@ export async function POST(req: Request) {
         if (res.ok) {
           const data = await res.json();
           const models = data.models.map((m: any) => m.name.replace('models/', ''));
-          availableModels = ` Available models for your key: ${models.join(', ')}`;
+          availableModels = ` Available models: ${models.join(', ')}`;
+        } else {
+          const errText = await res.text();
+          availableModels = ` (Failed to list models: ${res.status} ${errText})`;
         }
       }
-    } catch (e) {
-      console.error('Failed to fetch model list:', e);
+    } catch (e: any) {
+      availableModels = ` (Fetch exception: ${e.message})`;
     }
 
     return NextResponse.json({ error: (error.message || 'Internal AI Vision error') + availableModels }, { status: 500 });
