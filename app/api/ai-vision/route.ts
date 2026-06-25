@@ -25,12 +25,16 @@ export async function POST(req: Request) {
 1. Identify the EXACT Player/Character Name or Card Name.
 2. Identify the Set, Series, Year, and Brand (e.g., '1999 Pokemon Base Set', '2023 Panini Prizm').
 3. Estimate the physical condition based strictly on visible wear (e.g., 'NM', 'LP', 'MP', 'HP').
+4. Determine if the card is autographed (look for ink signatures).
+5. Determine if the card is a numbered parallel (look for stamped serial numbers like '10/99' or '1/1').
 Do not guess or hallucinate. Use ONLY the text and symbols visibly printed on the card.
 Respond strictly in JSON format matching exactly:
 {
   "cardName": "Exact Name",
   "cardSeries": "Year Brand Set",
-  "condition": "Estimated condition"
+  "condition": "Estimated condition",
+  "isAutographed": true or false,
+  "serialNumber": "10/99" or null
 }
 Do not wrap the JSON in markdown code blocks, just return the raw JSON object.`;
     
@@ -70,6 +74,9 @@ Do not wrap the JSON in markdown code blocks, just return the raw JSON object.`;
         cardName: extractedData.cardName,
         cardSeries: extractedData.cardSeries || 'Unknown Series',
         condition: extractedData.condition || 'NM',
+        isAutographed: extractedData.isAutographed || false,
+        isNumbered: !!extractedData.serialNumber,
+        serialNumber: extractedData.serialNumber || null,
         isGraded: false
       }
     });

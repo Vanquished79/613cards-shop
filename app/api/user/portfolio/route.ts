@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     const contentType = req.headers.get('content-type') || '';
     
-    let cardName, cardSeries, isGraded, gradingCompany, grade, purchasePrice, currentValue, imageUrl, isVaulted, vaultStatus;
+    let cardName, cardSeries, isGraded, gradingCompany, grade, purchasePrice, currentValue, imageUrl, isVaulted, vaultStatus, isAutographed, isNumbered, serialNumber;
 
     if (contentType.includes('multipart/form-data')) {
       const formData = await req.formData();
@@ -33,6 +33,9 @@ export async function POST(req: Request) {
       currentValue = formData.get('currentValue') as string;
       isVaulted = formData.get('isVaulted') === 'true';
       vaultStatus = formData.get('vaultStatus') as string;
+      isAutographed = formData.get('isAutographed') === 'true';
+      isNumbered = formData.get('isNumbered') === 'true';
+      serialNumber = formData.get('serialNumber') as string;
       
       const imageFile = formData.get('imageFile') as File;
       if (imageFile && imageFile.size > 0) {
@@ -42,7 +45,7 @@ export async function POST(req: Request) {
       }
     } else {
       const body = await req.json();
-      ({ cardName, cardSeries, isGraded, gradingCompany, grade, purchasePrice, currentValue, imageUrl, isVaulted, vaultStatus } = body);
+      ({ cardName, cardSeries, isGraded, gradingCompany, grade, purchasePrice, currentValue, imageUrl, isVaulted, vaultStatus, isAutographed, isNumbered, serialNumber } = body);
     }
 
     if (!cardName) return NextResponse.json({ error: 'Card name is required' }, { status: 400 });
@@ -59,7 +62,10 @@ export async function POST(req: Request) {
         currentValue: currentValue ? parseFloat(currentValue as string) : null,
         imageUrl,
         isVaulted: isVaulted || false,
-        vaultStatus
+        vaultStatus,
+        isAutographed: isAutographed || false,
+        isNumbered: isNumbered || false,
+        serialNumber
       }
     });
 

@@ -12,7 +12,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
   const [isAdding, setIsAdding] = useState(false);
   const [isSelling, setIsSelling] = useState<number | null>(null);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
-  const [newItem, setNewItem] = useState({ cardName: '', cardSeries: '', condition: 'NM', purchasePrice: 0, currentValue: 0, imageUrl: '' });
+  const [newItem, setNewItem] = useState({ cardName: '', cardSeries: '', condition: 'NM', purchasePrice: 0, currentValue: 0, imageUrl: '', isAutographed: false, isNumbered: false, serialNumber: '' });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -47,7 +47,10 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
       setNewItem(prev => ({
         ...prev,
         cardName: extractedName,
-        cardSeries: extractedSeries
+        cardSeries: extractedSeries,
+        isAutographed: aiData.data.isAutographed || false,
+        isNumbered: aiData.data.isNumbered || false,
+        serialNumber: aiData.data.serialNumber || ''
       }));
       
       toast.success(`AI Extracted: ${extractedName}`);
@@ -89,6 +92,9 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
         formData.append('condition', newItem.condition);
         formData.append('purchasePrice', newItem.purchasePrice.toString());
         formData.append('currentValue', newItem.currentValue.toString());
+        formData.append('isAutographed', newItem.isAutographed.toString());
+        formData.append('isNumbered', newItem.isNumbered.toString());
+        if (newItem.serialNumber) formData.append('serialNumber', newItem.serialNumber);
         formData.append('imageFile', imageFile);
         
         res = await fetch('/api/user/portfolio', {
@@ -107,7 +113,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
         const data = await res.json();
         setItems([data, ...items]);
         setIsAdding(false);
-        setNewItem({ cardName: '', cardSeries: '', condition: 'NM', purchasePrice: 0, currentValue: 0, imageUrl: '' });
+        setNewItem({ cardName: '', cardSeries: '', condition: 'NM', purchasePrice: 0, currentValue: 0, imageUrl: '', isAutographed: false, isNumbered: false, serialNumber: '' });
         setImageFile(null);
         toast.success('Card added to portfolio');
       }
@@ -243,6 +249,16 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                         {item.gradingCompany} {item.grade}
                       </span>
                     )}
+                    {item.isAutographed && (
+                      <span style={{ fontSize: '11px', padding: '2px 6px', background: 'rgba(59, 130, 246, 0.1)', color: '#60a5fa', borderRadius: '4px', border: '1px solid #3b82f6' }}>
+                        ✍️ Auto
+                      </span>
+                    )}
+                    {item.isNumbered && item.serialNumber && (
+                      <span style={{ fontSize: '11px', padding: '2px 6px', background: 'rgba(168, 85, 247, 0.1)', color: '#c084fc', borderRadius: '4px', border: '1px solid #a855f7' }}>
+                        # {item.serialNumber}
+                      </span>
+                    )}
                   </div>
                   
                   <div style={{ marginTop: 'auto', paddingTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -367,6 +383,21 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Est. Value</label>
                   <input type="number" step="0.01" value={newItem.currentValue} onChange={(e) => setNewItem({...newItem, currentValue: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} />
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'rgba(0,0,0,0.1)', padding: '12px', borderRadius: '8px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-muted)' }}>
+                  <input type="checkbox" checked={newItem.isAutographed} onChange={(e) => setNewItem({...newItem, isAutographed: e.target.checked})} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                  Autographed
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-muted)' }}>
+                    <input type="checkbox" checked={newItem.isNumbered} onChange={(e) => setNewItem({...newItem, isNumbered: e.target.checked})} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                    Numbered
+                  </label>
+                  {newItem.isNumbered && (
+                    <input type="text" value={newItem.serialNumber} onChange={(e) => setNewItem({...newItem, serialNumber: e.target.value})} placeholder="e.g. 10/99" style={{ flex: 1, padding: '8px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '6px' }} />
+                  )}
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>

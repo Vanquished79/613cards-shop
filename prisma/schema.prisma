@@ -266,6 +266,10 @@ model PortfolioItem {
   gradingCompany String?
   grade          String?
   
+  isAutographed  Boolean  @default(false)
+  isNumbered     Boolean  @default(false)
+  serialNumber   String?
+  
   purchasePrice  Float?
   currentValue   Float?
   imageUrl       String?
