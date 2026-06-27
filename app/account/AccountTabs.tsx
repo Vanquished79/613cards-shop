@@ -104,7 +104,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {displayedBuyList.map((sub: any) => (
-              <div key={sub.id} className="glass-panel" style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px' }}>
+              <div key={sub.id} className="glass-panel" style={{ padding: '24px', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
                   <div>
                     <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Submission #{sub.id}</div>
@@ -120,11 +120,11 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     <h3 style={{ margin: '0 0 16px 0', color: '#3b82f6' }}>You have an offer!</h3>
                     <p style={{ margin: '0 0 16px 0' }}>We have reviewed your cards and made the following offers:</p>
                     <div style={{ display: 'flex', gap: '24px', marginBottom: '24px' }}>
-                      <div style={{ flex: 1, padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', textAlign: 'center' }}>
+                      <div style={{ flex: 1, padding: '16px', background: 'var(--glass-bg)', borderRadius: '8px', textAlign: 'center' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '8px' }}>Cash Offer (PayPal)</div>
                         <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${sub.cashOffer?.toFixed(2)}</div>
                       </div>
-                      <div style={{ flex: 1, padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', textAlign: 'center' }}>
+                      <div style={{ flex: 1, padding: '16px', background: 'var(--glass-bg)', borderRadius: '8px', textAlign: 'center' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '8px' }}>Store Credit Offer</div>
                         <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#22c55e' }}>${sub.creditOffer?.toFixed(2)}</div>
                       </div>
@@ -145,7 +145,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                             }
                           } catch (err) { toast.error('Error accepting offer'); }
                         }}
-                        style={{ flex: 1, padding: '12px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                        style={{ flex: 1, padding: '12px', background: '#3b82f6', color: '#ffffff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                       >
                         Accept Cash
                       </button>
@@ -164,7 +164,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                             }
                           } catch (err) { toast.error('Error accepting offer'); }
                         }}
-                        style={{ flex: 1, padding: '12px', background: '#22c55e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                        style={{ flex: 1, padding: '12px', background: '#22c55e', color: '#ffffff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                       >
                         Accept Store Credit
                       </button>
@@ -192,7 +192,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                   <div style={{ padding: '16px', background: 'rgba(34, 197, 94, 0.1)', border: '1px solid #22c55e', borderRadius: '8px', marginBottom: '16px' }}>
                     <h3 style={{ margin: '0 0 8px 0', color: '#22c55e' }}>Offer Accepted</h3>
                     <p style={{ margin: '0 0 8px 0', fontSize: '14px' }}>Please mail your cards securely to:</p>
-                    <div style={{ padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '4px', fontFamily: 'monospace', color: 'var(--text-muted)' }}>
+                    <div style={{ padding: '12px', background: 'var(--glass-bg)', borderRadius: '4px', fontFamily: 'monospace', color: 'var(--text-muted)' }}>
                       613 Cards Shop<br/>
                       123 Trading Card Ln<br/>
                       Ottawa, ON K1A 0B1<br/>
@@ -211,7 +211,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}>
                       We have processed your payout for this submission:
                     </p>
-                    <div style={{ fontSize: '15px', fontWeight: 'bold', color: 'white', marginTop: '6px' }}>
+                    <div style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--text-main)', marginTop: '6px' }}>
                       {sub.payoutMethod === 'PAYPAL' ? (
                         <span>PayPal Payout: <span style={{ color: 'var(--accent-color)' }}>${sub.cashOffer?.toFixed(2)}</span> sent to <span style={{ color: 'var(--text-muted)' }}>{sub.paypalEmail}</span></span>
                       ) : (
@@ -221,7 +221,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                   </div>
                 )}
                 
-                <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+                <div style={{ padding: '16px', background: 'var(--glass-bg)', borderRadius: '8px' }}>
                   <h4 style={{ margin: '0 0 12px 0', fontSize: '14px' }}>Cards ({sub.items.length})</h4>
                   {sub.items.map((item: any) => (
                     <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '8px' }}>
@@ -255,7 +255,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
             const currentStageIndex = getStageIndex(order.status);
             
             return (
-              <div key={order.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '24px' }}>
+              <div key={order.id} style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
                   <div>
                     <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Order #{order.id}</div>
@@ -282,7 +282,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                             width: '24px', 
                             height: '24px', 
                             borderRadius: '50%', 
-                            background: isCompleted ? 'var(--accent-color)' : '#1a1a2e',
+                            background: isCompleted ? 'var(--accent-color)' : '#e2e8f0',
                             border: `2px solid ${isCompleted ? 'var(--accent-color)' : 'var(--glass-border)'}`,
                             marginBottom: '8px',
                             display: 'flex',
@@ -292,7 +292,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                           }}>
                             {isCompleted && <span style={{ color: '#000', fontSize: '12px' }}>✓</span>}
                           </div>
-                          <span style={{ fontSize: '10px', color: isCompleted ? 'white' : 'var(--text-muted)', fontWeight: isCurrent ? 'bold' : 'normal', textTransform: 'capitalize' }}>
+                          <span style={{ fontSize: '10px', color: isCompleted ? 'var(--text-main)' : 'var(--text-muted)', fontWeight: isCurrent ? 'bold' : 'normal', textTransform: 'capitalize' }}>
                             {stage.toLowerCase()}
                           </span>
                         </div>
@@ -302,7 +302,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                 </div>
                 
                 {/* Items List */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '16px', background: 'var(--glass-bg)', borderRadius: '8px' }}>
                   {order.items.map((item: any) => (
                     <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
                       <span>{item.quantity}x {item.productVariation.product.name} - {item.productVariation.condition}</span>
@@ -316,7 +316,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     
                     return (
                       <>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '8px', marginTop: '4px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', borderTop: '1px solid var(--glass-border)', paddingTop: '8px', marginTop: '4px' }}>
                           <span style={{ color: 'var(--text-muted)' }}>Subtotal</span>
                           <span style={{ color: 'var(--text-muted)' }}>${subtotal.toFixed(2)}</span>
                         </div>
@@ -345,7 +345,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                           const { markOrderAsDelivered } = await import('./actions');
                           await markOrderAsDelivered(order.id);
                         }}
-                        style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
+                        style={{ padding: '6px 12px', background: 'var(--glass-bg)', color: 'var(--text-main)', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
                       >
                         Mark as Delivered
                       </button>
@@ -359,7 +359,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                         const { markOrderAsDelivered } = await import('./actions');
                         await markOrderAsDelivered(order.id);
                       }}
-                      style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
+                      style={{ padding: '6px 12px', background: 'var(--glass-bg)', color: 'var(--text-main)', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
                     >
                       Mark as Delivered
                     </button>

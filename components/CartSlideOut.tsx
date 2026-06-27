@@ -26,7 +26,7 @@ export function CartSlideOut() {
           <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: 0, fontSize: '24px' }}>
             <ShoppingCart /> Your Cart
           </h2>
-          <button onClick={() => setIsCartOpen(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>
+          <button onClick={() => setIsCartOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-main)', cursor: 'pointer' }}>
             <X />
           </button>
         </div>
@@ -36,8 +36,8 @@ export function CartSlideOut() {
             <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '40px' }}>Your cart is empty.</p>
           ) : (
             items.map(item => (
-              <div key={`${item.id}-${item.productVariationId}`} style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '12px' }}>
-                <div style={{ width: '60px', height: '60px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div key={`${item.id}-${item.productVariationId}`} style={{ display: 'flex', gap: '12px', background: 'var(--glass-bg)', padding: '12px', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+                <div style={{ width: '60px', height: '60px', background: '#f1f5f9', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {item.imageUrl ? (
                     <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
@@ -52,11 +52,11 @@ export function CartSlideOut() {
                   <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>${item.price.toFixed(2)}</span>
                   
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
-                    <button onClick={() => updateQuantity(item.productVariationId, item.quantity - 1)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <button onClick={() => updateQuantity(item.productVariationId, item.quantity - 1)} style={{ background: '#f1f5f9', border: '1px solid var(--glass-border)', color: 'var(--text-main)', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Minus size={14} />
                     </button>
                     <span style={{ fontSize: '14px' }}>{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.productVariationId, item.quantity + 1)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <button onClick={() => updateQuantity(item.productVariationId, item.quantity + 1)} style={{ background: '#f1f5f9', border: '1px solid var(--glass-border)', color: 'var(--text-main)', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Plus size={14} />
                     </button>
                     <button onClick={() => removeFromCart(item.productVariationId)} style={{ background: 'none', border: 'none', color: '#ff6b6b', marginLeft: 'auto', cursor: 'pointer', fontSize: '13px' }}>Remove</button>

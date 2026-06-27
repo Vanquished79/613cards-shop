@@ -137,7 +137,7 @@ export default function CheckoutPage() {
             {items.map(item => (
               <div key={`${item.id}-${item.productVariationId}`} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid var(--glass-border)' }}>
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <div style={{ width: '48px', height: '48px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: '48px', height: '48px', background: 'var(--glass-bg)', borderRadius: '6px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {item.imageUrl ? (
                       <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
@@ -152,12 +152,12 @@ export default function CheckoutPage() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <button 
                         onClick={() => updateQuantity(item.productVariationId, item.quantity - 1)}
-                        style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer' }}
+                        style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-main)', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer' }}
                       >-</button>
                       <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{item.quantity}</span>
                       <button 
                         onClick={() => updateQuantity(item.productVariationId, item.quantity + 1)}
-                        style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer' }}
+                        style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-main)', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer' }}
                       >+</button>
                       <button 
                         onClick={() => removeFromCart(item.productVariationId)}
@@ -212,7 +212,7 @@ export default function CheckoutPage() {
           </p>
 
           <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-            <label style={{ flex: 1, padding: '16px', border: shippingMethod === 'SHIPPING' ? '2px solid var(--accent-color)' : '1px solid var(--glass-border)', background: shippingMethod === 'SHIPPING' ? 'rgba(255, 183, 3, 0.1)' : 'rgba(0,0,0,0.2)', borderRadius: '8px', cursor: 'pointer', textAlign: 'center' }}>
+            <label style={{ flex: 1, padding: '16px', border: shippingMethod === 'SHIPPING' ? '2px solid var(--accent-color)' : '1px solid var(--glass-border)', background: shippingMethod === 'SHIPPING' ? 'rgba(255, 183, 3, 0.1)' : 'var(--glass-bg)', borderRadius: '8px', cursor: 'pointer', textAlign: 'center' }}>
               <input 
                 type="radio" 
                 checked={shippingMethod === 'SHIPPING'} 
@@ -222,7 +222,7 @@ export default function CheckoutPage() {
               <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Mail to Me</div>
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Standard shipping rates apply</div>
             </label>
-            <label style={{ flex: 1, padding: '16px', border: shippingMethod === 'VAULT' ? '2px solid #3b82f6' : '1px solid var(--glass-border)', background: shippingMethod === 'VAULT' ? 'rgba(59, 130, 246, 0.1)' : 'rgba(0,0,0,0.2)', borderRadius: '8px', cursor: 'pointer', textAlign: 'center' }}>
+            <label style={{ flex: 1, padding: '16px', border: shippingMethod === 'VAULT' ? '2px solid #3b82f6' : '1px solid var(--glass-border)', background: shippingMethod === 'VAULT' ? 'rgba(59, 130, 246, 0.1)' : 'var(--glass-bg)', borderRadius: '8px', cursor: 'pointer', textAlign: 'center' }}>
               <input 
                 type="radio" 
                 checked={shippingMethod === 'VAULT'} 
@@ -242,36 +242,36 @@ export default function CheckoutPage() {
                   setCountry(e.target.value);
                   setProvince('');
                 }}
-                style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', outline: 'none' }}
+                style={{ width: '100%', padding: '12px', background: '#ffffff', border: '1px solid var(--glass-border)', color: 'var(--text-main)', borderRadius: '8px', outline: 'none' }}
               >
-                <option value="" style={{ background: '#1a1025', color: 'white' }}>Select Country</option>
-                <option value="CA" style={{ background: '#1a1025', color: 'white' }}>Canada</option>
-                <option value="US" style={{ background: '#1a1025', color: 'white' }}>United States</option>
-                <option value="AU" style={{ background: '#1a1025', color: 'white' }}>Australia</option>
-                <optgroup label="Europe" style={{ background: '#1a1025', color: 'var(--text-muted)' }}>
+                <option value="" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Select Country</option>
+                <option value="CA" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Canada</option>
+                <option value="US" style={{ background: '#ffffff', color: 'var(--text-main)' }}>United States</option>
+                <option value="AU" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Australia</option>
+                <optgroup label="Europe" style={{ background: '#ffffff', color: 'var(--text-muted)' }}>
                   {EUROPEAN_COUNTRIES.map(c => (
-                    <option key={c.code} value={c.code} style={{ background: '#1a1025', color: 'white' }}>{c.name}</option>
+                    <option key={c.code} value={c.code} style={{ background: '#ffffff', color: 'var(--text-main)' }}>{c.name}</option>
                   ))}
                 </optgroup>
-                <option value="OTHER" style={{ background: '#1a1025', color: 'white' }}>Other</option>
+                <option value="OTHER" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Other</option>
               </select>
 
             {country === 'CA' && (
               <select 
                 value={province} 
                 onChange={(e) => setProvince(e.target.value)}
-                style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', outline: 'none' }}
+                style={{ width: '100%', padding: '12px', background: '#ffffff', border: '1px solid var(--glass-border)', color: 'var(--text-main)', borderRadius: '8px', outline: 'none' }}
               >
-                <option value="" style={{ background: '#1a1025', color: 'white' }}>Select Province</option>
+                <option value="" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Select Province</option>
                 {CANADIAN_PROVINCES.map(p => (
-                  <option key={p.code} value={p.code} style={{ background: '#1a1025', color: 'white' }}>{p.name}</option>
+                  <option key={p.code} value={p.code} style={{ background: '#ffffff', color: 'var(--text-main)' }}>{p.name}</option>
                 ))}
               </select>
             )}
             </div>
           )}
 
-          <h3 style={{ marginBottom: '20px', color: isStep1Complete ? 'white' : 'var(--text-muted)' }}>2. Payment Details</h3>
+          <h3 style={{ marginBottom: '20px', color: isStep1Complete ? 'var(--text-main)' : 'var(--text-muted)' }}>2. Payment Details</h3>
           
           {!isStep1Complete ? (
             <div style={{ padding: '20px', textAlign: 'center', border: '1px dashed var(--glass-border)', borderRadius: '8px', color: 'var(--text-muted)' }}>
@@ -280,7 +280,7 @@ export default function CheckoutPage() {
           ) : (
             <>
               {amountToFreeShipping > 0 ? (
-                 <div style={{ padding: '12px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', marginBottom: '20px' }}>
+                 <div style={{ padding: '12px', background: 'var(--glass-bg)', borderRadius: '8px', marginBottom: '20px' }}>
                    <div style={{ fontSize: '14px', marginBottom: '8px' }}>You are <strong>{formatPrice(amountToFreeShipping)}</strong> away from Free Shipping!</div>
                    <div style={{ height: '8px', background: 'var(--glass-border)', borderRadius: '4px', overflow: 'hidden' }}>
                      <div style={{ width: `${(totalAmount / FREE_SHIPPING_THRESHOLD) * 100}%`, height: '100%', background: 'var(--accent-color)', transition: 'width 0.3s' }}></div>

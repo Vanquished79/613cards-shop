@@ -106,13 +106,13 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
             name="search" 
             defaultValue={search} 
             placeholder="Search PayPal ID, Name..." 
-            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', width: '220px' }}
+            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', width: '220px' }}
           />
           <button type="submit" style={{ padding: '8px 16px', background: 'var(--accent-color)', color: 'black', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
             Search
           </button>
           {search && (
-            <a href={`/admin/orders?tab=${tab}`} style={{ padding: '8px 16px', color: 'white', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', fontSize: '14px' }}>Clear</a>
+            <a href={`/admin/orders?tab=${tab}`} style={{ padding: '8px 16px', color: 'var(--text-main)', textDecoration: 'none', border: '1px solid var(--glass-border)', borderRadius: '6px', fontSize: '14px' }}>Clear</a>
           )}
         </form>
       </div>
@@ -122,8 +122,8 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {orders.map((order: any) => (
-            <div key={order.id} style={{ background: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+            <div key={order.id} style={{ background: 'rgba(0,0,0,0.03)', padding: '20px', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid var(--glass-border)' }}>
                 <div>
                   <h3 style={{ margin: '0 0 4px 0' }}>Order #{order.id}</h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: 0 }}>
@@ -132,8 +132,8 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <span style={{ 
-                    background: order.status === 'PAID' ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255, 255, 255, 0.1)', 
-                    color: order.status === 'PAID' ? '#4ade80' : 'white',
+                    background: order.status === 'PAID' ? 'rgba(74, 222, 128, 0.2)' : 'rgba(0, 0, 0, 0.05)', 
+                    color: order.status === 'PAID' ? '#16a34a' : 'var(--text-main)',
                     padding: '4px 12px', 
                     borderRadius: '20px', 
                     fontSize: '12px', 
@@ -157,34 +157,34 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                   <p style={{ margin: '8px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>PayPal ID: {order.paypalOrderId}</p>
                 </div>
 
-                <div style={{ borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '24px' }}>
+                <div style={{ borderLeft: '1px solid var(--glass-border)', paddingLeft: '24px' }}>
                   <h4 style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '16px' }}>Shipping & Tracking</h4>
                   <form action={updateTracking} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <input type="hidden" name="orderId" value={order.id} />
                     <select 
                       name="status"
                       defaultValue={order.status}
-                      style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '12px', marginBottom: '8px' }}
+                      style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', fontSize: '12px', marginBottom: '8px' }}
                     >
-                      <option value="PAID" style={{ background: '#1a0b2e', color: 'white' }}>Paid</option>
-                      <option value="CONFIRMED" style={{ background: '#1a0b2e', color: 'white' }}>Confirmed</option>
-                      <option value="PACKING" style={{ background: '#1a0b2e', color: 'white' }}>Packing</option>
-                      <option value="SHIPPED" style={{ background: '#1a0b2e', color: 'white' }}>Shipped</option>
-                      <option value="DELIVERED" style={{ background: '#1a0b2e', color: 'white' }}>Delivered</option>
+                      <option value="PAID" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Paid</option>
+                      <option value="CONFIRMED" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Confirmed</option>
+                      <option value="PACKING" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Packing</option>
+                      <option value="SHIPPED" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Shipped</option>
+                      <option value="DELIVERED" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Delivered</option>
                     </select>
                     <input 
                       name="shippingCarrier" 
                       placeholder="Carrier (e.g. USPS, FedEx)" 
                       defaultValue={order.shippingCarrier || ''}
-                      style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '12px' }} 
+                      style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', fontSize: '12px' }} 
                     />
                     <input 
                       name="trackingNumber" 
                       placeholder="Tracking Number" 
                       defaultValue={order.trackingNumber || ''}
-                      style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '12px' }} 
+                      style={{ padding: '8px', borderRadius: '4px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', fontSize: '12px' }} 
                     />
-                    <button type="submit" style={{ padding: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', marginTop: '4px' }}>
+                    <button type="submit" style={{ padding: '8px', background: 'rgba(0,0,0,0.05)', color: 'var(--text-main)', border: '1px solid var(--glass-border)', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', marginTop: '4px' }}>
                       Save Updates
                     </button>
                   </form>
@@ -194,7 +194,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                   <h4 style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Items</h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {order.items.map((item: any) => (
-                      <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', background: 'rgba(0,0,0,0.2)', padding: '8px 12px', borderRadius: '8px' }}>
+                      <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', background: 'rgba(0,0,0,0.03)', padding: '8px 12px', borderRadius: '8px' }}>
                         <span>{item.quantity}x {item.productVariation.product.name} ({item.productVariation.condition})</span>
                         <span>${(item.price * item.quantity).toFixed(2)}</span>
                       </div>

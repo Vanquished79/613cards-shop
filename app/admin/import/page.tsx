@@ -62,7 +62,7 @@ export default function BulkImportPage() {
     <div style={{ padding: '28px' }} className="glass-panel">
       <h1 style={{ marginBottom: '24px' }}>Bulk Import Products</h1>
       
-      <div style={{ marginBottom: '32px', background: 'rgba(255,255,255,0.05)', padding: '24px', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+      <div style={{ marginBottom: '32px', background: 'rgba(0,0,0,0.03)', padding: '24px', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
         <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>Instructions</h2>
         <p style={{ color: 'var(--text-muted)', marginBottom: '16px', lineHeight: '1.6' }}>
           Upload a CSV file to create multiple products at once. The first row must be the header row matching exactly. 
@@ -88,8 +88,8 @@ export default function BulkImportPage() {
               padding: '12px', 
               border: '1px dashed var(--glass-border)', 
               borderRadius: '8px', 
-              background: 'rgba(0,0,0,0.2)', 
-              color: 'white' 
+              background: '#ffffff', 
+              color: 'var(--text-main)' 
             }} 
           />
         </div>
@@ -99,7 +99,7 @@ export default function BulkImportPage() {
           disabled={!file || isUploading}
           style={{ 
             padding: '12px', 
-            background: file && !isUploading ? '#4ade80' : 'rgba(255,255,255,0.1)', 
+            background: file && !isUploading ? '#4ade80' : 'rgba(0,0,0,0.05)', 
             color: file && !isUploading ? '#000' : 'var(--text-muted)', 
             border: 'none', 
             borderRadius: '6px', 
@@ -113,7 +113,7 @@ export default function BulkImportPage() {
       </form>
 
       {result && (
-        <div style={{ marginTop: '32px', padding: '24px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+        <div style={{ marginTop: '32px', padding: '24px', background: 'var(--glass-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
           <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>Import Results</h2>
           
           {result.success !== undefined && (

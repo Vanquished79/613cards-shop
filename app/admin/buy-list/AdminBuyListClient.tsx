@@ -233,14 +233,14 @@ export default function AdminBuyListClient({
 
     if (comps && comps.recentSales) {
       return (
-        <div style={{ marginTop: '8px', padding: '12px', background: 'rgba(0,0,0,0.4)', borderRadius: '6px', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
+        <div style={{ marginTop: '8px', padding: '12px', background: 'var(--glass-bg)', borderRadius: '6px', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '12px' }}>
             <span style={{ color: '#60a5fa', fontWeight: 'bold' }}>Live Market Data</span>
-            <span style={{ color: 'var(--text-muted)' }}>Avg: <strong style={{ color: 'white' }}>${comps.averagePrice}</strong> | Range: ${comps.lowPrice} - ${comps.highPrice}</span>
+            <span style={{ color: 'var(--text-muted)' }}>Avg: <strong style={{ color: 'var(--text-main)' }}>${comps.averagePrice}</strong> | Range: ${comps.lowPrice} - ${comps.highPrice}</span>
           </div>
           <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
             {comps.recentSales.slice(0,3).map((sale: any) => (
-              <div key={sale.id} style={{ background: 'rgba(255,255,255,0.05)', padding: '6px 8px', borderRadius: '4px', minWidth: '120px', fontSize: '11px' }}>
+              <div key={sale.id} style={{ background: 'rgba(0,0,0,0.03)', padding: '6px 8px', borderRadius: '4px', minWidth: '120px', fontSize: '11px' }}>
                 <div style={{ color: '#4ade80', fontWeight: 'bold', marginBottom: '2px' }}>${sale.price.toFixed(2)}</div>
                 <div style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={sale.title}>{sale.title}</div>
                 <div style={{ color: 'var(--text-muted)', fontSize: '10px', marginTop: '2px' }}>{sale.soldDate}</div>
@@ -259,8 +259,8 @@ export default function AdminBuyListClient({
     padding: '10px 14px', 
     borderRadius: '8px', 
     border: '1px solid var(--glass-border)', 
-    background: 'rgba(0,0,0,0.3)', 
-    color: 'white',
+    background: '#ffffff', 
+    color: 'var(--text-main)',
     boxSizing: 'border-box' as const
   };
 
@@ -279,9 +279,9 @@ export default function AdminBuyListClient({
                     From: {sub.user.name} ({sub.user.email})
                     <span style={{ 
                       fontSize: '11px', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold',
-                      background: sub.user.vipTier === 'OBSIDIAN' ? 'rgba(168, 85, 247, 0.2)' : sub.user.vipTier === 'GOLD' ? 'rgba(234, 179, 8, 0.2)' : sub.user.vipTier === 'SILVER' ? 'rgba(148, 163, 184, 0.2)' : 'rgba(255,255,255,0.1)',
-                      color: sub.user.vipTier === 'OBSIDIAN' ? '#d8b4fe' : sub.user.vipTier === 'GOLD' ? '#fef08a' : sub.user.vipTier === 'SILVER' ? '#cbd5e1' : 'white',
-                      border: `1px solid ${sub.user.vipTier === 'OBSIDIAN' ? '#a855f7' : sub.user.vipTier === 'GOLD' ? '#eab308' : sub.user.vipTier === 'SILVER' ? '#94a3b8' : 'rgba(255,255,255,0.2)'}`
+                      background: sub.user.vipTier === 'OBSIDIAN' ? 'rgba(168, 85, 247, 0.2)' : sub.user.vipTier === 'GOLD' ? 'rgba(234, 179, 8, 0.2)' : sub.user.vipTier === 'SILVER' ? 'rgba(148, 163, 184, 0.2)' : 'rgba(0,0,0,0.05)',
+                      color: sub.user.vipTier === 'OBSIDIAN' ? '#7c3aed' : sub.user.vipTier === 'GOLD' ? '#a16207' : sub.user.vipTier === 'SILVER' ? '#64748b' : 'var(--text-main)',
+                      border: `1px solid ${sub.user.vipTier === 'OBSIDIAN' ? '#a855f7' : sub.user.vipTier === 'GOLD' ? '#eab308' : sub.user.vipTier === 'SILVER' ? '#94a3b8' : 'var(--glass-border)'}`
                     }}>
                       {sub.user.vipTier || 'MEMBER'}
                     </span>
@@ -295,14 +295,14 @@ export default function AdminBuyListClient({
                   <select 
                     value={sub.status} 
                     onChange={(e) => handleUpdateStatus(sub.id, e.target.value)}
-                    style={{ padding: '6px 12px', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', color: 'white', border: '1px solid var(--glass-border)' }}
+                    style={{ padding: '6px 12px', borderRadius: '4px', background: '#ffffff', color: 'var(--text-main)', border: '1px solid var(--glass-border)' }}
                   >
-                    <option value="PENDING" style={{ background: '#1a1025' }}>Pending</option>
-                    <option value="REVIEWING" style={{ background: '#1a1025' }}>Reviewing</option>
-                    <option value="OFFER_MADE" style={{ background: '#1a1025' }}>Offer Made</option>
-                    <option value="ACCEPTED" style={{ background: '#1a1025' }}>Accepted</option>
-                    <option value="REJECTED" style={{ background: '#1a1025' }}>Rejected</option>
-                    <option value="COMPLETED" style={{ background: '#1a1025' }}>Completed</option>
+                    <option value="PENDING" style={{ background: '#ffffff' }}>Pending</option>
+                    <option value="REVIEWING" style={{ background: '#ffffff' }}>Reviewing</option>
+                    <option value="OFFER_MADE" style={{ background: '#ffffff' }}>Offer Made</option>
+                    <option value="ACCEPTED" style={{ background: '#ffffff' }}>Accepted</option>
+                    <option value="REJECTED" style={{ background: '#ffffff' }}>Rejected</option>
+                    <option value="COMPLETED" style={{ background: '#ffffff' }}>Completed</option>
                   </select>
                 </div>
               </div>
@@ -316,7 +316,7 @@ export default function AdminBuyListClient({
                       step="0.01" 
                       id={`cashOffer-${sub.id}`}
                       defaultValue={sub.cashOffer || ''}
-                      style={{ width: '100%', padding: '8px', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', color: 'white', border: '1px solid var(--glass-border)' }}
+                      style={{ width: '100%', padding: '8px', borderRadius: '4px', background: '#ffffff', color: 'var(--text-main)', border: '1px solid var(--glass-border)' }}
                     />
                   </div>
                   <div style={{ flex: 1 }}>
@@ -331,7 +331,7 @@ export default function AdminBuyListClient({
                       step="0.01" 
                       id={`creditOffer-${sub.id}`}
                       defaultValue={sub.creditOffer || ''}
-                      style={{ width: '100%', padding: '8px', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', color: 'white', border: '1px solid var(--glass-border)' }}
+                      style={{ width: '100%', padding: '8px', borderRadius: '4px', background: '#ffffff', color: 'var(--text-main)', border: '1px solid var(--glass-border)' }}
                     />
                   </div>
                   <button 
@@ -400,7 +400,7 @@ export default function AdminBuyListClient({
               )}
 
               {sub.notes && (
-                <div style={{ padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', marginBottom: '24px', fontSize: '14px' }}>
+                <div style={{ padding: '16px', background: 'rgba(0,0,0,0.03)', borderRadius: '8px', marginBottom: '24px', fontSize: '14px' }}>
                   <strong>User Notes:</strong>
                   <p style={{ margin: '8px 0 0 0', color: 'var(--text-muted)' }}>{sub.notes}</p>
                 </div>
@@ -420,7 +420,7 @@ export default function AdminBuyListClient({
                 </thead>
                 <tbody>
                   {sub.items.map((item: any) => (
-                    <tr key={item.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <tr key={item.id} style={{ borderBottom: '1px solid var(--glass-border)' }}>
                       <td style={{ padding: '12px 4px', fontWeight: 'bold' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           {item.imageUrls && item.imageUrls.length > 0 ? (
@@ -591,7 +591,7 @@ export default function AdminBuyListClient({
                   {/* Card Main Info */}
                   <div style={{ display: 'flex', gap: '12px' }}>
                     {/* Card Image */}
-                    <div style={{ width: '80px', height: '112px', flexShrink: 0, background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <div style={{ width: '80px', height: '112px', flexShrink: 0, background: 'var(--glass-bg)', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                       {item.imageUrl ? (
                         <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       ) : (
@@ -601,7 +601,7 @@ export default function AdminBuyListClient({
 
                     {/* Details */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, minWidth: 0 }}>
-                      <h4 style={{ margin: 0, fontSize: '15px', color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={item.name}>
+                      <h4 style={{ margin: 0, fontSize: '15px', color: 'var(--text-main)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={item.name}>
                         {item.name}
                       </h4>
                       {item.series && (
@@ -645,22 +645,22 @@ export default function AdminBuyListClient({
                   </div>
 
                   {/* Item Actions */}
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '10px' }}>
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '4px', borderTop: '1px solid var(--glass-border)', paddingTop: '10px' }}>
                     <button 
                       onClick={() => handleEditClick(item)}
                       style={{ 
                         flex: 1, 
                         padding: '6px 12px', 
-                        background: 'rgba(255,255,255,0.05)', 
+                        background: 'rgba(0,0,0,0.03)', 
                         border: '1px solid var(--glass-border)', 
-                        color: 'white', 
+                        color: 'var(--text-main)', 
                         borderRadius: '6px', 
                         cursor: 'pointer',
                         fontSize: '12px',
                         transition: 'background 0.2s'
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
-                      onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.08)'}
+                      onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.03)'}
                     >
                       Edit Details
                     </button>
@@ -766,7 +766,7 @@ export default function AdminBuyListClient({
               </div>
 
               {/* Attributes Toggle Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '12px', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', background: 'rgba(0,0,0,0.15)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '12px', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', background: 'rgba(0,0,0,0.03)' }}>
                 {/* RC and Numbered */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', cursor: 'pointer' }}>
@@ -846,7 +846,7 @@ export default function AdminBuyListClient({
 
               {/* Image Upload Block */}
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px' }}>
-                <div style={{ width: '70px', height: '98px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: '6px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: '70px', height: '98px', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: '6px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {imagePreview ? (
                     <img src={imagePreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
@@ -895,9 +895,9 @@ export default function AdminBuyListClient({
                     flex: 1, 
                     padding: '10px', 
                     borderRadius: '8px', 
-                    background: 'rgba(255,255,255,0.05)', 
+                    background: 'rgba(0,0,0,0.03)', 
                     border: '1px solid var(--glass-border)', 
-                    color: 'white', 
+                    color: 'var(--text-main)', 
                     cursor: 'pointer' 
                   }}
                 >

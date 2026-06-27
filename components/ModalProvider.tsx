@@ -70,8 +70,8 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                 placeholder={modalState.placeholder}
                 style={{
                   width: '100%', padding: '12px', marginBottom: '24px',
-                  background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)',
-                  color: 'white', borderRadius: '8px', outline: 'none'
+                  background: '#ffffff', border: '1px solid var(--glass-border)',
+                  color: 'var(--text-main)', borderRadius: '8px', outline: 'none'
                 }}
                 autoFocus
               />

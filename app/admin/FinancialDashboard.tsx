@@ -206,7 +206,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
             disabled={isUpdatingBuyList}
             style={{ 
               width: '44px', height: '24px', borderRadius: '12px', border: 'none', cursor: 'pointer', position: 'relative',
-              background: buyListEnabled ? '#4ade80' : 'rgba(255,255,255,0.2)',
+              background: buyListEnabled ? '#4ade80' : 'rgba(0,0,0,0.15)',
               transition: 'background 0.3s'
             }}
           >
@@ -224,7 +224,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
             disabled={isUpdatingTax}
             style={{ 
               width: '44px', height: '24px', borderRadius: '12px', border: 'none', cursor: 'pointer', position: 'relative',
-              background: taxEnabled ? '#4ade80' : 'rgba(255,255,255,0.2)',
+              background: taxEnabled ? '#4ade80' : 'rgba(0,0,0,0.15)',
               transition: 'background 0.3s'
             }}
           >
@@ -246,7 +246,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
 
           <button 
             onClick={() => exportToCSV('TAX_EXEMPT_ALL')}
-            style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+            style={{ padding: '8px 16px', background: 'rgba(0,0,0,0.05)', color: 'var(--text-main)', border: '1px solid var(--glass-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
             title="Export all orders that did not collect tax"
           >
             Export All Tax-Exempt
@@ -270,7 +270,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
           { label: 'This Year', value: totalYear },
           { label: 'All Time', value: totalAllTime }
         ].map(metric => (
-          <div key={metric.label} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '20px' }}>
+          <div key={metric.label} style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '20px' }}>
             <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '8px' }}>{metric.label}</div>
             <div style={{ color: 'var(--accent-color)', fontSize: '24px', fontWeight: 'bold' }}>{formatCurrency(metric.value)}</div>
           </div>
@@ -279,15 +279,15 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
         {/* Calendar Section */}
-        <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '24px' }}>
+        <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <h2 style={{ fontSize: '18px' }}>Sales Calendar</h2>
             <div style={{ display: 'flex', gap: '12px' }}>
-              <button onClick={prevMonth} style={{ background: 'transparent', border: 'none', color: 'white', cursor: 'pointer', fontSize: '18px' }}>◀</button>
+              <button onClick={prevMonth} style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer', fontSize: '18px' }}>◀</button>
               <span style={{ fontWeight: 'bold', width: '120px', textAlign: 'center' }}>
                 {currentMonth.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
               </span>
-              <button onClick={nextMonth} style={{ background: 'transparent', border: 'none', color: 'white', cursor: 'pointer', fontSize: '18px' }}>▶</button>
+              <button onClick={nextMonth} style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer', fontSize: '18px' }}>▶</button>
             </div>
           </div>
 
@@ -311,7 +311,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
                   style={{
                     padding: '12px 0',
                     background: isSelected ? 'var(--accent-color)' : (hasOrders ? 'rgba(255, 183, 3, 0.15)' : 'transparent'),
-                    color: isSelected ? '#1a1025' : (hasOrders ? 'var(--accent-color)' : 'white'),
+                    color: isSelected ? '#ffffff' : (hasOrders ? 'var(--accent-color)' : 'var(--text-main)'),
                     border: '1px solid',
                     borderColor: isSelected ? 'var(--accent-color)' : (hasOrders ? 'rgba(255, 183, 3, 0.3)' : 'var(--glass-border)'),
                     borderRadius: '8px',
@@ -328,7 +328,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
         </div>
 
         {/* Selected Day Orders */}
-        <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', maxHeight: '500px' }}>
+        <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', maxHeight: '500px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', paddingBottom: '16px', borderBottom: '1px solid var(--glass-border)' }}>
             <h2 style={{ fontSize: '18px' }}>{selectedDate.toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric' })}</h2>
             <div style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '18px' }}>
@@ -341,7 +341,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
               <div style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '40px' }}>No orders on this date.</div>
             ) : (
               selectedDateOrders.map(order => (
-                <div key={order.id} style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div key={order.id} style={{ background: 'rgba(0,0,0,0.03)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                     <span style={{ fontWeight: 'bold' }}>Order #{order.id}</span>
                     <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>{formatCurrency(order.totalAmount)}</span>
@@ -349,8 +349,8 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
                     <span style={{ color: 'var(--text-main)' }}>{order.customerName}</span>
                     <span style={{ 
-                      background: order.status === 'DELIVERED' ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255, 255, 255, 0.1)', 
-                      color: order.status === 'DELIVERED' ? '#4ade80' : 'white',
+                      background: order.status === 'DELIVERED' ? 'rgba(74, 222, 128, 0.2)' : 'rgba(0, 0, 0, 0.05)', 
+                      color: order.status === 'DELIVERED' ? '#16a34a' : 'var(--text-main)',
                       padding: '2px 8px', 
                       borderRadius: '12px', 
                       fontSize: '10px',

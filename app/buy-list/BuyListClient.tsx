@@ -167,13 +167,13 @@ export default function BuyListClient({
     );
   }
 
-  const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', boxSizing: 'border-box' as const };
+  const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', boxSizing: 'border-box' as const };
   const labelStyle = { display: 'block', marginBottom: '6px', fontSize: '13px', color: 'var(--text-muted)' };
 
   const pillButtonStyle = (active: boolean) => ({
-    background: active ? 'var(--accent-color)' : 'rgba(255,255,255,0.05)',
+    background: active ? 'var(--accent-color)' : '#f1f5f9',
     border: active ? '1px solid var(--accent-color)' : '1px solid var(--glass-border)',
-    color: 'white',
+    color: active ? 'white' : 'var(--text-main)',
     padding: '6px 14px',
     borderRadius: '20px',
     cursor: 'pointer',
@@ -298,7 +298,7 @@ export default function BuyListClient({
                   <div style={{ display: 'flex', gap: '12px' }}>
                     
                     {/* Card Image */}
-                    <div style={{ width: '84px', height: '118px', flexShrink: 0, background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <div style={{ width: '84px', height: '118px', flexShrink: 0, background: '#f1f5f9', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                       {item.imageUrl ? (
                         <img 
                           src={item.imageUrl} 
@@ -314,7 +314,7 @@ export default function BuyListClient({
 
                     {/* Details */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, minWidth: 0 }}>
-                      <h4 style={{ margin: 0, fontSize: '15px', color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={item.name}>
+                      <h4 style={{ margin: 0, fontSize: '15px', color: 'var(--text-main)', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={item.name}>
                         {item.name}
                       </h4>
                       {item.series && (
@@ -414,12 +414,12 @@ export default function BuyListClient({
                   <div>
                     <label style={labelStyle}>Condition *</label>
                     <select required style={inputStyle} value={item.condition} onChange={e => updateItem(item.id, 'condition', e.target.value)}>
-                      <option value="Mint" style={{ background: '#1a1025' }}>Mint</option>
-                      <option value="Near Mint" style={{ background: '#1a1025' }}>Near Mint</option>
-                      <option value="Lightly Played" style={{ background: '#1a1025' }}>Lightly Played</option>
-                      <option value="Moderately Played" style={{ background: '#1a1025' }}>Moderately Played</option>
-                      <option value="Heavily Played" style={{ background: '#1a1025' }}>Heavily Played</option>
-                      <option value="Damaged" style={{ background: '#1a1025' }}>Damaged</option>
+                      <option value="Mint" style={{ background: '#ffffff' }}>Mint</option>
+                      <option value="Near Mint" style={{ background: '#ffffff' }}>Near Mint</option>
+                      <option value="Lightly Played" style={{ background: '#ffffff' }}>Lightly Played</option>
+                      <option value="Moderately Played" style={{ background: '#ffffff' }}>Moderately Played</option>
+                      <option value="Heavily Played" style={{ background: '#ffffff' }}>Heavily Played</option>
+                      <option value="Damaged" style={{ background: '#ffffff' }}>Damaged</option>
                     </select>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '24px' }}>
@@ -454,8 +454,8 @@ export default function BuyListClient({
                   </div>
                 </div>
 
-                <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px' }}>
-                  <label style={{ ...labelStyle, fontSize: '14px', fontWeight: 'bold', color: 'white', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ marginTop: '20px', padding: '16px', background: '#fafafa', border: '1px solid var(--glass-border)', borderRadius: '12px' }}>
+                  <label style={{ ...labelStyle, fontSize: '14px', fontWeight: 'bold', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     📸 Card Photos (Multiple Photos Requested)
                   </label>
                   
@@ -470,7 +470,7 @@ export default function BuyListClient({
                         {item.imageFiles.map((file, imgIdx) => {
                           const url = URL.createObjectURL(file);
                           return (
-                            <div key={imgIdx} style={{ position: 'relative', width: '80px', height: '110px', borderRadius: '6px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.2)' }}>
+                            <div key={imgIdx} style={{ position: 'relative', width: '80px', height: '110px', borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
                               <img src={url} alt={`Preview ${imgIdx}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                               <button 
                                 type="button"
@@ -571,14 +571,14 @@ export default function BuyListClient({
                           <div style={{ gridColumn: '1 / -1' }}>
                             <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>Sub-Grades</div>
                             <div style={{ display: 'flex', gap: '12px', fontSize: '13px', flexWrap: 'wrap' }}>
-                              <span style={{ background: 'rgba(0,0,0,0.3)', padding: '2px 8px', borderRadius: '4px' }}>Corners: {item.aiGradingResult.metrics.corners}</span>
-                              <span style={{ background: 'rgba(0,0,0,0.3)', padding: '2px 8px', borderRadius: '4px' }}>Edges: {item.aiGradingResult.metrics.edges}</span>
-                              <span style={{ background: 'rgba(0,0,0,0.3)', padding: '2px 8px', borderRadius: '4px' }}>Surface: {item.aiGradingResult.metrics.surface}</span>
+                              <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px' }}>Corners: {item.aiGradingResult.metrics.corners}</span>
+                              <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px' }}>Edges: {item.aiGradingResult.metrics.edges}</span>
+                              <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px' }}>Surface: {item.aiGradingResult.metrics.surface}</span>
                             </div>
                           </div>
                         </div>
                         
-                        <div style={{ fontSize: '13px', color: '#e9d5ff', fontStyle: 'italic', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '4px' }}>
+                        <div style={{ fontSize: '13px', color: '#7c3aed', fontStyle: 'italic', background: '#f8f0ff', padding: '8px', borderRadius: '4px' }}>
                           "{item.aiGradingResult.notes}"
                         </div>
                         <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>
@@ -594,7 +594,7 @@ export default function BuyListClient({
           </div>
 
           <div>
-            <button type="button" onClick={addItem} style={{ padding: '12px 24px', background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px dashed var(--glass-border)', borderRadius: '8px', cursor: 'pointer', width: '100%', fontSize: '16px', fontWeight: 'bold' }}>
+            <button type="button" onClick={addItem} style={{ padding: '12px 24px', background: '#f1f5f9', color: 'var(--text-main)', border: '1px dashed var(--glass-border)', borderRadius: '8px', cursor: 'pointer', width: '100%', fontSize: '16px', fontWeight: 'bold' }}>
               + Add Another Card
             </button>
           </div>

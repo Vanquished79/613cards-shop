@@ -257,3 +257,73 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== Global Form Element Styles (Light Theme) ===== */
+input, select, textarea {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: var(--border-width) solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  padding: 10px 14px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  box-shadow: var(--glass-glow);
+}
+
+input::placeholder, textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+select option {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Style disabled inputs */
+input:disabled, select:disabled, textarea:disabled {
+  background: #f1f5f9 !important;
+  color: #94a3b8 !important;
+  cursor: not-allowed;
+}
+
+/* Labels */
+label {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  background: var(--accent-color) !important;
+  color: #0f172a !important;
+  font-weight: 700;
+  border: var(--border-width) solid var(--glass-border) !important;
+  padding: 10px 14px;
+}
+
+td {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: var(--border-width) solid var(--glass-border) !important;
+  padding: 10px 14px;
+}
+
+tr:nth-child(even) td {
+  background: #f8fafc !important;
+}
+
+/* Modal/Overlay backgrounds */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+

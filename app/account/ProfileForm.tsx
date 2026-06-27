@@ -61,16 +61,16 @@ export function ProfileForm({ user }: { user: any }) {
           }}
           style={inputStyle}
         >
-          <option value="" style={{ background: '#1a1025', color: 'white' }}>Select Country</option>
-          <option value="CA" style={{ background: '#1a1025', color: 'white' }}>Canada</option>
-          <option value="US" style={{ background: '#1a1025', color: 'white' }}>United States</option>
-          <option value="AU" style={{ background: '#1a1025', color: 'white' }}>Australia</option>
-          <optgroup label="Europe" style={{ background: '#1a1025', color: 'var(--text-muted)' }}>
+          <option value="" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Select Country</option>
+          <option value="CA" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Canada</option>
+          <option value="US" style={{ background: '#ffffff', color: 'var(--text-main)' }}>United States</option>
+          <option value="AU" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Australia</option>
+          <optgroup label="Europe" style={{ background: '#ffffff', color: 'var(--text-muted)' }}>
             {EUROPEAN_COUNTRIES.map(c => (
-              <option key={c.code} value={c.code} style={{ background: '#1a1025', color: 'white' }}>{c.name}</option>
+              <option key={c.code} value={c.code} style={{ background: '#ffffff', color: 'var(--text-main)' }}>{c.name}</option>
             ))}
           </optgroup>
-          <option value="OTHER" style={{ background: '#1a1025', color: 'white' }}>Other</option>
+          <option value="OTHER" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Other</option>
         </select>
       </div>
 
@@ -88,9 +88,9 @@ export function ProfileForm({ user }: { user: any }) {
               onChange={(e) => setState(e.target.value)}
               style={inputStyle}
             >
-              <option value="" style={{ background: '#1a1025', color: 'white' }}>Select Province</option>
+              <option value="" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Select Province</option>
               {CANADIAN_PROVINCES.map(p => (
-                <option key={p.code} value={p.code} style={{ background: '#1a1025', color: 'white' }}>{p.name}</option>
+                <option key={p.code} value={p.code} style={{ background: '#ffffff', color: 'var(--text-main)' }}>{p.name}</option>
               ))}
             </select>
           ) : (
@@ -116,5 +116,5 @@ export function ProfileForm({ user }: { user: any }) {
   );
 }
 
-const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', boxSizing: 'border-box' as const };
+const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', boxSizing: 'border-box' as const };
 const labelStyle = { display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-muted)' };

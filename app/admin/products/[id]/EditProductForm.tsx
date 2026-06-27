@@ -24,7 +24,7 @@ export default function EditProductForm({ product, categories, updateProductActi
                 onChange={(e) => setProductType(e.target.value)} 
                 style={{ cursor: 'pointer' }}
               />
-              <span style={{ color: 'white' }}>{type.charAt(0) + type.slice(1).toLowerCase()}</span>
+              <span style={{ color: 'var(--text-main)' }}>{type.charAt(0) + type.slice(1).toLowerCase()}</span>
             </label>
           ))}
         </div>
@@ -39,7 +39,7 @@ export default function EditProductForm({ product, categories, updateProductActi
         <div>
           <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Category</label>
           <select name="categoryId" defaultValue={product.categoryId} required style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
-            {categories.map((c: any) => <option key={c.id} value={c.id} style={{ background: '#1a0b2e', color: 'white' }}>{c.name}</option>)}
+            {categories.map((c: any) => <option key={c.id} value={c.id} style={{ background: '#ffffff', color: 'var(--text-main)' }}>{c.name}</option>)}
           </select>
         </div>
       </div>
@@ -60,7 +60,7 @@ export default function EditProductForm({ product, categories, updateProductActi
           <button 
             type="button" 
             onClick={() => setFileInputs([...fileInputs, fileInputs.length])}
-            style={{ padding: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px dashed var(--glass-border)', borderRadius: '8px', cursor: 'pointer', fontSize: '12px' }}
+            style={{ padding: '8px', background: 'var(--glass-bg)', color: 'var(--text-main)', border: '1px dashed var(--glass-border)', borderRadius: '8px', cursor: 'pointer', fontSize: '12px' }}
           >
             + Add another image upload field
           </button>
@@ -72,7 +72,7 @@ export default function EditProductForm({ product, categories, updateProductActi
       </div>
       
       {/* Existing Images Gallery Management */}
-      <div style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+      <div style={{ padding: '16px', background: 'var(--glass-bg)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
         <label style={{ display: 'block', marginBottom: '16px', color: 'var(--text-muted)', fontSize: '14px', fontWeight: 'bold' }}>Manage Images</label>
         
         {/* Hidden input to pass deleted images array to the server */}
@@ -109,7 +109,7 @@ export default function EditProductForm({ product, categories, updateProductActi
 
       {/* Dynamic Card Fields */}
       {productType === 'CARD' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: 'var(--glass-bg)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
           <h3 style={{ gridColumn: '1 / -1', margin: '0 0 8px 0', fontSize: '16px', color: 'var(--accent-color)' }}>Card Details</h3>
           
           <div>
@@ -123,20 +123,20 @@ export default function EditProductForm({ product, categories, updateProductActi
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
               <input type="checkbox" name="isRookie" defaultChecked={product.isRookie} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Rookie Card
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
               <input type="checkbox" name="isAutograph" defaultChecked={product.isAutograph} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Autograph
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
               <input type="checkbox" name="isNumbered" defaultChecked={product.isNumbered} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Numbered
             </label>
-            <input name="serialNumber" defaultValue={product.serialNumber || ''} placeholder="Serial Number (e.g. 245/499)" style={{ padding: '8px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', marginTop: '4px' }} />
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+            <input name="serialNumber" defaultValue={product.serialNumber || ''} placeholder="Serial Number (e.g. 245/499)" style={{ padding: '8px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', marginTop: '4px' }} />
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
               <input type="checkbox" name="isParallel" defaultChecked={product.isParallel} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Parallel
             </label>
@@ -151,7 +151,7 @@ export default function EditProductForm({ product, categories, updateProductActi
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
         <input type="checkbox" id="isFeatured" name="isFeatured" defaultChecked={product.isFeatured} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-        <label htmlFor="isFeatured" style={{ color: 'white', cursor: 'pointer' }}>Feature this product on the Home Page</label>
+        <label htmlFor="isFeatured" style={{ color: 'var(--text-main)', cursor: 'pointer' }}>Feature this product on the Home Page</label>
       </div>
 
       <button type="submit" className="btn-primary" style={{ padding: '16px', marginTop: '16px', fontSize: '16px' }}>
@@ -161,4 +161,4 @@ export default function EditProductForm({ product, categories, updateProductActi
   );
 }
 
-const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', boxSizing: 'border-box' as const };
+const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', boxSizing: 'border-box' as const };

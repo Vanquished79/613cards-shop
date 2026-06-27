@@ -34,7 +34,7 @@ export default function CreateProductForm({ categories, createProductAction }: {
                 onChange={(e) => setProductType(e.target.value)} 
                 style={{ cursor: 'pointer' }}
               />
-              <span style={{ color: 'white' }}>{type.charAt(0) + type.slice(1).toLowerCase()}</span>
+              <span style={{ color: 'var(--text-main)' }}>{type.charAt(0) + type.slice(1).toLowerCase()}</span>
             </label>
           ))}
         </div>
@@ -43,19 +43,19 @@ export default function CreateProductForm({ categories, createProductAction }: {
       <input name="name" placeholder="Listing Title (e.g. 2023 Prizm LeBron James)" required style={inputStyle} />
       
       <select name="categoryId" required style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
-        <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Select Category</option>
-        {categories.map((c: any) => <option key={c.id} value={c.id} style={{ background: '#1a0b2e', color: 'white' }}>{c.name}</option>)}
+        <option value="" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Select Category</option>
+        {categories.map((c: any) => <option key={c.id} value={c.id} style={{ background: '#ffffff', color: 'var(--text-main)' }}>{c.name}</option>)}
       </select>
       
       <select name="condition" style={{...inputStyle, WebkitAppearance: 'none', appearance: 'none'}}>
-        <option value="" style={{ background: '#1a0b2e', color: 'white' }}>Any Condition</option>
-        <option value="Mint" style={{ background: '#1a0b2e', color: 'white' }}>Mint</option>
-        <option value="Near Mint" style={{ background: '#1a0b2e', color: 'white' }}>Near Mint</option>
-        <option value="Lightly Played" style={{ background: '#1a0b2e', color: 'white' }}>Lightly Played</option>
-        <option value="Moderately Played" style={{ background: '#1a0b2e', color: 'white' }}>Moderately Played</option>
-        <option value="Heavily Played" style={{ background: '#1a0b2e', color: 'white' }}>Heavily Played</option>
-        <option value="Damaged" style={{ background: '#1a0b2e', color: 'white' }}>Damaged</option>
-        <option value="N/A" style={{ background: '#1a0b2e', color: 'white' }}>N/A (Sealed)</option>
+        <option value="" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Any Condition</option>
+        <option value="Mint" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Mint</option>
+        <option value="Near Mint" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Near Mint</option>
+        <option value="Lightly Played" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Lightly Played</option>
+        <option value="Moderately Played" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Moderately Played</option>
+        <option value="Heavily Played" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Heavily Played</option>
+        <option value="Damaged" style={{ background: '#ffffff', color: 'var(--text-main)' }}>Damaged</option>
+        <option value="N/A" style={{ background: '#ffffff', color: 'var(--text-main)' }}>N/A (Sealed)</option>
       </select>
 
       <input name="price" type="number" step="0.01" placeholder="Price (e.g. 99.99)" required style={inputStyle} />
@@ -70,7 +70,7 @@ export default function CreateProductForm({ categories, createProductAction }: {
         <button 
           type="button" 
           onClick={() => setFileInputs([...fileInputs, fileInputs.length])}
-          style={{ padding: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px dashed var(--glass-border)', borderRadius: '8px', cursor: 'pointer', fontSize: '12px' }}
+          style={{ padding: '8px', background: 'var(--glass-bg)', color: 'var(--text-main)', border: '1px dashed var(--glass-border)', borderRadius: '8px', cursor: 'pointer', fontSize: '12px' }}
         >
           + Add another image upload field
         </button>
@@ -83,7 +83,7 @@ export default function CreateProductForm({ categories, createProductAction }: {
 
       {/* Dynamic Card Fields */}
       {productType === 'CARD' && (
-        <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+        <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: 'var(--glass-bg)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
           <h3 style={{ gridColumn: '1 / -1', margin: '0 0 8px 0', fontSize: '16px', color: 'var(--accent-color)' }}>Card Details</h3>
           
           <input name="cardName" placeholder="Card/Player Name (e.g. LeBron James)" style={inputStyle} />
@@ -91,20 +91,20 @@ export default function CreateProductForm({ categories, createProductAction }: {
           <input name="cardBrand" placeholder="Brand (e.g. Panini)" style={inputStyle} />
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
               <input type="checkbox" name="isRookie" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Rookie Card
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
               <input type="checkbox" name="isAutograph" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Autograph
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
               <input type="checkbox" name="isNumbered" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Numbered
             </label>
-            <input name="serialNumber" placeholder="Serial Number (e.g. 245/499)" style={{ padding: '8px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', marginTop: '4px' }} />
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'white' }}>
+            <input name="serialNumber" placeholder="Serial Number (e.g. 245/499)" style={{ padding: '8px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', marginTop: '4px' }} />
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
               <input type="checkbox" name="isParallel" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Parallel
             </label>
@@ -116,7 +116,7 @@ export default function CreateProductForm({ categories, createProductAction }: {
       
       <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
         <input type="checkbox" id="isFeatured" name="isFeatured" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-        <label htmlFor="isFeatured" style={{ color: 'white', cursor: 'pointer' }}>Feature this product on the Home Page</label>
+        <label htmlFor="isFeatured" style={{ color: 'var(--text-main)', cursor: 'pointer' }}>Feature this product on the Home Page</label>
       </div>
 
       <button type="submit" className="btn-primary" style={{ gridColumn: '1 / -1' }}>Add Product</button>
@@ -124,4 +124,4 @@ export default function CreateProductForm({ categories, createProductAction }: {
   );
 }
 
-const inputStyle = { padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white' };
+const inputStyle = { padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)' };

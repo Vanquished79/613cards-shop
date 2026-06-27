@@ -119,12 +119,12 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                 : `$${minPrice.toFixed(2)} - $${maxPrice.toFixed(2)}`;
 
             return (
-            <div key={p.id} style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div key={p.id} style={{ padding: '16px', background: 'var(--glass-bg)', borderRadius: '8px', border: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                 {p.imageUrl ? (
                   <img src={p.imageUrl} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} />
                 ) : (
-                  <div style={{ width: '50px', height: '50px', background: 'rgba(0,0,0,0.3)', borderRadius: '4px' }}></div>
+                  <div style={{ width: '50px', height: '50px', background: 'var(--glass-bg)', borderRadius: '4px', border: '1px solid var(--glass-border)' }}></div>
                 )}
                 <div>
                   <h3 style={{ margin: 0 }}>
@@ -135,7 +135,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                 <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>{priceDisplay}</span>
-                <Link href={`/admin/products/${p.id}`} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.1)', color: 'white', textDecoration: 'none', borderRadius: '4px', fontSize: '13px' }}>Edit</Link>
+                <Link href={`/admin/products/${p.id}`} style={{ padding: '6px 12px', background: 'var(--glass-bg)', color: 'var(--text-main)', textDecoration: 'none', borderRadius: '4px', fontSize: '13px', border: '1px solid var(--glass-border)' }}>Edit</Link>
                 <form action={deleteProduct}>
                   <input type="hidden" name="id" value={p.id} />
                   <button type="submit" style={{ padding: '6px 12px', background: 'rgba(255,100,100,0.1)', color: '#ff8080', border: '1px solid rgba(255,100,100,0.2)', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}>Delete</button>
@@ -149,4 +149,4 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   );
 }
 
-const inputStyle = { padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white' };
+const inputStyle = { padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)' };

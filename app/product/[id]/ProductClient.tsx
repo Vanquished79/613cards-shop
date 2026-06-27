@@ -41,7 +41,7 @@ export function ProductClient({ product }: { product: any }) {
         <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div 
             className="product-image-container" 
-            style={{ width: '100%', height: '400px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative', cursor: selectedImage ? 'zoom-in' : 'default' }}
+            style={{ width: '100%', height: '400px', background: '#f8fafc', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative', cursor: selectedImage ? 'zoom-in' : 'default' }}
             onClick={() => {
               if (selectedImage) {
                 setIsImageExpanded(true);
@@ -51,7 +51,7 @@ export function ProductClient({ product }: { product: any }) {
             }}
           >
             {selectedImage ? (
-              <img src={selectedImage} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.5))' }} />
+              <img src={selectedImage} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.15))' }} />
             ) : (
               <span style={{ color: 'var(--text-muted)' }}>No Image Available</span>
             )}
@@ -70,9 +70,10 @@ export function ProductClient({ product }: { product: any }) {
               }}
               style={{ 
                 position: 'absolute', top: '16px', right: product.compareAtPrice && product.compareAtPrice > product.price ? '100px' : '16px', 
-                background: 'rgba(0,0,0,0.5)', borderRadius: '50%', width: '40px', height: '40px', 
+                background: 'rgba(255,255,255,0.9)', borderRadius: '50%', width: '40px', height: '40px', 
                 display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10,
-                color: isWishlisted ? '#ff3366' : 'white', transition: 'transform 0.2s, color 0.2s',
+                color: isWishlisted ? '#ff3366' : 'var(--text-muted)', transition: 'transform 0.2s, color 0.2s',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                 transform: isWishlisted ? 'scale(1.1)' : 'scale(1)'
               }}
               onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
@@ -94,7 +95,7 @@ export function ProductClient({ product }: { product: any }) {
                   onClick={() => setSelectedImage(img)}
                   style={{ 
                     width: '80px', height: '80px', flexShrink: 0, 
-                    borderRadius: '8px', background: 'rgba(0,0,0,0.2)', 
+                    borderRadius: '8px', background: '#f1f5f9', 
                     border: selectedImage === img ? '2px solid var(--accent-color)' : '2px solid transparent',
                     cursor: 'pointer', overflow: 'hidden', padding: '4px'
                   }}
@@ -211,7 +212,7 @@ export function ProductClient({ product }: { product: any }) {
           </div>
 
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '24px' }}>
-            <span style={{ background: 'rgba(255,255,255,0.05)', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', border: '1px solid var(--glass-border)' }}>
+            <span style={{ background: '#f1f5f9', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', border: '1px solid var(--glass-border)' }}>
               {product.category?.name || 'Uncategorized'}
             </span>
 
@@ -235,13 +236,13 @@ export function ProductClient({ product }: { product: any }) {
           )}
 
           {product.type === 'CARD' && (
-            <div style={{ marginBottom: '32px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '8px', overflow: 'hidden' }}>
-              <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid var(--glass-border)', fontWeight: 'bold' }}>
+            <div style={{ marginBottom: '32px', background: '#fafafa', border: '1px solid var(--glass-border)', borderRadius: '8px', overflow: 'hidden' }}>
+              <div style={{ padding: '12px 16px', background: '#f1f5f9', borderBottom: '1px solid var(--glass-border)', fontWeight: 'bold' }}>
                 Card Specifications
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'var(--glass-border)' }}>
                 {product.cardName && (
-                  <div style={{ padding: '12px 16px', background: '#1a0b2e' }}>
+                  <div style={{ padding: '12px 16px', background: 'var(--glass-bg)' }}>
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Player / Character</div>
                     <div style={{ fontWeight: '500' }}>{product.cardName}</div>
                   </div>
@@ -258,7 +259,7 @@ export function ProductClient({ product }: { product: any }) {
                     <div style={{ fontWeight: '500' }}>{product.cardBrand}</div>
                   </div>
                 )}
-                <div style={{ padding: '12px 16px', background: '#1a0b2e', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ padding: '12px 16px', background: 'var(--glass-bg)', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                     {product.type === 'BREAK' && (
                       <span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', fontWeight: 'bold' }}>
                         BREAK SPOT
@@ -300,7 +301,7 @@ export function ProductClient({ product }: { product: any }) {
                       }}
                       style={{ 
                         display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
-                        padding: '16px', background: isSelected ? 'rgba(var(--accent-color-rgb), 0.1)' : 'rgba(255,255,255,0.03)', 
+                        padding: '16px', background: isSelected ? 'rgba(var(--accent-color-rgb), 0.1)' : '#fafafa', 
                         borderRadius: '8px', border: isSelected ? '2px solid var(--accent-color)' : '1px solid var(--glass-border)',
                         cursor: isOutOfStock ? 'not-allowed' : 'pointer',
                         opacity: isOutOfStock ? 0.5 : 1,
@@ -326,7 +327,7 @@ export function ProductClient({ product }: { product: any }) {
             </div>
           )}
 
-          <div style={{ marginTop: 'auto', padding: '24px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+          <div style={{ marginTop: 'auto', padding: '24px', background: '#f1f5f9', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
             <button 
               className="btn-primary" 
               style={{ 

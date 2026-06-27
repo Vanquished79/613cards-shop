@@ -56,8 +56,8 @@ export function ReplyForm({ ticketId }: { ticketId: number }) {
             padding: '16px',
             borderRadius: '8px',
             border: '1px solid var(--glass-border)',
-            background: 'rgba(0,0,0,0.2)',
-            color: 'white',
+            background: '#ffffff',
+            color: 'var(--text-main)',
             outline: 'none',
             fontSize: '15px',
             resize: 'vertical'

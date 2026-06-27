@@ -111,7 +111,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
           <p style={{ color: 'var(--text-muted)' }}>No variations found. Please add at least one variation to make this product purchasable.</p>
         ) : (
           product.variations.map((v: any) => (
-            <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+            <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'var(--glass-bg)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
               <div>
                 <p style={{ margin: '0 0 4px 0', fontWeight: 'bold' }}>
                   {v.condition}
@@ -121,7 +121,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
               </div>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                 <span style={{ fontWeight: 'bold', color: 'var(--accent-color)' }}>${v.price.toFixed(2)}</span>
-                <Link href={`/admin/products/${productId}/variations/${v.id}`} style={{ color: 'white', textDecoration: 'none', background: 'rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: '4px', fontSize: '13px' }}>Edit</Link>
+                <Link href={`/admin/products/${productId}/variations/${v.id}`} style={{ color: 'var(--text-main)', textDecoration: 'none', background: 'var(--glass-bg)', padding: '6px 12px', borderRadius: '4px', fontSize: '13px', border: '1px solid var(--glass-border)' }}>Edit</Link>
               </div>
             </div>
           ))
@@ -131,4 +131,4 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   );
 }
 
-const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', boxSizing: 'border-box' as const };
+const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', boxSizing: 'border-box' as const };
