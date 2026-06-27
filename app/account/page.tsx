@@ -55,6 +55,14 @@ export default async function AccountPage() {
     return <div>User not found.</div>;
   }
 
+  const settings = await prisma.storeSettings.findUnique({ where: { id: 1 } });
+  const sT = settings?.silverThreshold || 500;
+  const sB = settings?.silverBonus || 2;
+  const gT = settings?.goldThreshold || 2000;
+  const gB = settings?.goldBonus || 5;
+  const oT = settings?.obsidianThreshold || 5000;
+  const oB = settings?.obsidianBonus || 10;
+
   async function updateProfile(formData: FormData) {
     'use server'
     const name = formData.get('name') as string;
@@ -104,19 +112,19 @@ export default async function AccountPage() {
             </p>
           </div>
           <div style={{ textAlign: 'right', fontSize: '14px', color: 'var(--text-muted)' }}>
-            {user.vipTier === 'MEMBER' && <span>Spend ${(500 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#64748b'}}>SILVER</strong></span>}
-            {user.vipTier === 'SILVER' && <span>Spend ${(2000 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#eab308'}}>GOLD</strong></span>}
-            {user.vipTier === 'GOLD' && <span>Spend ${(5000 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#a855f7'}}>OBSIDIAN</strong></span>}
+            {user.vipTier === 'MEMBER' && <span>Spend ${(sT - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#64748b'}}>SILVER</strong></span>}
+            {user.vipTier === 'SILVER' && <span>Spend ${(gT - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#eab308'}}>GOLD</strong></span>}
+            {user.vipTier === 'GOLD' && <span>Spend ${(oT - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#a855f7'}}>OBSIDIAN</strong></span>}
             {user.vipTier === 'OBSIDIAN' && <span style={{ color: '#a855f7' }}>Highest Tier Reached!</span>}
           </div>
         </div>
 
         {user.vipTier !== 'OBSIDIAN' && (() => {
-          const thresholds = { MEMBER: 0, SILVER: 500, GOLD: 2000, OBSIDIAN: 5000 };
-          const currentFloor = thresholds[user.vipTier as keyof typeof thresholds];
-          let nextCeil = 500;
-          if (user.vipTier === 'SILVER') nextCeil = 2000;
-          if (user.vipTier === 'GOLD') nextCeil = 5000;
+          const thresholds = { MEMBER: 0, SILVER: sT, GOLD: gT, OBSIDIAN: oT };
+          const currentFloor = thresholds[user.vipTier as keyof typeof thresholds] || 0;
+          let nextCeil = sT;
+          if (user.vipTier === 'SILVER') nextCeil = gT;
+          if (user.vipTier === 'GOLD') nextCeil = oT;
           
           const progress = Math.min(100, Math.max(0, ((user.lifetimeSpend - currentFloor) / (nextCeil - currentFloor)) * 100));
 
@@ -135,9 +143,9 @@ export default async function AccountPage() {
         <div style={{ fontSize: '14px', color: 'var(--text-muted)', display: 'flex', gap: '24px', marginTop: '8px' }}>
           <span><strong>Benefits:</strong></span>
           {user.vipTier === 'MEMBER' && <span>Standard access to Store.</span>}
-          {user.vipTier === 'SILVER' && <span>+2% bonus on all Store Credit trade-ins.</span>}
-          {user.vipTier === 'GOLD' && <span>+5% bonus on Store Credit trade-ins.</span>}
-          {user.vipTier === 'OBSIDIAN' && <span>+10% bonus on Store Credit trade-ins & priority shipping.</span>}
+          {user.vipTier === 'SILVER' && <span>+{sB}% bonus on all Store Credit trade-ins.</span>}
+          {user.vipTier === 'GOLD' && <span>+{gB}% bonus on Store Credit trade-ins.</span>}
+          {user.vipTier === 'OBSIDIAN' && <span>+{oB}% bonus on Store Credit trade-ins & priority shipping.</span>}
         </div>
       </div>
 

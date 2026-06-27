@@ -3,21 +3,31 @@ import prisma from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
-    const { taxEnabled, buyListEnabled, maintenanceMode } = await request.json();
+    const body = await request.json();
+    const { 
+      taxEnabled, buyListEnabled, maintenanceMode,
+      silverThreshold, silverBonus,
+      goldThreshold, goldBonus,
+      obsidianThreshold, obsidianBonus
+    } = body;
     
     const updateData: any = {};
     if (taxEnabled !== undefined) updateData.taxEnabled = taxEnabled;
     if (buyListEnabled !== undefined) updateData.buyListEnabled = buyListEnabled;
     if (maintenanceMode !== undefined) updateData.maintenanceMode = maintenanceMode;
+    if (silverThreshold !== undefined) updateData.silverThreshold = parseFloat(silverThreshold);
+    if (silverBonus !== undefined) updateData.silverBonus = parseFloat(silverBonus);
+    if (goldThreshold !== undefined) updateData.goldThreshold = parseFloat(goldThreshold);
+    if (goldBonus !== undefined) updateData.goldBonus = parseFloat(goldBonus);
+    if (obsidianThreshold !== undefined) updateData.obsidianThreshold = parseFloat(obsidianThreshold);
+    if (obsidianBonus !== undefined) updateData.obsidianBonus = parseFloat(obsidianBonus);
 
     await prisma.storeSettings.upsert({
       where: { id: 1 },
       update: updateData,
       create: {
         id: 1,
-        taxEnabled: taxEnabled !== undefined ? taxEnabled : false,
-        buyListEnabled: buyListEnabled !== undefined ? buyListEnabled : true,
-        maintenanceMode: maintenanceMode !== undefined ? maintenanceMode : false
+        ...updateData
       }
     });
 
@@ -37,7 +47,13 @@ export async function GET() {
     return NextResponse.json({
       taxEnabled: settings?.taxEnabled ?? false,
       buyListEnabled: settings?.buyListEnabled ?? true,
-      maintenanceMode: settings?.maintenanceMode ?? false
+      maintenanceMode: settings?.maintenanceMode ?? false,
+      silverThreshold: settings?.silverThreshold ?? 500,
+      silverBonus: settings?.silverBonus ?? 2,
+      goldThreshold: settings?.goldThreshold ?? 2000,
+      goldBonus: settings?.goldBonus ?? 5,
+      obsidianThreshold: settings?.obsidianThreshold ?? 5000,
+      obsidianBonus: settings?.obsidianBonus ?? 10
     });
   } catch (error: any) {
     console.error('Failed to get settings:', error);

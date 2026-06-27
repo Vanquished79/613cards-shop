@@ -25,11 +25,18 @@ export default async function AdminBuyListPage() {
     orderBy: { createdAt: 'desc' }
   });
 
+  const settings = await prisma.storeSettings.findUnique({ where: { id: 1 } });
+  const vipBonuses = {
+    silver: settings?.silverBonus || 2,
+    gold: settings?.goldBonus || 5,
+    obsidian: settings?.obsidianBonus || 10
+  };
+
   return (
     <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px' }}>
       <h1 style={{ marginBottom: '24px' }}>Buy-List Management</h1>
       
-      <AdminBuyListClient initialSubmissions={submissions} initialWantedItems={wantedItems} />
+      <AdminBuyListClient initialSubmissions={submissions} initialWantedItems={wantedItems} vipBonuses={vipBonuses} />
     </div>
   );
 }

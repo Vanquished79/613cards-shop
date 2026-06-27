@@ -28,11 +28,26 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
   const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [isUpdatingMaintenance, setIsUpdatingMaintenance] = useState(false);
 
+  const [vipSettings, setVipSettings] = useState({
+    silverThreshold: 500, silverBonus: 2,
+    goldThreshold: 2000, goldBonus: 5,
+    obsidianThreshold: 5000, obsidianBonus: 10
+  });
+  const [isUpdatingVip, setIsUpdatingVip] = useState(false);
+
   useEffect(() => {
     fetch('/api/settings').then(r => r.json()).then(data => {
       if (data.taxEnabled !== undefined) setTaxEnabled(data.taxEnabled);
       if (data.buyListEnabled !== undefined) setBuyListEnabled(data.buyListEnabled);
       if (data.maintenanceMode !== undefined) setMaintenanceMode(data.maintenanceMode);
+      setVipSettings({
+        silverThreshold: data.silverThreshold ?? 500,
+        silverBonus: data.silverBonus ?? 2,
+        goldThreshold: data.goldThreshold ?? 2000,
+        goldBonus: data.goldBonus ?? 5,
+        obsidianThreshold: data.obsidianThreshold ?? 5000,
+        obsidianBonus: data.obsidianBonus ?? 10
+      });
     }).catch(e => console.error(e));
   }, []);
 
@@ -88,6 +103,22 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
       toast.error('Failed to update maintenance setting');
     }
     setIsUpdatingMaintenance(false);
+  };
+
+  const saveVipSettings = async () => {
+    setIsUpdatingVip(true);
+    try {
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(vipSettings)
+      });
+      toast.success('VIP settings updated!');
+    } catch (e) {
+      console.error(e);
+      toast.error('Failed to update VIP settings');
+    }
+    setIsUpdatingVip(false);
   };
 
   // Compute metrics
@@ -298,6 +329,53 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
             style={{ padding: '8px 16px', background: 'var(--accent-color)', color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
           >
             Export All
+          </button>
+        </div>
+      </div>
+
+      {/* VIP Tier Settings */}
+      <div style={{ marginTop: '32px', background: 'rgba(0,0,0,0.02)', padding: '24px', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+        <h3 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span>🏆 VIP Tier Settings</span>
+        </h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+          <div style={{ padding: '16px', background: '#ffffff', borderRadius: '8px', border: '1px solid #94a3b8' }}>
+            <h4 style={{ color: '#64748b', marginBottom: '12px' }}>SILVER TIER</h4>
+            <div style={{ marginBottom: '8px' }}>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)' }}>Required Spend ($)</label>
+              <input type="number" step="0.01" value={vipSettings.silverThreshold} onChange={e => setVipSettings({...vipSettings, silverThreshold: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)' }}>Bonus Credit (%)</label>
+              <input type="number" step="0.1" value={vipSettings.silverBonus} onChange={e => setVipSettings({...vipSettings, silverBonus: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+            </div>
+          </div>
+          <div style={{ padding: '16px', background: '#ffffff', borderRadius: '8px', border: '1px solid #eab308' }}>
+            <h4 style={{ color: '#a16207', marginBottom: '12px' }}>GOLD TIER</h4>
+            <div style={{ marginBottom: '8px' }}>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)' }}>Required Spend ($)</label>
+              <input type="number" step="0.01" value={vipSettings.goldThreshold} onChange={e => setVipSettings({...vipSettings, goldThreshold: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)' }}>Bonus Credit (%)</label>
+              <input type="number" step="0.1" value={vipSettings.goldBonus} onChange={e => setVipSettings({...vipSettings, goldBonus: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+            </div>
+          </div>
+          <div style={{ padding: '16px', background: '#ffffff', borderRadius: '8px', border: '1px solid #a855f7' }}>
+            <h4 style={{ color: '#7c3aed', marginBottom: '12px' }}>OBSIDIAN TIER</h4>
+            <div style={{ marginBottom: '8px' }}>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)' }}>Required Spend ($)</label>
+              <input type="number" step="0.01" value={vipSettings.obsidianThreshold} onChange={e => setVipSettings({...vipSettings, obsidianThreshold: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)' }}>Bonus Credit (%)</label>
+              <input type="number" step="0.1" value={vipSettings.obsidianBonus} onChange={e => setVipSettings({...vipSettings, obsidianBonus: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+            </div>
+          </div>
+        </div>
+        <div style={{ marginTop: '16px', textAlign: 'right' }}>
+          <button onClick={saveVipSettings} disabled={isUpdatingVip} style={{ padding: '8px 24px', background: 'var(--text-main)', color: 'white', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>
+            {isUpdatingVip ? 'Saving...' : 'Save VIP Settings'}
           </button>
         </div>
       </div>

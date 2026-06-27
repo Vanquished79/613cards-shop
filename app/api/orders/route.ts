@@ -89,6 +89,28 @@ export async function POST(request: Request) {
         });
       }
 
+      // 5. Update Lifetime Spend and recalculate VIP Tier
+      if (userId) {
+        const settings = await tx.storeSettings.findUnique({ where: { id: 1 } });
+        const user = await tx.user.findUnique({ where: { id: userId } });
+        
+        if (settings && user) {
+          const newLifetimeSpend = user.lifetimeSpend + totalAmount;
+          let newTier = 'MEMBER';
+          if (newLifetimeSpend >= settings.obsidianThreshold) newTier = 'OBSIDIAN';
+          else if (newLifetimeSpend >= settings.goldThreshold) newTier = 'GOLD';
+          else if (newLifetimeSpend >= settings.silverThreshold) newTier = 'SILVER';
+
+          await tx.user.update({
+            where: { id: userId },
+            data: { 
+              lifetimeSpend: newLifetimeSpend,
+              vipTier: newTier
+            }
+          });
+        }
+      }
+
       return newOrder;
     });
 

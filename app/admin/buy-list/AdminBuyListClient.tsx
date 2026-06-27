@@ -7,10 +7,12 @@ import { toast } from 'react-hot-toast';
 
 export default function AdminBuyListClient({ 
   initialSubmissions, 
-  initialWantedItems = [] 
+  initialWantedItems = [],
+  vipBonuses = { silver: 2, gold: 5, obsidian: 10 }
 }: { 
   initialSubmissions: any[], 
-  initialWantedItems?: any[] 
+  initialWantedItems?: any[],
+  vipBonuses?: { silver: number, gold: number, obsidian: number }
 }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'active_submissions' | 'archived_submissions' | 'wanted'>('active_submissions');
@@ -322,9 +324,9 @@ export default function AdminBuyListClient({
                   <div style={{ flex: 1 }}>
                     <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-muted)' }}>
                       Store Credit Offer ($)
-                      {sub.user.vipTier === 'SILVER' && <span style={{ color: '#64748b', marginLeft: '8px', fontSize: '12px' }}>(Suggest +2% Bonus)</span>}
-                      {sub.user.vipTier === 'GOLD' && <span style={{ color: '#eab308', marginLeft: '8px', fontSize: '12px' }}>(Suggest +5% Bonus)</span>}
-                      {sub.user.vipTier === 'OBSIDIAN' && <span style={{ color: '#a855f7', marginLeft: '8px', fontSize: '12px' }}>(Suggest +10% Bonus)</span>}
+                      {sub.user.vipTier === 'SILVER' && <span style={{ color: '#64748b', marginLeft: '8px', fontSize: '12px' }}>(Suggest +{vipBonuses.silver}% Bonus)</span>}
+                      {sub.user.vipTier === 'GOLD' && <span style={{ color: '#eab308', marginLeft: '8px', fontSize: '12px' }}>(Suggest +{vipBonuses.gold}% Bonus)</span>}
+                      {sub.user.vipTier === 'OBSIDIAN' && <span style={{ color: '#a855f7', marginLeft: '8px', fontSize: '12px' }}>(Suggest +{vipBonuses.obsidian}% Bonus)</span>}
                     </label>
                     <input 
                       type="number" 

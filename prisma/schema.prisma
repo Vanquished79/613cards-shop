@@ -184,11 +184,17 @@ model WaitlistSubscriber {
 }
 
 model StoreSettings {
-  id             Int      @id @default(1)
-  taxEnabled     Boolean  @default(false)
-  buyListEnabled Boolean  @default(true)
-  maintenanceMode Boolean @default(false)
-  updatedAt      DateTime @updatedAt
+  id                Int      @id @default(1)
+  taxEnabled        Boolean  @default(false)
+  buyListEnabled    Boolean  @default(true)
+  maintenanceMode   Boolean  @default(false)
+  silverThreshold   Float    @default(500)
+  silverBonus       Float    @default(2)
+  goldThreshold     Float    @default(2000)
+  goldBonus         Float    @default(5)
+  obsidianThreshold Float    @default(5000)
+  obsidianBonus     Float    @default(10)
+  updatedAt         DateTime @updatedAt
 }
 
 model WishlistItem {
