@@ -40,9 +40,9 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
           onClick={() => setActiveTab('active')}
           style={{ 
             background: 'transparent', border: 'none', 
-            color: activeTab === 'active' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            color: activeTab === 'active' ? 'var(--text-accent)' : 'var(--text-muted)', 
             padding: '8px 0', fontWeight: activeTab === 'active' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'active' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            borderBottom: activeTab === 'active' ? '2px solid var(--text-accent)' : '2px solid transparent',
             cursor: 'pointer', fontSize: '15px'
           }}
         >
@@ -52,9 +52,9 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
           onClick={() => setActiveTab('archived')}
           style={{ 
             background: 'transparent', border: 'none', 
-            color: activeTab === 'archived' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            color: activeTab === 'archived' ? 'var(--text-accent)' : 'var(--text-muted)', 
             padding: '8px 0', fontWeight: activeTab === 'archived' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'archived' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            borderBottom: activeTab === 'archived' ? '2px solid var(--text-accent)' : '2px solid transparent',
             cursor: 'pointer', fontSize: '15px'
           }}
         >
@@ -64,9 +64,9 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
           onClick={() => setActiveTab('wishlist')}
           style={{ 
             background: 'transparent', border: 'none', 
-            color: activeTab === 'wishlist' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            color: activeTab === 'wishlist' ? 'var(--text-accent)' : 'var(--text-muted)', 
             padding: '8px 0', fontWeight: activeTab === 'wishlist' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'wishlist' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            borderBottom: activeTab === 'wishlist' ? '2px solid var(--text-accent)' : '2px solid transparent',
             cursor: 'pointer', fontSize: '15px'
           }}
         >
@@ -76,9 +76,9 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
           onClick={() => setActiveTab('buylist')}
           style={{ 
             background: 'transparent', border: 'none', 
-            color: activeTab === 'buylist' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            color: activeTab === 'buylist' ? 'var(--text-accent)' : 'var(--text-muted)', 
             padding: '8px 0', fontWeight: activeTab === 'buylist' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'buylist' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            borderBottom: activeTab === 'buylist' ? '2px solid var(--text-accent)' : '2px solid transparent',
             cursor: 'pointer', fontSize: '15px'
           }}
         >
@@ -88,9 +88,9 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
           onClick={() => setActiveTab('archived_buylist')}
           style={{ 
             background: 'transparent', border: 'none', 
-            color: activeTab === 'archived_buylist' ? 'var(--accent-color)' : 'var(--text-muted)', 
+            color: activeTab === 'archived_buylist' ? 'var(--text-accent)' : 'var(--text-muted)', 
             padding: '8px 0', fontWeight: activeTab === 'archived_buylist' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'archived_buylist' ? '2px solid var(--accent-color)' : '2px solid transparent',
+            borderBottom: activeTab === 'archived_buylist' ? '2px solid var(--text-accent)' : '2px solid transparent',
             cursor: 'pointer', fontSize: '15px'
           }}
         >

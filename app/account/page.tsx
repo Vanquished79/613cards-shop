@@ -89,12 +89,12 @@ export default async function AccountPage() {
       </div>
 
       {/* VIP Tier Gamification Block */}
-      <div className="glass-panel" style={{ padding: '24px', marginBottom: '32px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'linear-gradient(145deg, rgba(30,30,40,0.4) 0%, rgba(20,20,30,0.6) 100%)' }}>
+      <div className="glass-panel" style={{ padding: '24px', marginBottom: '32px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'var(--glass-bg)', border: 'var(--border-width) solid var(--glass-border)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <h2 style={{ fontSize: '20px', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ 
-                color: user.vipTier === 'OBSIDIAN' ? '#a855f7' : user.vipTier === 'GOLD' ? '#eab308' : user.vipTier === 'SILVER' ? '#94a3b8' : 'white'
+                color: user.vipTier === 'OBSIDIAN' ? '#a855f7' : user.vipTier === 'GOLD' ? '#eab308' : user.vipTier === 'SILVER' ? '#94a3b8' : 'var(--text-main)'
               }}>
                 {user.vipTier} TIER
               </span>
