@@ -91,7 +91,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                 onClick={() => handleClose(modalState.type === 'confirm' ? true : inputValue)}
                 style={{
                   padding: '10px 16px', background: 'var(--accent-color)', border: 'none',
-                  color: 'white', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold'
+                  color: 'var(--text-main)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold'
                 }}
               >
                 {modalState.type === 'confirm' ? 'Confirm' : 'Submit'}

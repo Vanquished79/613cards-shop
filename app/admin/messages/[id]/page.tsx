@@ -38,7 +38,7 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
         <div>
           <h1 style={{ fontSize: '24px', margin: '0 0 8px 0' }}>Ticket #{ticket.id}</h1>
           <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
-            From: <span style={{ color: 'white' }}>{ticket.name}</span> ({ticket.email}) &bull; {ticket.createdAt.toLocaleString()}
+            From: <span style={{ color: 'var(--text-main)' }}>{ticket.name}</span> ({ticket.email}) &bull; {ticket.createdAt.toLocaleString()}
           </div>
         </div>
         <div>

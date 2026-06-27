@@ -189,7 +189,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
         </div>
         <div className="glass-panel" style={{ padding: '24px', textAlign: 'center' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Cost</div>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>${totalCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)' }}>${totalCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
         </div>
         <div className="glass-panel" style={{ padding: '24px', textAlign: 'center' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Net Return</div>
@@ -336,7 +336,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                 right: '0',
                 background: 'transparent',
                 border: 'none',
-                color: 'white',
+                color: 'var(--text-main)',
                 fontSize: '28px',
                 cursor: 'pointer'
               }}
@@ -355,7 +355,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
             <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Card Name *</label>
-                <input required type="text" value={newItem.cardName} onChange={(e) => setNewItem({...newItem, cardName: e.target.value})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} placeholder="e.g., Charizard Holographic" />
+                <input required type="text" value={newItem.cardName} onChange={(e) => setNewItem({...newItem, cardName: e.target.value})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-main)', borderRadius: '8px' }} placeholder="e.g., Charizard Holographic" />
               </div>
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Image Upload (Optional)</label>
@@ -365,7 +365,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                     accept="image/*" 
                     disabled={isAnalyzing}
                     onChange={handleImageSelect} 
-                    style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', opacity: isAnalyzing ? 0.5 : 1 }} 
+                    style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-main)', borderRadius: '8px', opacity: isAnalyzing ? 0.5 : 1 }} 
                   />
                   {isAnalyzing && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-accent)', fontSize: '13px', fontWeight: 'bold' }}>
@@ -378,11 +378,11 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
               <div style={{ display: 'flex', gap: '16px' }}>
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Purchase Price</label>
-                  <input type="number" step="0.01" value={newItem.purchasePrice} onChange={(e) => setNewItem({...newItem, purchasePrice: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} />
+                  <input type="number" step="0.01" value={newItem.purchasePrice} onChange={(e) => setNewItem({...newItem, purchasePrice: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-main)', borderRadius: '8px' }} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Est. Value</label>
-                  <input type="number" step="0.01" value={newItem.currentValue} onChange={(e) => setNewItem({...newItem, currentValue: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px' }} />
+                  <input type="number" step="0.01" value={newItem.currentValue} onChange={(e) => setNewItem({...newItem, currentValue: parseFloat(e.target.value) || 0})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-main)', borderRadius: '8px' }} />
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'rgba(0,0,0,0.1)', padding: '12px', borderRadius: '8px' }}>
@@ -396,7 +396,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                     Numbered
                   </label>
                   {newItem.isNumbered && (
-                    <input type="text" value={newItem.serialNumber} onChange={(e) => setNewItem({...newItem, serialNumber: e.target.value})} placeholder="e.g. 10/99" style={{ flex: 1, padding: '8px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '6px' }} />
+                    <input type="text" value={newItem.serialNumber} onChange={(e) => setNewItem({...newItem, serialNumber: e.target.value})} placeholder="e.g. 10/99" style={{ flex: 1, padding: '8px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', color: 'var(--text-main)', borderRadius: '6px' }} />
                   )}
                 </div>
               </div>

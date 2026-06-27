@@ -96,23 +96,23 @@ function ShopFiltersInner({ categories }: { categories: any[] }) {
           <input type="checkbox" name="isRookie" value="true" defaultChecked={searchParams.get('isRookie') === 'true'} />
           Rookie Cards
         </label>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'var(--text-main)', fontSize: '14px' }}>
           <input type="checkbox" name="isAutograph" value="true" defaultChecked={searchParams.get('isAutograph') === 'true'} />
           Autographs
         </label>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'var(--text-main)', fontSize: '14px' }}>
           <input type="checkbox" name="isNumbered" value="true" defaultChecked={searchParams.get('isNumbered') === 'true'} />
           Numbered
         </label>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'var(--text-main)', fontSize: '14px' }}>
           <input type="checkbox" name="isGraded" value="true" defaultChecked={searchParams.get('isGraded') === 'true'} />
           Graded
         </label>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'var(--text-main)', fontSize: '14px' }}>
           <input type="checkbox" name="isPreorder" value="true" defaultChecked={searchParams.get('isPreorder') === 'true'} />
           Pre-orders
         </label>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'white', fontSize: '14px' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'var(--text-main)', fontSize: '14px' }}>
           <input type="checkbox" name="isBreak" value="true" defaultChecked={searchParams.get('isBreak') === 'true'} />
           Breaks
         </label>

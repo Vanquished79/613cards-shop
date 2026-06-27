@@ -36,7 +36,7 @@ export default async function BuyListPage() {
       <div style={{ maxWidth: '600px', margin: '80px auto', padding: '0 20px', textAlign: 'center' }}>
         <div className="glass-panel" style={{ padding: '48px 32px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
           <div style={{ fontSize: '64px' }}>🔒</div>
-          <h1 style={{ fontSize: '28px', color: 'white', margin: 0 }}>Submissions Temporarily Closed</h1>
+          <h1 style={{ fontSize: '28px', color: 'var(--text-main)', margin: 0 }}>Submissions Temporarily Closed</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '16px', lineHeight: '1.6', margin: 0 }}>
             We are not currently accepting any card submissions. Our team is working through current orders and will reopen shortly. Please check back later!
           </p>

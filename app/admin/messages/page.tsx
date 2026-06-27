@@ -78,7 +78,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
                     <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{msg.email}</div>
                   </td>
                   <td style={{ padding: '16px 24px', maxWidth: '300px' }}>
-                    <Link href={`/admin/messages/${msg.id}`} style={{ color: 'white', textDecoration: 'none' }}>
+                    <Link href={`/admin/messages/${msg.id}`} style={{ color: 'var(--text-main)', textDecoration: 'none' }}>
                       <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-muted)' }}>
                         {msg.message}
                       </div>

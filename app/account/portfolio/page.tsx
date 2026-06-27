@@ -36,7 +36,7 @@ export default async function PortfolioPage() {
           <p style={{ color: 'var(--text-muted)', margin: 0 }}>Track the value of your personal collection and vaulted items.</p>
         </div>
         <div style={{ display: 'flex', gap: '16px' }}>
-          <a href="/account" className="btn-secondary" style={{ padding: '8px 16px', borderRadius: '8px', textDecoration: 'none', border: '1px solid var(--glass-border)', color: 'white' }}>&larr; Back to Account</a>
+          <a href="/account" className="btn-secondary" style={{ padding: '8px 16px', borderRadius: '8px', textDecoration: 'none', border: '1px solid var(--glass-border)', color: 'var(--text-main)' }}>&larr; Back to Account</a>
         </div>
       </div>
 

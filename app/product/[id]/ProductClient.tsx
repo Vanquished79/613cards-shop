@@ -122,7 +122,7 @@ export function ProductClient({ product }: { product: any }) {
             }}
           >
             <div 
-              style={{ position: 'absolute', top: '20px', right: '30px', color: 'white', fontSize: '40px', cursor: 'pointer', zIndex: 10000, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}
+              style={{ position: 'absolute', top: '20px', right: '30px', color: 'var(--text-main)', fontSize: '40px', cursor: 'pointer', zIndex: 10000, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}
               onClick={(e) => {
                 e.stopPropagation();
                 setIsImageExpanded(false);

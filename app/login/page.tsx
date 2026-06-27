@@ -134,7 +134,7 @@ function LoginForm() {
             background: loading
               ? 'rgba(138,43,226,0.4)'
               : 'linear-gradient(135deg, var(--accent-color), #6a0dad)',
-            color: 'white',
+            color: 'var(--text-main)',
             fontSize: '15px',
             fontWeight: '600',
             cursor: loading ? 'not-allowed' : 'pointer',

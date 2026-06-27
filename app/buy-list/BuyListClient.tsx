@@ -529,7 +529,7 @@ export default function BuyListClient({
                           style={{ 
                             padding: '8px 16px', 
                             background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)', 
-                            color: 'white', 
+                            color: 'var(--text-main)', 
                             border: 'none', 
                             borderRadius: '8px', 
                             cursor: item.isGrading ? 'not-allowed' : 'pointer',
@@ -658,7 +658,7 @@ export default function BuyListClient({
                 right: '0',
                 background: 'transparent',
                 border: 'none',
-                color: 'white',
+                color: 'var(--text-main)',
                 fontSize: '28px',
                 cursor: 'pointer'
               }}

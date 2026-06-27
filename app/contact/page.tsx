@@ -64,7 +64,7 @@ export default function ContactPage() {
           <div style={{ padding: '20px', background: 'rgba(74, 222, 128, 0.1)', border: '1px solid rgba(74, 222, 128, 0.2)', borderRadius: '12px', textAlign: 'center' }}>
             <h3 style={{ color: '#4ade80', margin: '0 0 8px 0' }}>Message Sent!</h3>
             <p style={{ margin: 0, color: 'var(--text-muted)' }}>We will get back to you as soon as possible.</p>
-            <button onClick={() => setSuccess(false)} style={{ background: 'none', border: 'none', color: 'white', marginTop: '16px', cursor: 'pointer', textDecoration: 'underline' }}>
+            <button onClick={() => setSuccess(false)} style={{ background: 'none', border: 'none', color: 'var(--text-main)', marginTop: '16px', cursor: 'pointer', textDecoration: 'underline' }}>
               Send another message
             </button>
           </div>
