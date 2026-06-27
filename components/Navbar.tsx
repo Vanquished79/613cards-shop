@@ -234,17 +234,17 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
                 onMouseEnter={() => setHoveredCategory(c.id)}
                 onMouseLeave={() => setHoveredCategory(null)}
               >
-                <Link href={`/?categoryId=${c.id}`} style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s', padding: '8px 0' }}
-                      onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-main)'}
-                      onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link href={`/?categoryId=${c.id}`} style={{ color: 'var(--text-main)', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s', padding: '8px 0', fontWeight: 'bold' }}
+                      onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-accent)'}
+                      onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-main)'}>
                   {c.name} ▾
                 </Link>
                 {hoveredCategory === c.id && (
                   <div style={{ position: 'absolute', top: '100%', left: 0, background: 'var(--glass-bg)', border: 'var(--border-width) solid var(--glass-border)', borderRadius: '8px', padding: '8px 0', minWidth: '180px', display: 'flex', flexDirection: 'column', boxShadow: 'var(--glass-glow)', zIndex: 50 }}>
                     {children.map((sub: any) => (
-                      <Link key={sub.id} href={`/?categoryId=${sub.id}`} style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', padding: '8px 16px', transition: 'background 0.2s, color 0.2s' }}
-                            onMouseOver={(e) => { e.currentTarget.style.color = 'var(--text-main)'; e.currentTarget.style.background = 'var(--bg-color-start)' }}
-                            onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'transparent' }}>
+                      <Link key={sub.id} href={`/?categoryId=${sub.id}`} style={{ color: 'var(--text-main)', textDecoration: 'none', fontSize: '14px', padding: '8px 16px', transition: 'background 0.2s, color 0.2s', fontWeight: 'bold' }}
+                            onMouseOver={(e) => { e.currentTarget.style.color = 'var(--text-accent)'; e.currentTarget.style.background = 'var(--bg-color-start)' }}
+                            onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-main)'; e.currentTarget.style.background = 'transparent' }}>
                         {sub.name}
                       </Link>
                     ))}
@@ -256,9 +256,9 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
 
           return (
             <div key={c.id}>
-              <Link href={`/?categoryId=${c.id}`} style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s' }}
-                    onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-main)'}
-                    onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+              <Link href={`/?categoryId=${c.id}`} style={{ color: 'var(--text-main)', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s', fontWeight: 'bold' }}
+                    onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-accent)'}
+                    onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-main)'}>
                 {c.name}
               </Link>
             </div>
@@ -267,9 +267,9 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
 
         {/* Right Links */}
         <div style={{ width: '1px', height: '16px', background: 'var(--glass-border)', margin: '0 8px' }} />
-        <Link href="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-main)'}
-              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
+        <Link href="/contact" style={{ color: 'var(--text-main)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', transition: 'color 0.2s' }}
+              onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-accent)'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-main)'}>
           Contact
         </Link>
       </div>
