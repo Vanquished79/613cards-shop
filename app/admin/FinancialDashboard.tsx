@@ -25,11 +25,14 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
   const [isUpdatingTax, setIsUpdatingTax] = useState(false);
   const [buyListEnabled, setBuyListEnabled] = useState(true);
   const [isUpdatingBuyList, setIsUpdatingBuyList] = useState(false);
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [isUpdatingMaintenance, setIsUpdatingMaintenance] = useState(false);
 
   useEffect(() => {
     fetch('/api/settings').then(r => r.json()).then(data => {
       if (data.taxEnabled !== undefined) setTaxEnabled(data.taxEnabled);
       if (data.buyListEnabled !== undefined) setBuyListEnabled(data.buyListEnabled);
+      if (data.maintenanceMode !== undefined) setMaintenanceMode(data.maintenanceMode);
     }).catch(e => console.error(e));
   }, []);
 
@@ -67,6 +70,24 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
       toast.error('Failed to update buy-list setting');
     }
     setIsUpdatingBuyList(false);
+  };
+
+  const toggleMaintenance = async () => {
+    setIsUpdatingMaintenance(true);
+    const newValue = !maintenanceMode;
+    try {
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ maintenanceMode: newValue })
+      });
+      setMaintenanceMode(newValue);
+      toast.success(newValue ? 'Maintenance Mode ON (Site Closed)' : 'Maintenance Mode OFF (Site Open)');
+    } catch (e) {
+      console.error(e);
+      toast.error('Failed to update maintenance setting');
+    }
+    setIsUpdatingMaintenance(false);
   };
 
   // Compute metrics
@@ -213,6 +234,26 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
             <div style={{
               width: '20px', height: '20px', borderRadius: '50%', background: 'white', position: 'absolute', top: '2px',
               left: buyListEnabled ? '22px' : '2px', transition: 'left 0.3s', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }} />
+          </button>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: maintenanceMode ? 'rgba(239,68,68,0.1)' : 'transparent', borderRadius: '8px', border: maintenanceMode ? '1px solid rgba(239,68,68,0.3)' : '1px solid transparent' }}>
+          <span style={{ color: maintenanceMode ? 'var(--text-error)' : 'var(--text-muted)', fontWeight: maintenanceMode ? 'bold' : 'normal' }}>
+            Maintenance Mode:
+          </span>
+          <button 
+            onClick={toggleMaintenance}
+            disabled={isUpdatingMaintenance}
+            style={{ 
+              width: '44px', height: '24px', borderRadius: '12px', border: 'none', cursor: 'pointer', position: 'relative',
+              background: maintenanceMode ? '#ef4444' : 'rgba(0,0,0,0.15)',
+              transition: 'background 0.3s'
+            }}
+          >
+            <div style={{
+              width: '20px', height: '20px', borderRadius: '50%', background: 'white', position: 'absolute', top: '2px',
+              left: maintenanceMode ? '22px' : '2px', transition: 'left 0.3s', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
             }} />
           </button>
         </div>

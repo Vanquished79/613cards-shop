@@ -187,6 +187,7 @@ model StoreSettings {
   id             Int      @id @default(1)
   taxEnabled     Boolean  @default(false)
   buyListEnabled Boolean  @default(true)
+  maintenanceMode Boolean @default(false)
   updatedAt      DateTime @updatedAt
 }
 

@@ -3,11 +3,12 @@ import prisma from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
-    const { taxEnabled, buyListEnabled } = await request.json();
+    const { taxEnabled, buyListEnabled, maintenanceMode } = await request.json();
     
     const updateData: any = {};
     if (taxEnabled !== undefined) updateData.taxEnabled = taxEnabled;
     if (buyListEnabled !== undefined) updateData.buyListEnabled = buyListEnabled;
+    if (maintenanceMode !== undefined) updateData.maintenanceMode = maintenanceMode;
 
     await prisma.storeSettings.upsert({
       where: { id: 1 },
@@ -15,7 +16,8 @@ export async function POST(request: Request) {
       create: {
         id: 1,
         taxEnabled: taxEnabled !== undefined ? taxEnabled : false,
-        buyListEnabled: buyListEnabled !== undefined ? buyListEnabled : true
+        buyListEnabled: buyListEnabled !== undefined ? buyListEnabled : true,
+        maintenanceMode: maintenanceMode !== undefined ? maintenanceMode : false
       }
     });
 
@@ -34,7 +36,8 @@ export async function GET() {
 
     return NextResponse.json({
       taxEnabled: settings?.taxEnabled ?? false,
-      buyListEnabled: settings?.buyListEnabled ?? true
+      buyListEnabled: settings?.buyListEnabled ?? true,
+      maintenanceMode: settings?.maintenanceMode ?? false
     });
   } catch (error: any) {
     console.error('Failed to get settings:', error);

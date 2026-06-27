@@ -19,7 +19,19 @@ export async function middleware(request: NextRequest) {
   }
 
   // Maintenance Mode (Coming Soon) Logic
-  const isMaintenanceMode = true;
+  let isMaintenanceMode = false;
+  try {
+    const settingsRes = await fetch(new URL('/api/settings', request.url), {
+      next: { revalidate: 60 }
+    });
+    if (settingsRes.ok) {
+      const data = await settingsRes.json();
+      isMaintenanceMode = !!data.maintenanceMode;
+    }
+  } catch (err) {
+    console.error('Middleware settings fetch error:', err);
+  }
+
   const isAdminUser = token?.role === 'ADMIN';
   
   const isExemptRoute = 
@@ -27,6 +39,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/login') || 
     pathname.startsWith('/register') || 
     pathname.startsWith('/api/auth') || 
+    pathname.startsWith('/api/settings') || 
     pathname.startsWith('/_next') || 
     pathname === '/logo.png' || 
     pathname === '/logo-transparent.png' || 

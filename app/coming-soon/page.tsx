@@ -64,17 +64,17 @@ export default function ComingSoon() {
         </div>
         
         <h1 style={{ fontSize: '52px', margin: 0, fontWeight: 800, color: '#0f172a' }}>
-          Coming <span style={{ color: '#c2410c' }}>Soon!</span>
+          Site <span style={{ color: '#c2410c' }}>Maintenance</span>
         </h1>
         
         <p style={{ fontSize: '18px', color: '#475569', lineHeight: '1.6', margin: 0, maxWidth: '500px' }}>
-          The premier destination for trading cards and supplies is almost ready. We&apos;re working hard to build the ultimate collection for you!
+          We are currently undergoing scheduled maintenance to improve your experience. We will be back online shortly!
         </p>
 
         <div style={{ marginTop: '10px', width: '80%', height: '3px', background: '#1e293b', borderRadius: '2px' }} />
         
         <p style={{ fontSize: '16px', color: '#0f172a', margin: 0, fontWeight: 700 }}>
-          Be the first to know when we launch! 🚀
+          Stay updated! 🚀
         </p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', width: '100%', maxWidth: '420px', gap: '12px', marginTop: '8px', flexDirection: 'column' }}>
