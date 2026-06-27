@@ -259,7 +259,7 @@ export function ProductClient({ product }: { product: any }) {
                     <div style={{ fontWeight: '500' }}>{product.cardBrand}</div>
                   </div>
                 )}
-                <div style={{ padding: '12px 16px', background: 'var(--glass-bg)', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ gridColumn: '1 / -1', padding: '12px 16px', background: 'var(--glass-bg)', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                     {product.type === 'BREAK' && (
                       <span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#b91c1c', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', fontWeight: 'bold' }}>
                         BREAK SPOT
