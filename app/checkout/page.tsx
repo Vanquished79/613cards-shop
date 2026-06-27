@@ -22,9 +22,11 @@ export default function CheckoutPage() {
   const [taxEnabled, setTaxEnabled] = useState(true);
   const [shippingMethod, setShippingMethod] = useState<'SHIPPING' | 'VAULT'>('SHIPPING');
 
-  // Store Credit
+  // Store Credit & VIP
   const [storeCredit, setStoreCredit] = useState(0);
   const [useStoreCredit, setUseStoreCredit] = useState(false);
+  const [vipTier, setVipTier] = useState<string>('MEMBER');
+  const [vipSettings, setVipSettings] = useState({ silver: 2, gold: 5, obsidian: 10 });
 
   const router = useRouter();
   const { data: session } = useSession();
@@ -32,12 +34,18 @@ export default function CheckoutPage() {
   useEffect(() => {
     fetch('/api/settings').then(r => r.json()).then(data => {
       if (data.taxEnabled !== undefined) setTaxEnabled(data.taxEnabled);
+      setVipSettings({
+        silver: data.silverBonus ?? 2,
+        gold: data.goldBonus ?? 5,
+        obsidian: data.obsidianBonus ?? 10
+      });
     }).catch(e => console.error(e));
 
-    // Fetch user profile for store credit and address pre-fill
+    // Fetch user profile for store credit, address pre-fill, and VIP tier
     if (session?.user) {
       fetch('/api/user/profile').then(r => r.json()).then(data => {
         if (data.storeCredit) setStoreCredit(data.storeCredit);
+        if (data.vipTier) setVipTier(data.vipTier);
         if (data.country) {
           setCountry(data.country);
           if (data.state && data.country === 'CA') {
@@ -48,19 +56,28 @@ export default function CheckoutPage() {
     }
   }, [session]);
 
-  // Calculations
-  const shippingCost = calculateShipping(totalAmount);
-  const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalAmount);
+  // VIP Discount Calculation
+  let discountPercent = 0;
+  if (vipTier === 'SILVER') discountPercent = vipSettings.silver;
+  if (vipTier === 'GOLD') discountPercent = vipSettings.gold;
+  if (vipTier === 'OBSIDIAN') discountPercent = vipSettings.obsidian;
   
+  const discountAmount = totalAmount * (discountPercent / 100);
+  const subtotalAfterDiscount = totalAmount - discountAmount;
+
+  // Calculations
+  const shippingCost = calculateShipping(subtotalAfterDiscount);
+  const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotalAfterDiscount);
+
   // Step 1 complete if valid country selected (and province if CA)
   const isStep1Complete = !!(country && (country !== 'CA' || province));
   
   const taxInfo = useMemo(() => {
     if (!isStep1Complete || !taxEnabled) return null;
-    return calculateTaxes(country, province, totalAmount + shippingCost);
-  }, [isStep1Complete, country, province, totalAmount, shippingCost, taxEnabled]);
+    return calculateTaxes(country, province, subtotalAfterDiscount + shippingCost);
+  }, [isStep1Complete, country, province, subtotalAfterDiscount, shippingCost, taxEnabled]);
 
-  const finalTotal = totalAmount + shippingCost + (taxInfo ? taxInfo.amount : 0);
+  const finalTotal = subtotalAfterDiscount + shippingCost + (taxInfo ? taxInfo.amount : 0);
   const storeCreditUsed = useStoreCredit ? Math.min(storeCredit, finalTotal) : 0;
   const amountToPay = Math.max(0, finalTotal - storeCreditUsed);
 
@@ -177,6 +194,12 @@ export default function CheckoutPage() {
               <span>Subtotal:</span>
               <span>{formatPrice(totalAmount)}</span>
             </div>
+            {discountPercent > 0 && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', color: 'var(--text-success)' }}>
+                <span>VIP Discount ({discountPercent}%):</span>
+                <span>-{formatPrice(discountAmount)}</span>
+              </div>
+            )}
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', color: 'var(--text-muted)' }}>
               <span>Shipping:</span>
               <span>{shippingCost === 0 ? 'FREE' : formatPrice(shippingCost)}</span>
@@ -259,7 +282,7 @@ export default function CheckoutPage() {
                  <div style={{ padding: '12px', background: 'var(--glass-bg)', borderRadius: '8px', marginBottom: '20px' }}>
                    <div style={{ fontSize: '14px', marginBottom: '8px' }}>You are <strong>{formatPrice(amountToFreeShipping)}</strong> away from Free Shipping!</div>
                    <div style={{ height: '8px', background: 'var(--glass-border)', borderRadius: '4px', overflow: 'hidden' }}>
-                     <div style={{ width: `${(totalAmount / FREE_SHIPPING_THRESHOLD) * 100}%`, height: '100%', background: 'var(--accent-color)', transition: 'width 0.3s' }}></div>
+                     <div style={{ width: `${(subtotalAfterDiscount / FREE_SHIPPING_THRESHOLD) * 100}%`, height: '100%', background: 'var(--accent-color)', transition: 'width 0.3s' }}></div>
                    </div>
                  </div>
               ) : (

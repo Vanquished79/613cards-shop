@@ -143,9 +143,9 @@ export default async function AccountPage() {
         <div style={{ fontSize: '14px', color: 'var(--text-muted)', display: 'flex', gap: '24px', marginTop: '8px' }}>
           <span><strong>Benefits:</strong></span>
           {user.vipTier === 'MEMBER' && <span>Standard access to Store.</span>}
-          {user.vipTier === 'SILVER' && <span>+{sB}% bonus on all Store Credit trade-ins.</span>}
-          {user.vipTier === 'GOLD' && <span>+{gB}% bonus on Store Credit trade-ins.</span>}
-          {user.vipTier === 'OBSIDIAN' && <span>+{oB}% bonus on Store Credit trade-ins & priority shipping.</span>}
+          {user.vipTier === 'SILVER' && <span>{sB}% off your store purchase.</span>}
+          {user.vipTier === 'GOLD' && <span>{gB}% off your store purchase.</span>}
+          {user.vipTier === 'OBSIDIAN' && <span>{oB}% off your store purchase & priority shipping.</span>}
         </div>
       </div>
 
