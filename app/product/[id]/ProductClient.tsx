@@ -248,13 +248,13 @@ export function ProductClient({ product }: { product: any }) {
                   </div>
                 )}
                 {product.cardSeries && (
-                  <div style={{ padding: '12px 16px', background: '#1a0b2e' }}>
+                  <div style={{ padding: '12px 16px', background: 'var(--glass-bg)' }}>
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Series / Year</div>
                     <div style={{ fontWeight: '500' }}>{product.cardSeries}</div>
                   </div>
                 )}
                 {product.cardBrand && (
-                  <div style={{ padding: '12px 16px', background: '#1a0b2e' }}>
+                  <div style={{ padding: '12px 16px', background: 'var(--glass-bg)' }}>
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Brand</div>
                     <div style={{ fontWeight: '500' }}>{product.cardBrand}</div>
                   </div>
