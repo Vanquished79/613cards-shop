@@ -16,13 +16,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
     }
 
-    const userId = parseInt(session.user.id as string);
+    let userId = parseInt(session.user.id as string);
     if (isNaN(userId)) {
-      // If the fallback env admin tries to use wishlist, they might have id "admin"
       if (session.user.id === 'admin') {
-         return NextResponse.json({ error: 'Must be logged in with a real account to use wishlist.' }, { status: 400 });
+         // Create or find a dummy admin user in the DB to attach wishlist items to
+         let adminUser = await prisma.user.findUnique({ where: { email: 'admin@613cards.online' } });
+         if (!adminUser) {
+           adminUser = await prisma.user.create({
+             data: {
+               email: 'admin@613cards.online',
+               passwordHash: '',
+               name: 'Admin Fallback',
+               role: 'ADMIN'
+             }
+           });
+         }
+         userId = adminUser.id;
+      } else {
+        return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 });
       }
-      return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 });
     }
 
     // Check if it already exists

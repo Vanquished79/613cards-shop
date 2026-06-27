@@ -10,9 +10,17 @@ export async function GET() {
       return NextResponse.json({ wishlistIds: [] });
     }
 
-    const userId = parseInt(session.user.id as string);
+    let userId = parseInt(session.user.id as string);
     if (isNaN(userId)) {
-      return NextResponse.json({ wishlistIds: [] });
+      if (session.user.id === 'admin') {
+         let adminUser = await prisma.user.findUnique({ where: { email: 'admin@613cards.online' } });
+         if (!adminUser) {
+           return NextResponse.json({ wishlistIds: [] });
+         }
+         userId = adminUser.id;
+      } else {
+        return NextResponse.json({ wishlistIds: [] });
+      }
     }
 
     const items = await prisma.wishlistItem.findMany({
