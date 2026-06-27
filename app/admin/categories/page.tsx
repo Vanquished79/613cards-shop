@@ -111,9 +111,9 @@ export default async function CategoriesPage() {
                     style={{
                       padding: '6px 14px',
                       borderRadius: '6px',
-                      border: '1px solid rgba(255,100,100,0.3)',
-                      background: 'rgba(255,100,100,0.08)',
-                      color: '#ff8080',
+                      border: '1px solid var(--text-error)',
+                      background: 'rgba(220, 38, 38, 0.1)',
+                      color: 'var(--text-error)',
                       cursor: 'pointer',
                       fontSize: '13px',
                       whiteSpace: 'nowrap',

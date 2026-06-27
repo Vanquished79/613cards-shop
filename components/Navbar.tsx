@@ -113,7 +113,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
                   top: '100%', 
                   right: 0, 
                   marginTop: '8px',
-                  background: 'rgba(26, 11, 46, 0.98)', 
+                  background: 'var(--glass-bg)', 
                   backdropFilter: 'blur(16px)', 
                   border: '1px solid var(--glass-border)', 
                   borderRadius: '12px', 

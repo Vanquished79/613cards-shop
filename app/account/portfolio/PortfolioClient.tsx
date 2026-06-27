@@ -286,7 +286,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                 )}
                 <button 
                   onClick={() => handleDelete(item.id)}
-                  style={{ padding: '8px 12px', flex: buyListEnabled ? 'none' : 1, background: 'transparent', color: '#ef4444', border: '1px solid #ef4444', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}
+                  style={{ padding: '8px 12px', flex: buyListEnabled ? 'none' : 1, background: 'transparent', color: 'var(--text-error)', border: '1px solid var(--text-error)', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}
                   title="Remove from Portfolio"
                 >
                   Delete

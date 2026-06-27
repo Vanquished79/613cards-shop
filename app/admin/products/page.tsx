@@ -138,7 +138,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                 <Link href={`/admin/products/${p.id}`} style={{ padding: '6px 12px', background: 'var(--glass-bg)', color: 'var(--text-main)', textDecoration: 'none', borderRadius: '4px', fontSize: '13px', border: '1px solid var(--glass-border)' }}>Edit</Link>
                 <form action={deleteProduct}>
                   <input type="hidden" name="id" value={p.id} />
-                  <button type="submit" style={{ padding: '6px 12px', background: 'rgba(255,100,100,0.1)', color: '#ff8080', border: '1px solid rgba(255,100,100,0.2)', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}>Delete</button>
+                  <button type="submit" style={{ padding: '6px 12px', background: 'rgba(220, 38, 38, 0.1)', color: 'var(--text-error)', border: '1px solid var(--text-error)', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}>Delete</button>
                 </form>
               </div>
             </div>

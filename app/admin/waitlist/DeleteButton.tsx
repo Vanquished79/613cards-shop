@@ -25,7 +25,7 @@ export function DeleteButton({ id, email }: { id: number, email: string }) {
       style={{
         background: 'none',
         border: 'none',
-        color: '#ff8080',
+        color: 'var(--text-error)',
         cursor: isDeleting ? 'not-allowed' : 'pointer',
         opacity: isDeleting ? 0.5 : 1,
         padding: '8px',
@@ -35,7 +35,7 @@ export function DeleteButton({ id, email }: { id: number, email: string }) {
         borderRadius: '4px',
         transition: 'background 0.2s'
       }}
-      onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,128,128,0.1)'}
+      onMouseOver={(e) => e.currentTarget.style.background = 'rgba(220, 38, 38, 0.1)'}
       onMouseOut={(e) => e.currentTarget.style.background = 'none'}
       title="Remove Subscriber"
     >

@@ -68,14 +68,14 @@ export function ReplyForm({ ticketId }: { ticketId: number }) {
             <button 
               type="button" 
               onClick={handleClose}
-              style={{ padding: '10px 16px', borderRadius: '8px', background: 'rgba(74, 222, 128, 0.1)', color: '#4ade80', border: '1px solid rgba(74, 222, 128, 0.2)', cursor: 'pointer', fontWeight: 'bold' }}
+              style={{ padding: '10px 16px', borderRadius: '8px', background: 'rgba(34, 197, 94, 0.1)', color: 'var(--text-success)', border: '1px solid var(--text-success)', cursor: 'pointer', fontWeight: 'bold' }}
             >
               Mark as Resolved
             </button>
             <button 
               type="button" 
               onClick={handleDelete}
-              style={{ padding: '10px 16px', borderRadius: '8px', background: 'rgba(255, 100, 100, 0.1)', color: '#ff8080', border: '1px solid rgba(255, 100, 100, 0.2)', cursor: 'pointer', fontWeight: 'bold' }}
+              style={{ padding: '10px 16px', borderRadius: '8px', background: 'rgba(220, 38, 38, 0.1)', color: 'var(--text-error)', border: '1px solid var(--text-error)', cursor: 'pointer', fontWeight: 'bold' }}
             >
               Delete Ticket
             </button>

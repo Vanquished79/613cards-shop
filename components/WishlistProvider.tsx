@@ -60,9 +60,10 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ productId })
       });
       if (!res.ok) {
-        throw new Error('Failed to toggle wishlist');
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to toggle wishlist');
       }
-    } catch (error) {
+    } catch (error: any) {
       // Revert optimistic update
       setWishlistIds(prev => {
         const next = new Set(prev);
@@ -73,7 +74,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
         }
         return next;
       });
-      alert("An error occurred updating your wishlist.");
+      alert(error.message || "An error occurred updating your wishlist.");
     }
   };
 

@@ -668,16 +668,16 @@ export default function AdminBuyListClient({
                       onClick={() => handleDeleteWanted(item.id)}
                       style={{ 
                         padding: '6px 12px', 
-                        background: 'rgba(239, 68, 68, 0.15)', 
-                        border: '1px solid #ef4444', 
-                        color: '#f87171', 
+                        background: 'rgba(220, 38, 38, 0.1)', 
+                        border: '1px solid var(--text-error)', 
+                        color: 'var(--text-error)', 
                         borderRadius: '6px', 
                         cursor: 'pointer',
                         fontSize: '12px',
                         transition: 'background 0.2s'
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.3)'}
-                      onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)'}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(220, 38, 38, 0.2)'}
+                      onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(220, 38, 38, 0.1)'}
                     >
                       Delete
                     </button>

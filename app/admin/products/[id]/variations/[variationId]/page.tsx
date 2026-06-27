@@ -108,7 +108,7 @@ export default async function EditVariationPage({ params }: { params: Promise<{ 
       </form>
 
       <form action={deleteVariation} style={{ marginTop: '16px' }}>
-        <button type="submit" style={{ width: '100%', padding: '16px', background: 'rgba(255,100,100,0.1)', color: '#ff8080', border: '1px solid rgba(255,100,100,0.2)', borderRadius: '8px', cursor: 'pointer', fontSize: '16px' }}>
+        <button type="submit" style={{ width: '100%', padding: '16px', background: 'rgba(220, 38, 38, 0.1)', color: 'var(--text-error)', border: '1px solid var(--text-error)', borderRadius: '8px', cursor: 'pointer', fontSize: '16px' }}>
           Delete Variation
         </button>
       </form>
