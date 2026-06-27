@@ -74,10 +74,10 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           <a 
             href={`/admin/orders?tab=active${search ? `&search=${search}` : ''}`}
             style={{ 
-              color: tab === 'active' ? 'var(--accent-color)' : 'var(--text-muted)', 
+              color: tab === 'active' ? 'var(--text-accent)' : 'var(--text-muted)', 
               padding: '8px 0',
               fontWeight: tab === 'active' ? 'bold' : 'normal',
-              borderBottom: tab === 'active' ? '2px solid var(--accent-color)' : '2px solid transparent',
+              borderBottom: tab === 'active' ? '2px solid var(--text-accent)' : '2px solid transparent',
               textDecoration: 'none',
               fontSize: '16px'
             }}
@@ -87,10 +87,10 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           <a 
             href={`/admin/orders?tab=archived${search ? `&search=${search}` : ''}`}
             style={{ 
-              color: tab === 'archived' ? 'var(--accent-color)' : 'var(--text-muted)', 
+              color: tab === 'archived' ? 'var(--text-accent)' : 'var(--text-muted)', 
               padding: '8px 0',
               fontWeight: tab === 'archived' ? 'bold' : 'normal',
-              borderBottom: tab === 'archived' ? '2px solid var(--accent-color)' : '2px solid transparent',
+              borderBottom: tab === 'archived' ? '2px solid var(--text-accent)' : '2px solid transparent',
               textDecoration: 'none',
               fontSize: '16px'
             }}

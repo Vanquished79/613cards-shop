@@ -217,7 +217,7 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
           Sell to Us
         </Link>
         {session?.user?.role === 'ADMIN' && (
-          <Link href="/admin/orders" style={{ color: '#4ade80', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold' }}>Admin</Link>
+          <Link href="/admin/orders" style={{ color: 'var(--text-success)', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold' }}>Admin</Link>
         )}
 
         <div style={{ width: '1px', height: '16px', background: 'var(--glass-border)', margin: '0 8px' }} />
