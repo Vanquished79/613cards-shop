@@ -5,7 +5,7 @@ import { ProductClient } from './ProductClient';
 export const dynamic = 'force-dynamic';
 
 import { Suspense } from 'react';
-import Loading from '../loading'; // generic loading spinner
+import Loading from '@/app/loading';
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
