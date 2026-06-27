@@ -15,7 +15,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div style={{ display: 'flex', gap: '24px', paddingTop: '20px', paddingBottom: '40px', width: '100%' }} className="admin-layout-container">
-      <aside className="glass-panel" style={{ width: '250px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px', height: 'fit-content', maxHeight: 'calc(100vh - 80px)', overflowY: 'auto', position: 'sticky', top: '50vh', transform: 'translateY(-50%)' }}>
+      <aside className="glass-panel" style={{ width: '250px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px', height: 'fit-content', maxHeight: 'calc(100vh - 140px)', overflowY: 'auto', position: 'sticky', top: '120px' }}>
         <h2 style={{ fontSize: '18px', marginBottom: '12px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '12px' }}>Admin Dashboard</h2>
         <Link href="/admin" style={{ color: 'var(--text-main)', textDecoration: 'none', padding: '8px', borderRadius: '8px' }} className="hover-bg">Overview</Link>
         <Link href="/admin/orders" style={{ color: 'var(--text-main)', textDecoration: 'none', padding: '8px', borderRadius: '8px' }} className="hover-bg">Orders</Link>
