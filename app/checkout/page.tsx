@@ -49,10 +49,11 @@ export default function CheckoutPage() {
   }, [session]);
 
   // Calculations
-  const shippingCost = shippingMethod === 'VAULT' ? 0 : calculateShipping(totalAmount);
+  const shippingCost = calculateShipping(totalAmount);
   const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalAmount);
   
-  const isStep1Complete = shippingMethod === 'VAULT' || (country && (country !== 'CA' || province));
+  // Step 1 complete if valid country selected (and province if CA)
+  const isStep1Complete = !!(country && (country !== 'CA' || province));
   
   const taxInfo = useMemo(() => {
     if (!isStep1Complete || !taxEnabled) return null;
@@ -161,7 +162,7 @@ export default function CheckoutPage() {
                       >+</button>
                       <button 
                         onClick={() => removeFromCart(item.productVariationId)}
-                        style={{ background: 'transparent', border: 'none', color: '#f87171', fontSize: '12px', cursor: 'pointer', marginLeft: '8px', textDecoration: 'underline' }}
+                        style={{ background: 'transparent', border: 'none', color: 'var(--text-error)', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer', marginLeft: '8px' }}
                       >Remove</button>
                     </div>
                   </div>
@@ -208,34 +209,10 @@ export default function CheckoutPage() {
           
           <h3 style={{ marginBottom: '20px' }}>1. Delivery Method</h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '16px' }}>
-            Choose whether to have your cards shipped to you, or securely vaulted in your digital portfolio.
+            Please select your country to calculate shipping rates.
           </p>
 
-          <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-            <label style={{ flex: 1, padding: '16px', border: shippingMethod === 'SHIPPING' ? '2px solid var(--accent-color)' : '1px solid var(--glass-border)', background: shippingMethod === 'SHIPPING' ? 'rgba(255, 183, 3, 0.1)' : 'var(--glass-bg)', borderRadius: '8px', cursor: 'pointer', textAlign: 'center' }}>
-              <input 
-                type="radio" 
-                checked={shippingMethod === 'SHIPPING'} 
-                onChange={() => setShippingMethod('SHIPPING')} 
-                style={{ display: 'none' }}
-              />
-              <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Mail to Me</div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Standard shipping rates apply</div>
-            </label>
-            <label style={{ flex: 1, padding: '16px', border: shippingMethod === 'VAULT' ? '2px solid #3b82f6' : '1px solid var(--glass-border)', background: shippingMethod === 'VAULT' ? 'rgba(59, 130, 246, 0.1)' : 'var(--glass-bg)', borderRadius: '8px', cursor: 'pointer', textAlign: 'center' }}>
-              <input 
-                type="radio" 
-                checked={shippingMethod === 'VAULT'} 
-                onChange={() => setShippingMethod('VAULT')} 
-                style={{ display: 'none' }}
-              />
-              <div style={{ fontWeight: 'bold', marginBottom: '4px', color: '#3b82f6' }}>Send to Vault</div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Free! Instantly added to your portfolio</div>
-            </label>
-          </div>
-
-          {shippingMethod === 'SHIPPING' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
               <select 
                 value={country} 
                 onChange={(e) => {
@@ -269,7 +246,6 @@ export default function CheckoutPage() {
               </select>
             )}
             </div>
-          )}
 
           <h3 style={{ marginBottom: '20px', color: isStep1Complete ? 'var(--text-main)' : 'var(--text-muted)' }}>2. Payment Details</h3>
           
@@ -362,18 +338,20 @@ export default function CheckoutPage() {
                         };
 
                       // Pre-fill user's PayPal address info based on their dropdown selection + session
-                      purchaseUnit.shipping = {
-                        address: {
-                          country_code: country === 'OTHER' ? '' : country,
-                          ...(country === 'CA' ? { admin_area_1: province } : {})
-                        }
-                      };
+                      if (country && country !== 'OTHER') {
+                        purchaseUnit.shipping = {
+                          address: {
+                            country_code: country,
+                            ...(country === 'CA' && province ? { admin_area_1: province } : {})
+                          }
+                        };
 
-                      if (session?.user && session.user.address) {
-                        purchaseUnit.shipping.name = { full_name: session.user.name };
-                        purchaseUnit.shipping.address.address_line_1 = session.user.address;
-                        purchaseUnit.shipping.address.admin_area_2 = session.user.city || '';
-                        purchaseUnit.shipping.address.postal_code = session.user.zip || '';
+                        if (session?.user && session.user.address) {
+                          purchaseUnit.shipping.name = { full_name: session.user.name };
+                          purchaseUnit.shipping.address.address_line_1 = session.user.address;
+                          if (session.user.city) purchaseUnit.shipping.address.admin_area_2 = session.user.city;
+                          if (session.user.zip) purchaseUnit.shipping.address.postal_code = session.user.zip;
+                        }
                       }
 
                       return actions.order.create({
