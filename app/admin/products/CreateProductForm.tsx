@@ -100,14 +100,14 @@ export default function CreateProductForm({ categories, createProductAction }: {
               Autograph
             </label>
             <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
-              <input type="checkbox" name="isNumbered" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-              Numbered
-            </label>
-            <input name="serialNumber" placeholder="Serial Number (e.g. 245/499)" style={{ padding: '8px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', marginTop: '4px' }} />
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
               <input type="checkbox" name="isParallel" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
               Parallel
             </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-main)' }}>
+              <input type="checkbox" name="isNumbered" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+              Numbered
+            </label>
+            <input name="serialNumber" maxLength={10} placeholder="e.g. 10/99" style={{ width: '120px', padding: '8px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: '#ffffff', color: 'var(--text-main)', marginTop: '4px' }} />
           </div>
         </div>
       )}
