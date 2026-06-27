@@ -129,8 +129,8 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
                       key={c}
                       onClick={() => { setCurrency(c as any); setIsCurrencyOpen(false); }}
                       style={{ 
-                        background: currency === c ? 'rgba(255, 183, 3, 0.1)' : 'transparent', 
-                        color: currency === c ? 'var(--accent-color)' : 'var(--text-muted)', 
+                        background: currency === c ? 'var(--bg-color-end)' : 'transparent', 
+                        color: currency === c ? 'var(--text-accent)' : 'var(--text-muted)', 
                         border: 'none',
                         textAlign: 'left',
                         fontSize: '14px', 
@@ -141,8 +141,8 @@ export function Navbar({ categories = [] }: { categories?: any[] }) {
                       }}
                       onMouseOver={(e) => { 
                         if (currency !== c) {
-                          e.currentTarget.style.color = 'white'; 
-                          e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; 
+                          e.currentTarget.style.color = 'var(--text-main)'; 
+                          e.currentTarget.style.background = 'var(--bg-color-end)'; 
                         }
                       }}
                       onMouseOut={(e) => { 

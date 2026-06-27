@@ -322,7 +322,7 @@ export default function AdminBuyListClient({
                   <div style={{ flex: 1 }}>
                     <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-muted)' }}>
                       Store Credit Offer ($)
-                      {sub.user.vipTier === 'SILVER' && <span style={{ color: '#94a3b8', marginLeft: '8px', fontSize: '12px' }}>(Suggest +2% Bonus)</span>}
+                      {sub.user.vipTier === 'SILVER' && <span style={{ color: '#64748b', marginLeft: '8px', fontSize: '12px' }}>(Suggest +2% Bonus)</span>}
                       {sub.user.vipTier === 'GOLD' && <span style={{ color: '#eab308', marginLeft: '8px', fontSize: '12px' }}>(Suggest +5% Bonus)</span>}
                       {sub.user.vipTier === 'OBSIDIAN' && <span style={{ color: '#a855f7', marginLeft: '8px', fontSize: '12px' }}>(Suggest +10% Bonus)</span>}
                     </label>

@@ -70,14 +70,14 @@ export function ProductClient({ product }: { product: any }) {
               }}
               style={{ 
                 position: 'absolute', top: '16px', right: product.compareAtPrice && product.compareAtPrice > product.price ? '100px' : '16px', 
-                background: 'rgba(255,255,255,0.9)', borderRadius: '50%', width: '40px', height: '40px', 
+                background: 'var(--glass-bg)', borderRadius: '50%', width: '44px', height: '44px', 
                 display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10,
                 color: isWishlisted ? '#ff3366' : 'var(--text-muted)', transition: 'transform 0.2s, color 0.2s',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                transform: isWishlisted ? 'scale(1.1)' : 'scale(1)'
+                boxShadow: 'var(--glass-glow)', border: 'var(--border-width) solid var(--glass-border)',
+                transform: isWishlisted ? 'scale(1.1) translate(-2px, -2px)' : 'scale(1)'
               }}
-              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
-              onMouseOut={(e) => e.currentTarget.style.transform = isWishlisted ? 'scale(1.1)' : 'scale(1)'}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1) translate(-2px, -2px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = isWishlisted ? 'scale(1.1) translate(-2px, -2px)' : 'scale(1)'}
               title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -216,7 +216,7 @@ export function ProductClient({ product }: { product: any }) {
               {product.category?.name || 'Uncategorized'}
             </span>
 
-            <span style={{ fontSize: '14px', color: product.availableStock > 0 ? '#4ade80' : '#ff8080', fontWeight: 'bold' }}>
+            <span style={{ fontSize: '14px', color: product.availableStock > 0 ? 'var(--text-success)' : 'var(--text-error)', fontWeight: 'bold' }}>
               {product.availableStock > 0 ? `${product.availableStock} in stock` : 'Out of Stock'}
             </span>
           </div>
@@ -230,7 +230,7 @@ export function ProductClient({ product }: { product: any }) {
 
           {product.isPreorder && product.releaseDate && (
             <div style={{ padding: '12px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.3)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#60a5fa', fontWeight: 'bold' }}>📅 Expected Release Date:</span>
+              <span style={{ color: '#2563eb', fontWeight: 'bold' }}>📅 Expected Release Date:</span>
               <span>{new Date(product.releaseDate).toLocaleDateString()}</span>
             </div>
           )}
@@ -261,12 +261,12 @@ export function ProductClient({ product }: { product: any }) {
                 )}
                 <div style={{ padding: '12px 16px', background: 'var(--glass-bg)', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                     {product.type === 'BREAK' && (
-                      <span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', fontWeight: 'bold' }}>
+                      <span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#b91c1c', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', fontWeight: 'bold' }}>
                         BREAK SPOT
                       </span>
                     )}
-                    {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>Rookie Card</span>}
-                    {product.isAutograph && <span style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(168, 85, 247, 0.3)', fontWeight: 'bold' }}>Autograph</span>}
+                    {product.isRookie && <span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#1d4ed8', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 'bold' }}>Rookie Card</span>}
+                    {product.isAutograph && <span style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#7e22ce', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(168, 85, 247, 0.3)', fontWeight: 'bold' }}>Autograph</span>}
                     {product.isNumbered && (() => {
                       const colors = getNumberedColor(product.serialNumber);
                       return (
@@ -275,7 +275,7 @@ export function ProductClient({ product }: { product: any }) {
                         </span>
                       );
                     })()}
-                    {product.isParallel && <span style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#f472b6', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 'bold' }}>Parallel</span>}
+                    {product.isParallel && <span style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#be185d', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 'bold' }}>Parallel</span>}
                     {!product.isRookie && !product.isAutograph && !product.isNumbered && !product.isParallel && (
                       <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Base Card</span>
                     )}
@@ -311,7 +311,7 @@ export function ProductClient({ product }: { product: any }) {
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <span style={{ fontWeight: 'bold' }}>{v.condition}</span>
-                          {v.isGraded && <span style={{ background: 'rgba(74, 222, 128, 0.2)', color: '#4ade80', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>{v.gradingCompany} {v.grade}</span>}
+                          {v.isGraded && <span style={{ background: 'rgba(74, 222, 128, 0.2)', color: '#15803d', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>{v.gradingCompany} {v.grade}</span>}
                         </div>
                         <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                           {isOutOfStock ? 'Out of Stock' : `${v.availableStock} available`}

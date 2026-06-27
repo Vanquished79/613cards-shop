@@ -47,7 +47,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         {children}
       </main>
       <style dangerouslySetInnerHTML={{__html: `
-        .hover-bg:hover { background: rgba(255,255,255,0.1); }
+          .hover-bg:hover { background: var(--bg-color-end); }
       `}} />
     </div>
   );

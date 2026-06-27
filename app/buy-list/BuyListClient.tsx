@@ -658,7 +658,7 @@ export default function BuyListClient({
                 right: '0',
                 background: 'transparent',
                 border: 'none',
-                color: 'var(--text-main)',
+                color: 'white',
                 fontSize: '28px',
                 cursor: 'pointer'
               }}

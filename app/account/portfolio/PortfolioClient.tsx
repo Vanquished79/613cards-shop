@@ -274,7 +274,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
+              <div style={{ display: 'flex', gap: '8px', borderTop: '1px solid var(--glass-border)', paddingTop: '16px' }}>
                 {buyListEnabled && (
                   <button 
                     onClick={() => handleSellToStore(item)}
@@ -324,7 +324,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                 maxHeight: '85vh', 
                 objectFit: 'contain', 
                 borderRadius: '12px',
-                border: '1px solid rgba(255,255,255,0.2)',
+                border: '1px solid var(--glass-border)',
                 boxShadow: '0 20px 50px rgba(0,0,0,0.8)'
               }} 
             />
@@ -401,7 +401,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
-                <button type="button" onClick={() => setIsAdding(false)} style={{ flex: 1, padding: '12px', background: 'transparent', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
+                <button type="button" onClick={() => setIsAdding(false)} style={{ flex: 1, padding: '12px', background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--text-main)', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
                 <button type="submit" className="btn-primary" style={{ flex: 1, padding: '12px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>Add Card</button>
               </div>
             </form>

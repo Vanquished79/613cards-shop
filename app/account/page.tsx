@@ -104,7 +104,7 @@ export default async function AccountPage() {
             </p>
           </div>
           <div style={{ textAlign: 'right', fontSize: '14px', color: 'var(--text-muted)' }}>
-            {user.vipTier === 'MEMBER' && <span>Spend ${(500 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#94a3b8'}}>SILVER</strong></span>}
+            {user.vipTier === 'MEMBER' && <span>Spend ${(500 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#64748b'}}>SILVER</strong></span>}
             {user.vipTier === 'SILVER' && <span>Spend ${(2000 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#eab308'}}>GOLD</strong></span>}
             {user.vipTier === 'GOLD' && <span>Spend ${(5000 - user.lifetimeSpend).toFixed(2)} more to reach <strong style={{ color: '#a855f7'}}>OBSIDIAN</strong></span>}
             {user.vipTier === 'OBSIDIAN' && <span style={{ color: '#a855f7' }}>Highest Tier Reached!</span>}
@@ -121,7 +121,7 @@ export default async function AccountPage() {
           const progress = Math.min(100, Math.max(0, ((user.lifetimeSpend - currentFloor) / (nextCeil - currentFloor)) * 100));
 
           return (
-            <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ width: '100%', height: '8px', background: 'var(--bg-color-end)', borderRadius: '4px', overflow: 'hidden' }}>
               <div style={{ 
                 height: '100%', 
                 width: `${progress}%`, 

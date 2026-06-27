@@ -21,15 +21,15 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1 style={{ fontSize: '28px', margin: 0 }}>Support <span style={{ color: 'var(--text-accent)' }}>Tickets</span></h1>
         
-        <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '4px' }}>
+        <div style={{ display: 'flex', background: 'var(--bg-color-end)', borderRadius: '8px', padding: '4px' }}>
           <Link href="/admin/messages?status=OPEN" style={{
             padding: '8px 16px',
             borderRadius: '6px',
             textDecoration: 'none',
             fontSize: '14px',
             fontWeight: 'bold',
-            color: currentStatus === 'OPEN' ? 'white' : 'var(--text-muted)',
-            background: currentStatus === 'OPEN' ? 'rgba(255,255,255,0.1)' : 'transparent',
+            color: currentStatus === 'OPEN' ? 'var(--text-main)' : 'var(--text-muted)',
+            background: currentStatus === 'OPEN' ? 'var(--glass-bg)' : 'transparent',
           }}>
             Open ({openCount})
           </Link>
@@ -39,8 +39,8 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
             textDecoration: 'none',
             fontSize: '14px',
             fontWeight: 'bold',
-            color: currentStatus === 'RESOLVED' ? 'white' : 'var(--text-muted)',
-            background: currentStatus === 'RESOLVED' ? 'rgba(255,255,255,0.1)' : 'transparent',
+            color: currentStatus === 'RESOLVED' ? 'var(--text-main)' : 'var(--text-muted)',
+            background: currentStatus === 'RESOLVED' ? 'var(--glass-bg)' : 'transparent',
           }}>
             Resolved ({resolvedCount})
           </Link>
@@ -65,7 +65,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
             <tbody>
               {messages.map((msg) => (
                 <tr key={msg.id} style={{ 
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  borderBottom: '1px solid var(--glass-border)',
                   background: !msg.isRead && currentStatus === 'OPEN' ? 'rgba(138, 43, 226, 0.1)' : 'transparent'
                 }}>
                   <td style={{ padding: '16px 24px' }}>

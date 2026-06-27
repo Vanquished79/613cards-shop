@@ -87,9 +87,9 @@ export default async function CategoriesPage() {
                 style={{
                   marginLeft: `${cat.depth * 28}px`,
                   padding: '14px 16px',
-                  background: cat.depth === 0 ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.02)',
+                  background: cat.depth === 0 ? 'var(--glass-bg)' : 'var(--bg-color-start)',
                   borderRadius: '10px',
-                  border: `1px solid ${cat.depth === 0 ? 'var(--accent-color)' : 'var(--glass-border)'}`,
+                  border: `var(--border-width) solid ${cat.depth === 0 ? 'var(--accent-color)' : 'var(--glass-border)'}`,
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
