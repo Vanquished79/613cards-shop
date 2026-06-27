@@ -55,7 +55,7 @@ export default async function RegisterPage({ searchParams }: { searchParams: { e
 
   return (
     <div style={{ padding: '60px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '80vh', alignItems: 'center', gap: '28px' }}>
-      <Image src="/logo.png" alt="613cards.com" width={260} height={130} style={{ objectFit: 'contain', mixBlendMode: 'lighten' }} />
+      <Image src="/shield-logo-transparent.png" alt="613cards.com" width={260} height={130} style={{ objectFit: 'contain' }} />
       <div className="glass-panel" style={{ width: '100%', maxWidth: '400px', padding: '40px' }}>
         <h1 style={{ textAlign: 'center', marginBottom: '8px' }}>Create Account</h1>
         <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginBottom: '32px' }}>

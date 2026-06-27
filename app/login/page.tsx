@@ -5,7 +5,7 @@ import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import logoImg from '../../public/brand-icon.png';
+import logoImg from '../../public/shield-logo-transparent.png';
 
 function LoginForm() {
   const [error, setError] = useState('');
