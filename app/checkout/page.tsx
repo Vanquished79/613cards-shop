@@ -319,40 +319,8 @@ export default function CheckoutPage() {
                           amount: {
                             currency_code: 'CAD',
                             value: amountToPay.toFixed(2),
-                            ...(storeCreditUsed === 0 ? {
-                              breakdown: {
-                                item_total: { currency_code: 'CAD', value: totalAmount.toFixed(2) },
-                                shipping: { currency_code: 'CAD', value: shippingCost.toFixed(2) },
-                                tax_total: { currency_code: 'CAD', value: (taxInfo ? taxInfo.amount : 0).toFixed(2) }
-                              }
-                            } : {})
-                          },
-                          ...(storeCreditUsed === 0 ? {
-                            items: items.map(item => ({
-                              name: item.name.substring(0, 127),
-                              ...(item.description ? { description: item.description.substring(0, 127) } : {}),
-                              quantity: item.quantity.toString(),
-                              unit_amount: { currency_code: 'CAD', value: item.price.toFixed(2) }
-                            }))
-                          } : {})
-                        };
-
-                      // Pre-fill user's PayPal address info based on their dropdown selection + session
-                      if (country && country !== 'OTHER') {
-                        purchaseUnit.shipping = {
-                          address: {
-                            country_code: country,
-                            ...(country === 'CA' && province ? { admin_area_1: province } : {})
                           }
                         };
-
-                        if (session?.user && session.user.address) {
-                          purchaseUnit.shipping.name = { full_name: session.user.name };
-                          purchaseUnit.shipping.address.address_line_1 = session.user.address;
-                          if (session.user.city) purchaseUnit.shipping.address.admin_area_2 = session.user.city;
-                          if (session.user.zip) purchaseUnit.shipping.address.postal_code = session.user.zip;
-                        }
-                      }
 
                       return actions.order.create({
                         intent: 'CAPTURE',
