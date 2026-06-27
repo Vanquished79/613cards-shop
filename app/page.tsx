@@ -6,8 +6,22 @@ import { ShopFilters } from '@/components/ShopFilters';
 
 export const dynamic = 'force-dynamic';
 
+import { Suspense } from 'react';
+import Loading from './loading';
+
 export default async function Home({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const resolvedParams = await searchParams;
+  
+  return (
+    <main style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', gap: '40px', padding: '40px 0' }}>
+      <Suspense fallback={<Loading />}>
+        <HomeContent resolvedParams={resolvedParams} />
+      </Suspense>
+    </main>
+  );
+}
+
+async function HomeContent({ resolvedParams }: { resolvedParams: any }) {
   const now = new Date();
   
   // Featured Products
@@ -170,7 +184,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
   );
 
   return (
-    <main style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', gap: '40px', padding: '40px 0' }}>
+    <>
       {isFiltering ? (
         <>
           {resultsSection}
@@ -182,6 +196,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
           {resultsSection}
         </>
       )}
-    </main>
+    </>
   );
 }

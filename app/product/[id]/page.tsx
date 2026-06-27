@@ -4,9 +4,20 @@ import { ProductClient } from './ProductClient';
 
 export const dynamic = 'force-dynamic';
 
+import { Suspense } from 'react';
+import Loading from '../loading'; // generic loading spinner
+
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
-  const productId = parseInt(resolvedParams.id);
+  return (
+    <Suspense fallback={<Loading />}>
+      <ProductContent productIdStr={resolvedParams.id} />
+    </Suspense>
+  );
+}
+
+async function ProductContent({ productIdStr }: { productIdStr: string }) {
+  const productId = parseInt(productIdStr);
   const now = new Date();
   
   if (isNaN(productId)) {
