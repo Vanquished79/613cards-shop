@@ -311,7 +311,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
                   style={{
                     padding: '12px 0',
                     background: isSelected ? 'var(--accent-color)' : (hasOrders ? 'rgba(255, 183, 3, 0.15)' : 'transparent'),
-                    color: isSelected ? '#ffffff' : (hasOrders ? 'var(--accent-color)' : 'var(--text-main)'),
+                    color: isSelected ? '#ffffff' : (hasOrders ? 'var(--text-accent)' : 'var(--text-main)'),
                     border: '1px solid',
                     borderColor: isSelected ? 'var(--accent-color)' : (hasOrders ? 'rgba(255, 183, 3, 0.3)' : 'var(--glass-border)'),
                     borderRadius: '8px',
