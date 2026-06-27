@@ -197,7 +197,7 @@ export default function CheckoutPage() {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '20px', fontWeight: 'bold', paddingTop: '8px', borderTop: '1px solid var(--glass-border)' }}>
               <span>Total:</span>
-              <span style={{ color: 'var(--accent-color)' }}>{formatPrice(amountToPay)}</span>
+              <span style={{ color: 'var(--text-accent)' }}>{formatPrice(amountToPay)}</span>
             </div>
           </div>
         </div>
@@ -297,7 +297,7 @@ export default function CheckoutPage() {
               </p>
               
               {currency !== 'CAD' && (
-                <div style={{ padding: '12px', background: 'rgba(255, 183, 3, 0.1)', border: '1px solid rgba(255, 183, 3, 0.3)', borderRadius: '8px', color: '#ffb703', fontSize: '13px', marginBottom: '20px' }}>
+                <div style={{ padding: '12px', background: 'rgba(255, 183, 3, 0.1)', border: '1px solid rgba(255, 183, 3, 0.3)', borderRadius: '8px', color: 'var(--text-accent)', fontSize: '13px', marginBottom: '20px' }}>
                   <strong>Note:</strong> You will be billed <strong>C${finalTotal.toFixed(2)} CAD</strong>. Exchange rates shown are estimates.
                 </div>
               )}
@@ -427,7 +427,7 @@ export default function CheckoutPage() {
                 </PayPalScriptProvider>
                 )}
               </div>
-              {isProcessing && <p style={{ textAlign: 'center', color: 'var(--accent-color)', marginTop: '16px' }}>Processing order...</p>}
+              {isProcessing && <p style={{ textAlign: 'center', color: 'var(--text-accent)', marginTop: '16px' }}>Processing order...</p>}
             </>
           )}
         </div>

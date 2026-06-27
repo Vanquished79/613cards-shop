@@ -185,7 +185,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginBottom: '40px' }}>
         <div className="glass-panel" style={{ padding: '24px', textAlign: 'center', background: 'linear-gradient(145deg, rgba(30,30,40,0.4) 0%, rgba(20,20,30,0.6) 100%)' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Value</div>
-          <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+          <div style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--text-accent)' }}>${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
         </div>
         <div className="glass-panel" style={{ padding: '24px', textAlign: 'center' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Cost</div>
@@ -268,7 +268,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                     </div>
                     <div style={{ textAlign: 'right' }}>
                       <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Est. Value</div>
-                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${item.currentValue ? item.currentValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '0.00'}</div>
+                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-accent)' }}>${item.currentValue ? item.currentValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '0.00'}</div>
                     </div>
                   </div>
                 </div>
@@ -368,7 +368,7 @@ export default function PortfolioClient({ initialItems, buyListEnabled = true }:
                     style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'white', borderRadius: '8px', opacity: isAnalyzing ? 0.5 : 1 }} 
                   />
                   {isAnalyzing && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-color)', fontSize: '13px', fontWeight: 'bold' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-accent)', fontSize: '13px', fontWeight: 'bold' }}>
                       <span className="spinner" style={{ width: '16px', height: '16px', border: '2px solid var(--accent-color)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></span>
                       Analyzing AI Vision & Market Comps...
                     </div>

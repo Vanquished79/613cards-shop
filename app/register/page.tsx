@@ -87,7 +87,7 @@ export default async function RegisterPage({ searchParams }: { searchParams: { e
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px', color: 'var(--text-muted)' }}>
-          Already have an account? <Link href="/login" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>Log in</Link>
+          Already have an account? <Link href="/login" style={{ color: 'var(--text-accent)', textDecoration: 'none' }}>Log in</Link>
         </div>
       </div>
     </div>

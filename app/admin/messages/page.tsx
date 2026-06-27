@@ -19,7 +19,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '28px', margin: 0 }}>Support <span style={{ color: 'var(--accent-color)' }}>Tickets</span></h1>
+        <h1 style={{ fontSize: '28px', margin: 0 }}>Support <span style={{ color: 'var(--text-accent)' }}>Tickets</span></h1>
         
         <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '4px' }}>
           <Link href="/admin/messages?status=OPEN" style={{

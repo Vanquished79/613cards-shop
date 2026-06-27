@@ -55,7 +55,7 @@ export default function ContactPage() {
   return (
     <div style={{ padding: '60px 0', display: 'flex', justifyContent: 'center' }}>
       <div className="glass-panel" style={{ width: '100%', maxWidth: '600px', padding: '40px' }}>
-        <h1 style={{ marginBottom: '8px', fontSize: '32px' }}>Contact <span style={{ color: 'var(--accent-color)' }}>Us</span></h1>
+        <h1 style={{ marginBottom: '8px', fontSize: '32px' }}>Contact <span style={{ color: 'var(--text-accent)' }}>Us</span></h1>
         <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>
           Have a question about an order or a specific card? Drop us a message below!
         </p>

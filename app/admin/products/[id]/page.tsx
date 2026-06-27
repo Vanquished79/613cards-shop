@@ -120,7 +120,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
                 <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>Stock: {v.stock}</p>
               </div>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                <span style={{ fontWeight: 'bold', color: 'var(--accent-color)' }}>${v.price.toFixed(2)}</span>
+                <span style={{ fontWeight: 'bold', color: 'var(--text-accent)' }}>${v.price.toFixed(2)}</span>
                 <Link href={`/admin/products/${productId}/variations/${v.id}`} style={{ color: 'var(--text-main)', textDecoration: 'none', background: 'var(--glass-bg)', padding: '6px 12px', borderRadius: '4px', fontSize: '13px', border: '1px solid var(--glass-border)' }}>Edit</Link>
               </div>
             </div>

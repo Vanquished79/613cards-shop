@@ -3,7 +3,7 @@ export const dynamic = 'force-static';
 export default function ReturnPolicyPage() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '60px 20px', lineHeight: '1.6' }}>
-      <h1 style={{ marginBottom: '32px', color: 'var(--accent-color)' }}>Return & Refund Policy</h1>
+      <h1 style={{ marginBottom: '32px', color: 'var(--text-accent)' }}>Return & Refund Policy</h1>
       
       <div className="glass-panel" style={{ padding: '32px' }}>
         <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>1. Single Cards</h2>
@@ -29,7 +29,7 @@ export default function ReturnPolicyPage() {
 
         <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>5. How to Initiate a Return</h2>
         <p style={{ color: 'var(--text-muted)' }}>
-          To initiate a return for an eligible item, please use our <a href="/contact" style={{ color: 'var(--accent-color)' }}>Contact Form</a> with your Order ID and the reason for the return. 
+          To initiate a return for an eligible item, please use our <a href="/contact" style={{ color: 'var(--text-accent)' }}>Contact Form</a> with your Order ID and the reason for the return. 
           Return shipping costs are the responsibility of the buyer unless the return is a result of our error (e.g., you received an incorrect item).
         </p>
       </div>

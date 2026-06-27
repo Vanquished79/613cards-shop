@@ -13,7 +13,7 @@ export default async function WaitlistPage() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '28px', margin: 0 }}>Waitlist <span style={{ color: 'var(--accent-color)' }}>Subscribers</span></h1>
+        <h1 style={{ fontSize: '28px', margin: 0 }}>Waitlist <span style={{ color: 'var(--text-accent)' }}>Subscribers</span></h1>
         
         {subscribers.length > 0 && (
           <CopyEmailsButton emailList={emailList} />

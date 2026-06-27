@@ -238,7 +238,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
         <div style={{ display: 'flex', gap: '8px' }}>
           <button 
             onClick={() => exportToCSV('TAX_EXEMPT_US')}
-            style={{ padding: '8px 16px', background: 'rgba(255,183,3,0.2)', color: '#ffb703', border: '1px solid rgba(255,183,3,0.3)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+            style={{ padding: '8px 16px', background: 'rgba(255,183,3,0.2)', color: 'var(--text-accent)', border: '1px solid rgba(255,183,3,0.3)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
             title="Export US orders that did not collect tax"
           >
             Export US Tax-Exempt
@@ -272,7 +272,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
         ].map(metric => (
           <div key={metric.label} style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '20px' }}>
             <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '8px' }}>{metric.label}</div>
-            <div style={{ color: 'var(--accent-color)', fontSize: '24px', fontWeight: 'bold' }}>{formatCurrency(metric.value)}</div>
+            <div style={{ color: 'var(--text-accent)', fontSize: '24px', fontWeight: 'bold' }}>{formatCurrency(metric.value)}</div>
           </div>
         ))}
       </div>
@@ -331,7 +331,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
         <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', maxHeight: '500px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', paddingBottom: '16px', borderBottom: '1px solid var(--glass-border)' }}>
             <h2 style={{ fontSize: '18px' }}>{selectedDate.toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric' })}</h2>
-            <div style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '18px' }}>
+            <div style={{ color: 'var(--text-accent)', fontWeight: 'bold', fontSize: '18px' }}>
               {formatCurrency(selectedDateTotal)}
             </div>
           </div>
@@ -344,7 +344,7 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
                 <div key={order.id} style={{ background: 'rgba(0,0,0,0.03)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                     <span style={{ fontWeight: 'bold' }}>Order #{order.id}</span>
-                    <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>{formatCurrency(order.totalAmount)}</span>
+                    <span style={{ color: 'var(--text-accent)', fontWeight: 'bold' }}>{formatCurrency(order.totalAmount)}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
                     <span style={{ color: 'var(--text-main)' }}>{order.customerName}</span>

@@ -49,7 +49,7 @@ export function CartSlideOut() {
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>
                     {item.condition} {item.isGraded ? `(${item.gradingCompany} ${item.grade})` : ''}
                   </div>
-                  <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>${item.price.toFixed(2)}</span>
+                  <span style={{ color: 'var(--text-accent)', fontWeight: 'bold' }}>${item.price.toFixed(2)}</span>
                   
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
                     <button onClick={() => updateQuantity(item.productVariationId, item.quantity - 1)} style={{ background: '#f1f5f9', border: '1px solid var(--glass-border)', color: 'var(--text-main)', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -71,7 +71,7 @@ export function CartSlideOut() {
           <div style={{ marginTop: '24px', borderTop: '1px solid var(--glass-border)', paddingTop: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontSize: '18px', fontWeight: 'bold' }}>
               <span>Total:</span>
-              <span style={{ color: 'var(--accent-color)' }}>${totalAmount.toFixed(2)}</span>
+              <span style={{ color: 'var(--text-accent)' }}>${totalAmount.toFixed(2)}</span>
             </div>
             <button 
               className="btn-primary" 

@@ -326,7 +326,7 @@ export default function BuyListClient({
                       {/* Price tag */}
                       <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column' }}>
                         <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>We Pay:</span>
-                        <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--accent-color)' }}>
+                        <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-accent)' }}>
                           {item.price ? `$${item.price.toFixed(2)}` : 'Contact for Offer'}
                         </span>
                       </div>

@@ -111,7 +111,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{new Date(sub.createdAt).toLocaleDateString()}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontWeight: 'bold', color: 'var(--accent-color)' }}>Status: {sub.status.replace(/_/g, ' ')}</div>
+                    <div style={{ fontWeight: 'bold', color: 'var(--text-accent)' }}>Status: {sub.status.replace(/_/g, ' ')}</div>
                   </div>
                 </div>
 
@@ -122,7 +122,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     <div style={{ display: 'flex', gap: '24px', marginBottom: '24px' }}>
                       <div style={{ flex: 1, padding: '16px', background: 'var(--glass-bg)', borderRadius: '8px', textAlign: 'center' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '8px' }}>Cash Offer (PayPal)</div>
-                        <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--accent-color)' }}>${sub.cashOffer?.toFixed(2)}</div>
+                        <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-accent)' }}>${sub.cashOffer?.toFixed(2)}</div>
                       </div>
                       <div style={{ flex: 1, padding: '16px', background: 'var(--glass-bg)', borderRadius: '8px', textAlign: 'center' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '8px' }}>Store Credit Offer</div>
@@ -213,7 +213,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     </p>
                     <div style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--text-main)', marginTop: '6px' }}>
                       {sub.payoutMethod === 'PAYPAL' ? (
-                        <span>PayPal Payout: <span style={{ color: 'var(--accent-color)' }}>${sub.cashOffer?.toFixed(2)}</span> sent to <span style={{ color: 'var(--text-muted)' }}>{sub.paypalEmail}</span></span>
+                        <span>PayPal Payout: <span style={{ color: 'var(--text-accent)' }}>${sub.cashOffer?.toFixed(2)}</span> sent to <span style={{ color: 'var(--text-muted)' }}>{sub.paypalEmail}</span></span>
                       ) : (
                         <span>Store Credit: <span style={{ color: '#22c55e' }}>+${sub.creditOffer?.toFixed(2)}</span> added to your account</span>
                       )}
@@ -262,7 +262,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{new Date(order.createdAt).toLocaleDateString()}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontWeight: 'bold', color: 'var(--accent-color)' }}>${order.totalAmount.toFixed(2)}</div>
+                    <div style={{ fontWeight: 'bold', color: 'var(--text-accent)' }}>${order.totalAmount.toFixed(2)}</div>
                   </div>
                 </div>
 
@@ -326,7 +326,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 'bold', paddingTop: '4px' }}>
                           <span>Total</span>
-                          <span style={{ color: 'var(--accent-color)' }}>${order.totalAmount.toFixed(2)}</span>
+                          <span style={{ color: 'var(--text-accent)' }}>${order.totalAmount.toFixed(2)}</span>
                         </div>
                       </>
                     );
@@ -337,7 +337,7 @@ export default function AccountTabs({ orders, wishlistItems = [], buyListSubmiss
                   <div style={{ marginTop: '16px', fontSize: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
                       <span style={{ color: 'var(--text-muted)' }}>Tracking: </span>
-                      <strong style={{ color: 'var(--accent-color)' }}>{order.shippingCarrier ? `${order.shippingCarrier} - ` : ''}{order.trackingNumber}</strong>
+                      <strong style={{ color: 'var(--text-accent)' }}>{order.shippingCarrier ? `${order.shippingCarrier} - ` : ''}{order.trackingNumber}</strong>
                     </div>
                     {order.status !== 'DELIVERED' && (
                       <button 

@@ -69,8 +69,8 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
     <div style={{ padding: '28px' }} className="glass-panel">
       <h1 style={{ marginBottom: '24px' }}>Manage Orders</h1>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '8px' }}>
-        <div style={{ display: 'flex', gap: '16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', gap: '20px' }}>
           <a 
             href={`/admin/orders?tab=active${search ? `&search=${search}` : ''}`}
             style={{ 
@@ -141,7 +141,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                   }}>
                     {order.status}
                   </span>
-                  <div style={{ marginTop: '8px', fontSize: '18px', fontWeight: 'bold', color: 'var(--accent-color)' }}>
+                  <div style={{ marginTop: '8px', fontSize: '18px', fontWeight: 'bold', color: 'var(--text-accent)' }}>
                     ${order.totalAmount.toFixed(2)}
                   </div>
                 </div>

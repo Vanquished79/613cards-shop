@@ -128,13 +128,13 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                 )}
                 <div>
                   <h3 style={{ margin: 0 }}>
-                    {p.name} {p.isFeatured && <span style={{ fontSize: '12px', background: 'rgba(255, 183, 3, 0.2)', color: '#ffb703', padding: '2px 6px', borderRadius: '4px', marginLeft: '8px', verticalAlign: 'middle' }}>Featured</span>}
+                    {p.name} {p.isFeatured && <span style={{ fontSize: '12px', background: 'rgba(255, 183, 3, 0.2)', color: 'var(--text-accent)', padding: '2px 6px', borderRadius: '4px', marginLeft: '8px', verticalAlign: 'middle' }}>Featured</span>}
                   </h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '4px 0 0 0' }}>{p.category.name} • Stock: {totalStock} • Variations: {variations.length}</p>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>{priceDisplay}</span>
+                <span style={{ color: 'var(--text-accent)', fontWeight: 'bold' }}>{priceDisplay}</span>
                 <Link href={`/admin/products/${p.id}`} style={{ padding: '6px 12px', background: 'var(--glass-bg)', color: 'var(--text-main)', textDecoration: 'none', borderRadius: '4px', fontSize: '13px', border: '1px solid var(--glass-border)' }}>Edit</Link>
                 <form action={deleteProduct}>
                   <input type="hidden" name="id" value={p.id} />

@@ -42,7 +42,7 @@ export default async function PortfolioPage() {
 
       <div className="glass-panel" style={{ padding: '80px 40px', marginTop: '40px' }}>
         <div style={{ fontSize: '64px', marginBottom: '24px' }}>🚧</div>
-        <h2 style={{ fontSize: '32px', marginBottom: '16px', color: 'var(--accent-color)' }}>COMING SOON!</h2>
+        <h2 style={{ fontSize: '32px', marginBottom: '16px', color: 'var(--text-accent)' }}>COMING SOON!</h2>
         <p style={{ fontSize: '18px', color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
           We are currently training our AI Vision engine to be incredibly accurate with sports cards, holographics, and autographs. The Portfolio feature will be unlocked very soon!
         </p>

@@ -110,7 +110,7 @@ export default function EditProductForm({ product, categories, updateProductActi
       {/* Dynamic Card Fields */}
       {productType === 'CARD' && (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: 'var(--glass-bg)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
-          <h3 style={{ gridColumn: '1 / -1', margin: '0 0 8px 0', fontSize: '16px', color: 'var(--accent-color)' }}>Card Details</h3>
+          <h3 style={{ gridColumn: '1 / -1', margin: '0 0 8px 0', fontSize: '16px', color: 'var(--text-accent)' }}>Card Details</h3>
           
           <div>
             <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Card/Player Name</label>

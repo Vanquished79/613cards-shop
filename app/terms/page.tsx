@@ -3,7 +3,7 @@ export const dynamic = 'force-static';
 export default function TermsPage() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '60px 20px', lineHeight: '1.6' }}>
-      <h1 style={{ marginBottom: '32px', color: 'var(--accent-color)' }}>Terms of Service & Privacy Policy</h1>
+      <h1 style={{ marginBottom: '32px', color: 'var(--text-accent)' }}>Terms of Service & Privacy Policy</h1>
       
       <div className="glass-panel" style={{ padding: '32px' }}>
         <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>1. Acceptance of Terms</h2>

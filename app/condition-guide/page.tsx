@@ -3,7 +3,7 @@ export const dynamic = 'force-static';
 export default function ConditionGuidePage() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '60px 20px', lineHeight: '1.6' }}>
-      <h1 style={{ marginBottom: '32px', color: 'var(--accent-color)' }}>Card Condition Guide</h1>
+      <h1 style={{ marginBottom: '32px', color: 'var(--text-accent)' }}>Card Condition Guide</h1>
       
       <div className="glass-panel" style={{ padding: '32px' }}>
         <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>

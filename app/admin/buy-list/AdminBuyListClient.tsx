@@ -289,7 +289,7 @@ export default function AdminBuyListClient({
                   <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Date: {new Date(sub.createdAt).toLocaleDateString()}</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontWeight: 'bold', color: 'var(--accent-color)', marginBottom: '8px' }}>
+                  <div style={{ fontWeight: 'bold', color: 'var(--text-accent)', marginBottom: '8px' }}>
                     Status: {sub.status.replace(/_/g, ' ')}
                   </div>
                   <select 
@@ -455,7 +455,7 @@ export default function AdminBuyListClient({
                         {item.isGraded ? <span style={{ color: '#4ade80' }}>Yes ({item.gradingCompany} {item.grade})</span> : 'No'}
                       </td>
                       <td style={{ padding: '12px 4px' }}>{item.quantity}</td>
-                      <td style={{ padding: '12px 4px', textAlign: 'right', color: 'var(--accent-color)' }}>
+                      <td style={{ padding: '12px 4px', textAlign: 'right', color: 'var(--text-accent)' }}>
                         {item.expectedPrice ? `$${item.expectedPrice.toFixed(2)}` : '-'}
                       </td>
                     </tr>
@@ -613,7 +613,7 @@ export default function AdminBuyListClient({
                       {/* Price tag */}
                       <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column' }}>
                         <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Offering:</span>
-                        <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--accent-color)' }}>
+                        <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-accent)' }}>
                           {item.price ? `$${item.price.toFixed(2)}` : 'Contact for Price'}
                         </span>
                       </div>

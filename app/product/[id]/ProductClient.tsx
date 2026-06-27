@@ -194,7 +194,7 @@ export function ProductClient({ product }: { product: any }) {
                   {formatPrice(product.compareAtPrice)}
                 </span>
               )}
-              <span style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--accent-color)' }}>
+              <span style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--text-accent)' }}>
                 {selectedVariation 
                   ? formatPrice(selectedVariation.price)
                   : (() => {
@@ -317,7 +317,7 @@ export function ProductClient({ product }: { product: any }) {
                           {isOutOfStock ? 'Out of Stock' : `${v.availableStock} available`}
                         </span>
                       </div>
-                      <span style={{ fontWeight: 'bold', fontSize: '16px', color: 'var(--accent-color)' }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '16px', color: 'var(--text-accent)' }}>
                         {formatPrice(v.price)}
                       </span>
                     </div>

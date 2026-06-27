@@ -84,7 +84,7 @@ export default function CreateProductForm({ categories, createProductAction }: {
       {/* Dynamic Card Fields */}
       {productType === 'CARD' && (
         <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: 'var(--glass-bg)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
-          <h3 style={{ gridColumn: '1 / -1', margin: '0 0 8px 0', fontSize: '16px', color: 'var(--accent-color)' }}>Card Details</h3>
+          <h3 style={{ gridColumn: '1 / -1', margin: '0 0 8px 0', fontSize: '16px', color: 'var(--text-accent)' }}>Card Details</h3>
           
           <input name="cardName" placeholder="Card/Player Name (e.g. LeBron James)" style={inputStyle} />
           <input name="cardSeries" placeholder="Series (e.g. 2023 Prizm)" style={inputStyle} />

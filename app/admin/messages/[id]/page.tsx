@@ -29,7 +29,7 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto' }}>
       <div style={{ marginBottom: '24px' }}>
-        <Link href="/admin/messages" style={{ color: 'var(--accent-color)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
+        <Link href="/admin/messages" style={{ color: 'var(--text-accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
           &larr; Back to Tickets
         </Link>
       </div>
