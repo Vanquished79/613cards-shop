@@ -59,7 +59,7 @@ export function CartSlideOut() {
                     <button onClick={() => updateQuantity(item.productVariationId, item.quantity + 1)} style={{ background: '#f1f5f9', border: '1px solid var(--glass-border)', color: 'var(--text-main)', width: '24px', height: '24px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Plus size={14} />
                     </button>
-                    <button onClick={() => removeFromCart(item.productVariationId)} style={{ background: 'none', border: 'none', color: '#ff6b6b', marginLeft: 'auto', cursor: 'pointer', fontSize: '13px' }}>Remove</button>
+                    <button onClick={() => removeFromCart(item.productVariationId)} style={{ background: 'none', border: 'none', color: '#b91c1c', marginLeft: 'auto', cursor: 'pointer', fontSize: '13px' }}>Remove</button>
                   </div>
                 </div>
               </div>

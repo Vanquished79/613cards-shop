@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 type Order = {
   id: number;
@@ -14,6 +15,7 @@ type Order = {
   city?: string;
   state?: string;
   zip?: string;
+  paypalOrderId?: string;
 };
 
 import { toast } from 'react-hot-toast';
@@ -460,23 +462,25 @@ export default function FinancialDashboard({ initialOrders }: { initialOrders: O
               <div style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '40px' }}>No orders on this date.</div>
             ) : (
               selectedDateOrders.map(order => (
-                <div key={order.id} style={{ background: 'rgba(0,0,0,0.03)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ fontWeight: 'bold' }}>Order #{order.id}</span>
-                    <span style={{ color: 'var(--text-accent)', fontWeight: 'bold' }}>{formatCurrency(order.totalAmount)}</span>
+                <Link key={order.id} href={`/admin/orders?search=${order.paypalOrderId || order.id}`} style={{ textDecoration: 'none' }}>
+                  <div style={{ background: 'rgba(0,0,0,0.03)', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'background 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.06)'} onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.03)'}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                      <span style={{ fontWeight: 'bold', color: 'var(--text-main)' }}>Order #{order.id}</span>
+                      <span style={{ color: 'var(--text-accent)', fontWeight: 'bold' }}>{formatCurrency(order.totalAmount)}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+                      <span style={{ color: 'var(--text-main)' }}>{order.customerName}</span>
+                      <span style={{ 
+                        background: order.status === 'DELIVERED' ? 'rgba(74, 222, 128, 0.2)' : 'rgba(0, 0, 0, 0.05)', 
+                        color: order.status === 'DELIVERED' ? '#16a34a' : 'var(--text-main)',
+                        padding: '2px 8px', 
+                        borderRadius: '12px', 
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                      }}>{order.status}</span>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-                    <span style={{ color: 'var(--text-main)' }}>{order.customerName}</span>
-                    <span style={{ 
-                      background: order.status === 'DELIVERED' ? 'rgba(74, 222, 128, 0.2)' : 'rgba(0, 0, 0, 0.05)', 
-                      color: order.status === 'DELIVERED' ? '#16a34a' : 'var(--text-main)',
-                      padding: '2px 8px', 
-                      borderRadius: '12px', 
-                      fontSize: '10px',
-                      fontWeight: 'bold'
-                    }}>{order.status}</span>
-                  </div>
-                </div>
+                </Link>
               ))
             )}
           </div>

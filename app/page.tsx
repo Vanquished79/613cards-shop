@@ -31,8 +31,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     let totalStock = 0;
     let reservedCount = 0;
     p.variations.forEach((v: any) => {
-      totalStock += v.stock;
-      reservedCount += v.reservations.reduce((sum: number, r: any) => sum + r.quantity, 0);
+      if (!v.isManualOutOfStock) {
+        totalStock += v.stock;
+        reservedCount += v.reservations.reduce((sum: number, r: any) => sum + r.quantity, 0);
+      }
     });
     return {
       ...p,
@@ -120,8 +122,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     let totalStock = 0;
     let reservedCount = 0;
     p.variations.forEach((v: any) => {
-      totalStock += v.stock;
-      reservedCount += v.reservations.reduce((sum: number, r: any) => sum + r.quantity, 0);
+      if (!v.isManualOutOfStock) {
+        totalStock += v.stock;
+        reservedCount += v.reservations.reduce((sum: number, r: any) => sum + r.quantity, 0);
+      }
     });
     return {
       ...p,

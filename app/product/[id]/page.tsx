@@ -32,6 +32,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   }
 
   const variationsWithStock = product.variations.map((v: any) => {
+    if (v.isManualOutOfStock) {
+      return { ...v, availableStock: 0 };
+    }
     const reservedCount = v.reservations.reduce((sum: number, r: any) => sum + r.quantity, 0);
     return {
       ...v,

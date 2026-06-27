@@ -24,6 +24,7 @@ export default async function EditVariationPage({ params }: { params: Promise<{ 
     const grade = formData.get('grade') as string || null;
     const price = parseFloat(formData.get('price') as string);
     const stock = parseInt(formData.get('stock') as string);
+    const isManualOutOfStock = formData.get('isManualOutOfStock') === 'on';
 
     if (isNaN(price) || isNaN(stock)) return;
 
@@ -35,7 +36,8 @@ export default async function EditVariationPage({ params }: { params: Promise<{ 
         gradingCompany,
         grade,
         price,
-        stock
+        stock,
+        isManualOutOfStock
       }
     });
 
@@ -99,6 +101,14 @@ export default async function EditVariationPage({ params }: { params: Promise<{ 
           <div>
             <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>Stock Quantity</label>
             <input name="stock" type="number" defaultValue={variation.stock} required style={inputStyle} />
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+          <input type="checkbox" id="isManualOutOfStock" name="isManualOutOfStock" defaultChecked={variation.isManualOutOfStock} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+          <div>
+            <label htmlFor="isManualOutOfStock" style={{ color: 'var(--text-error)', cursor: 'pointer', fontWeight: 'bold' }}>Force Out of Stock</label>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>If checked, this item will show as Sold Out regardless of the stock quantity above.</div>
           </div>
         </div>
 

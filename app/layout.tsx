@@ -11,13 +11,13 @@ export const metadata: Metadata = {
   description: "The premier shop for trading cards and supplies.",
 };
 
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// Session check removed to prevent blocking root layout rendering
 
 import { Providers } from "@/components/Providers";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { WishlistProvider } from "@/components/WishlistProvider";
 import prisma from "@/lib/prisma";
+import { unstable_cache } from 'next/cache';
 
 import { ModalProvider } from '@/components/ModalProvider';
 import { Toaster } from 'react-hot-toast';
@@ -27,8 +27,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(authOptions);
-  const categories = await prisma.category.findMany();
+  
+  const getCategories = unstable_cache(
+    async () => prisma.category.findMany(),
+    ['global-categories'],
+    { revalidate: 3600, tags: ['categories'] } // cache for 1 hour, revalidate on demand
+  );
+  
+  const categories = await getCategories();
 
   return (
     <html lang="en">
