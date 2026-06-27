@@ -55,6 +55,10 @@ model Product {
   updatedAt      DateTime @updatedAt
   
   wishlistItems  WishlistItem[]
+
+  @@index([categoryId])
+  @@index([isFeatured])
+  @@index([type])
 }
 
 model ProductVariation {
@@ -146,6 +150,10 @@ model Order {
   items         OrderItem[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([paypalOrderId])
+  @@index([status])
 }
 
 model OrderItem {
